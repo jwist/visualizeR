@@ -27,11 +27,14 @@ Prior to this, the list have to be parsed and stored as a json file. This file c
 or stored on https://gist.github.com.
 }
 \examples{
-visu()
-visu("https://my.cheminfo.org", "http://localhost:9898/view.json", "http://localhost:9898/data.json")
-visu("https://my.cheminfo.org",
-"https://gist.githubusercontent.com/jwist/57512dc74595a7c2b66c3e2bf4e76ba1/raw/test.view.json",
-"https://gist.githubusercontent.com/jwist/3354274a2b1762e408af22a8217384d9/raw/data.json")
+x <- seq(from = 0, to = pi, by = 0.1)
+
+d <- appendData(variableName = "simpleArray", variable = cos(x), type = "1D Y array")
+d <- appendData(data = d, variableName = "simpleArray2", variable = sin(x), type = "1D Y array")
+toJSON(d)
+
+chart <- data.frame("x" = x, "y" = cos(3*x), "highlight" = seq_along(x) - 1, "info"= paste0("ID: ", 0:31))
+d <- appendData(data = d, variableName = "chart", variable = chart, type = "chart")
 }
 \seealso{
 exposeData.R

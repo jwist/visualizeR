@@ -10,11 +10,15 @@
 #' @param type type of the data. The types currently supported are, "1D Y array", "chart", "multiChart".
 #' @return a list object with the data
 #' @examples
-#' visu()
-#' visu("https://my.cheminfo.org", "http://localhost:9898/view.json", "http://localhost:9898/data.json")
-#' visu("https://my.cheminfo.org",
-#' "https://gist.githubusercontent.com/jwist/57512dc74595a7c2b66c3e2bf4e76ba1/raw/test.view.json",
-#' "https://gist.githubusercontent.com/jwist/3354274a2b1762e408af22a8217384d9/raw/data.json")
+#' x <- seq(from = 0, to = pi, by = 0.1)
+#'
+#' d <- appendData(variableName = "simpleArray", variable = cos(x), type = "1D Y array")
+#' d <- appendData(data = d, variableName = "simpleArray2", variable = sin(x), type = "1D Y array")
+#' toJSON(d)
+#'
+#' chart <- data.frame("x" = x, "y" = cos(3*x), "highlight" = seq_along(x) - 1, "info"= paste0("ID: ", 0:31))
+#' d <- appendData(data = d, variableName = "chart", variable = chart, type = "chart")
+
 #' @seealso exposeData.R
 #' @export
 
@@ -113,8 +117,9 @@ appendData <- function(data, variable, variableName, type) {
 #   "flip" = "false"
 # )
 #
-#  chart <- data.frame("x" = x, "y" = cos(3*x), "highlight" = seq_along(x) - 1, "info"= paste0("ID: ", 0:31) )
-#  chart = list( list(chart=chart, options=opts), list(chart=chart, options=opts))
+#  chart1 <- data.frame("x" = x, "y" = cos(3*x), "highlight" = seq_along(x) - 1, "info"= paste0("cosID: ", 0:31) )
+#  chart2 <- data.frame("x" = x, "y" = sin(3*x), "highlight" = seq_along(x) - 1, "info"= paste0("sinID: ", 0:31) )
+#  chart = list( list(chart=chart1, options=opts), list(chart=chart2, options=opts))
 #  d <- appendData( data = d, variableName = "multiChart", variable = chart, type = "multiChart")
 #
 # saveJSON(d, "~/data.json")
