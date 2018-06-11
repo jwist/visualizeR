@@ -15,6 +15,7 @@ test_that('import export with jsonlite', {
   v <- readView("../../R/views/test.view.json")
   saveJSON(v, "viewTestThat.json")
   expect_true(system("diff viewTestThat.json ../../R/views/test.view.json") == 0)
+  expect_is(v$variables[[1]]$jpath, "list")
 })
 
 
