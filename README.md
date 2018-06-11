@@ -5,7 +5,7 @@ The https://github.com/npellet/visualizer projects provides exactly what R is mi
 
 The visualizer requires data to be provided as a json file with a specific structure. A second json file contains what is called a "view" and that describes how to display the information. Since the visualizer is an online tool, a webpage, the json files must be served via a webserver to avoid giving the browser access to local files, an unnecessary security hole. There is several manner to achieve this depending on ddd 
 
-# installation
+## installation
 
 Either clone the repository and build the package locally, or install it directly from R using the nice *devtools* package by Hadley Wickham and coworkers.
 
