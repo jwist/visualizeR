@@ -14,7 +14,7 @@ saveJSON <- function( object, pathToFile ) {
 
   fileConn <- file( pathToFile )
 
-  writeLines(toJSON(object,
+  writeLines(jsonlite::toJSON(object,
                     pretty = TRUE,
                     auto_unbox = TRUE,
                     null = 'null'

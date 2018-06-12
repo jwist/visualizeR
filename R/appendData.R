@@ -31,15 +31,18 @@ appendData <- function(data, variable, variableName, type) {
           "1D Y array" = {
             data[[variableName]] <- variable
           },
+          "table" = {
+            data[[variableName]] <- variable
+          },
           "chart" = {
-            data[[variableName]] <- list(type = unbox("chart"),
+            data[[variableName]] <- list(type = jsonlite::unbox("chart"),
                                          value = list(
-                                           title = unbox("a visualizeR title"),
+                                           title = jsonlite::unbox("a visualizeR title"),
                                            data = list(list(
                                              info = mapply(
                                                function(x, y)
                                                  list(
-                                                   id = unbox(as.character(x)),
+                                                   id = jsonlite::unbox(as.character(x)),
                                                    "_hightlight" = list(y)
                                                  ),
                                                variable$info,
@@ -52,9 +55,9 @@ appendData <- function(data, variable, variableName, type) {
                                          ))
           },
           "multiChart" = {
-            data[[variableName]] <- list(type = unbox("chart"),
+            data[[variableName]] <- list(type = jsonlite::unbox("chart"),
                                          value = list(
-                                           title = unbox("a visualizeR title"),
+                                           title = jsonlite::unbox("a visualizeR title"),
                                            axis = list("0" = list(type = "bottom", name = "Bottom axis"),
                                                        "1" = list(type = "left", name = "Left axis"),
                                                        "2" = list(type = "right", name = "Right axis")
@@ -65,7 +68,7 @@ appendData <- function(data, variable, variableName, type) {
                                              info = mapply(
                                                function(x, y)
                                                  list(
-                                                   id = unbox(as.character(x)),
+                                                   id = jsonlite::unbox(as.character(x)),
                                                    "_hightlight" = list(y)
                                                  ),
                                                x$chart$info,
