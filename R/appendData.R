@@ -16,6 +16,8 @@
 #' d <- appendData(data = d, variableName = "simpleArray2", variable = sin(x), type = "1D Y array")
 #' toJSON(d)
 #'
+#' xy = data.frame( x = x, y = sin(x) )
+#' d <- appendData(data = d, variableName = "simpleArray3", variable = xy, type = "1D XY array")
 #' chart <- data.frame("x" = x, "y" = cos(3*x), "highlight" = seq_along(x) - 1, "info"= paste0("ID: ", 0:31))
 #' d <- appendData(data = d, variableName = "chart", variable = chart, type = "chart")
 
@@ -30,6 +32,9 @@ appendData <- function(data, variable, variableName, type) {
   switch (type,
           "1D Y array" = {
             data[[variableName]] <- variable
+          },
+          "1D XY array" = {
+            data[[variableName]] <- c(rbind(variable$x, variable$y))
           },
           "table" = {
             data[[variableName]] <- variable
