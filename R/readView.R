@@ -13,7 +13,7 @@ readView <- function( pathToFile ) {
 
   lines <- readLines( pathToFile )
 
-  fromJSON(lines,
+  jsonlite::fromJSON(lines,
                 simplifyVector = FALSE,
                 simplifyDataFrame = FALSE,
                 simplifyMatrix = FALSE

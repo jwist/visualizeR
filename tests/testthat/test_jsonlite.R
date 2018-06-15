@@ -1,8 +1,8 @@
 
 context("testing jsonlite behavior")
 
-source("../../R/readView.R")
-source("../../R/saveJSON.R")
+#source("../../R/readView.R")
+#source("../../R/saveJSON.R")
 
 
 test_that('blank view exists', {

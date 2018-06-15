@@ -16,7 +16,7 @@
 
 exposeData <- function(view, data) {
 
-  m <- lapply(names(data), function(x)   list( varname = unbox(x), jpath = list(x) ))
+  m <- lapply(names(data), function(x)   list( varname = jsonlite::unbox(x), jpath = list(x) ))
   view$variables[[ length(view$variables) + 1 ]] <- m
 
   return(view)

@@ -2,9 +2,7 @@
 % Please edit documentation in R/appendData.R
 \name{appendData}
 \alias{appendData}
-\title{This function allows to create, append data to be passed to the https://github.com/npellet/visualizer.
-Prior to this, the list have to be parsed and stored as a json file. This file can be either stored locally
-or stored on https://gist.github.com.}
+\title{append new data to data list}
 \usage{
 appendData(data, variable, variableName, type)
 }
