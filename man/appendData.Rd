@@ -16,7 +16,14 @@ appendData(data, variable, variableName, type)
 \item{variableName}{name of the dataset. The name of the data must be exposed to the https://github.com/npellet/visualizer
 using the exposeData.R function.}
 
-\item{type}{type of the data. The types currently supported are, "1D Y array", "chart", "multiChart".}
+\item{type}{type of the data. The types currently supported are
+\itemize{
+\item "1D Y array"
+\item "1D XY array"
+\item "table"
+\item "chart"
+\item"multiChart"
+}}
 }
 \value{
 a list object with the data
@@ -29,12 +36,47 @@ or stored on https://gist.github.com.
 \examples{
 x <- seq(from = 0, to = pi, by = 0.1)
 
+simple array
 d <- appendData(variableName = "simpleArray", variable = cos(x), type = "1D Y array")
 d <- appendData(data = d, variableName = "simpleArray2", variable = sin(x), type = "1D Y array")
-toJSON(d)
 
+XY array
+xy = data.frame( x = x, y = sin(x) )
+d <- appendData(data = d, variableName = "simpleArray3", variable = xy, type = "1D XY array")
+
+chart
 chart <- data.frame("x" = x, "y" = cos(3*x), "highlight" = seq_along(x) - 1, "info"= paste0("ID: ", 0:31))
 d <- appendData(data = d, variableName = "chart", variable = chart, type = "chart")
+
+opts = "options" = list(
+"trackMouseLabelRouding" = 1,
+"trackMouse" = "false",
+"lineToZero" = "false",
+"trackMouseLabel" = "false",
+"lineColor" = "red",
+"autoPeakPickingNb" = 4,
+"markers" = list(
+  "fillColor" = "transparent",
+  "zoom" = 1,
+  "show" = "false",
+  "type" = 1,
+  "strokeColor" = "false",
+  "strokeWidth" = 1
+),
+"lineStyle" = 1,
+"autoPeakPickingMinDistance" = 10,
+"label" = "",
+"autoPeakPicking" = "false",
+"flip" = "false"
+)
+
+chart1 <- data.frame("x" = x, "y" = cos(3*x), "highlight" = seq_along(x) - 1, "info"= paste0("cosID: ", 0:31) )
+chart2 <- data.frame("x" = x, "y" = sin(3*x), "highlight" = seq_along(x) - 1, "info"= paste0("sinID: ", 0:31) )
+chart = list( list(chart=chart1, options=opts), list(chart=chart2, options=opts))
+d <- appendData( data = d, variableName = "multiChart", variable = chart, type = "multiChart")
+
+saveJSON(d, "~/data.json")
+
 }
 \seealso{
 exposeData.R
