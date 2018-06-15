@@ -7,9 +7,10 @@
 #' @param data data list object with datasets to be exposed
 #' @return a modified view list object with correct variable configuration
 #' @examples
-#' reset variables in view
+#' #reset variables in view
 #' v$variables <- list()
-#' creste new variables
+#'
+#' #create new variables
 #' v <- exposeData(view=v, data=d)
 #' @export
 

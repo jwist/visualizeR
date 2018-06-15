@@ -21,19 +21,19 @@
 #' @examples
 #' x <- seq(from = 0, to = pi, by = 0.1)
 #'
-#' simple array
+#' #simple array
 #' d <- appendData(variableName = "simpleArray", variable = cos(x), type = "1D Y array")
 #' d <- appendData(data = d, variableName = "simpleArray2", variable = sin(x), type = "1D Y array")
 #'
-#' XY array
+#' #XY array
 #' xy = data.frame( x = x, y = sin(x) )
 #' d <- appendData(data = d, variableName = "simpleArray3", variable = xy, type = "1D XY array")
 #'
-#' chart
+#' #chart
 #' chart <- data.frame("x" = x, "y" = cos(3*x), "highlight" = seq_along(x) - 1, "info"= paste0("ID: ", 0:31))
 #' d <- appendData(data = d, variableName = "chart", variable = chart, type = "chart")
 #'
-#' opts = "options" = list(
+#' opts = list(
 #' "trackMouseLabelRouding" = 1,
 #' "trackMouse" = "false",
 #' "lineToZero" = "false",

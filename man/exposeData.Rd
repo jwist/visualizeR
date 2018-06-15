@@ -22,8 +22,9 @@ For the view to be able to access the data in the https://github.com/npellet/vis
 be exposed.
 }
 \examples{
-reset variables in view
+#reset variables in view
 v$variables <- list()
-creste new variables
+
+#create new variables
 v <- exposeData(view=v, data=d)
 }

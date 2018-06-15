@@ -4,7 +4,6 @@
 #' @param pathToFile the path to file
 #' @return a list object to be manipulated
 #' @examples
-#' example
 #' path <- file.path( system.file(package = "visualizeR"), "R", "views", "blank.view.json" )
 #' v <- readView( path )
 #' @export

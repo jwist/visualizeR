@@ -2,7 +2,7 @@
 % Please edit documentation in R/addModules.R
 \name{addModule}
 \alias{addModule}
-\title{This function adds module to a view list object}
+\title{Add modules to view list}
 \usage{
 addModule(view, type)
 }
@@ -18,7 +18,6 @@ modified view object list
 This function adds module to a view list object
 }
 \examples{
-example
 v <- createView( name = "visualizeR" )
 v <- addModule( view = v, type="spectra_displayer")
 }
