@@ -5,7 +5,8 @@
 #' @return a list object to be manipulated
 #' @examples
 #' example
-#' v <- readView("R/example_spectra_displayer.view.json")
+#' path <- file.path( system.file(package = "visualizeR"), "R", "views", "blank.view.json" )
+#' v <- readView( path )
 #' @export
 
 readView <- function( pathToFile ) {

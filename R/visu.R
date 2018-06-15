@@ -13,8 +13,16 @@
 #' @param dataURL url of the data
 #' @return void
 #' @examples
+#' #using options
+#' options(baseURL = "https://my.cheminfo.org")
+#' options(viewURL = "http://localhost:9898/view.json")
+#' options(dataURL = "http://localhost:9898/data.json")
 #' visu()
+#'
+#' #using parameters and local views
 #' visu("https://my.cheminfo.org", "http://localhost:9898/view.json", "http://localhost:9898/data.json")
+#'
+#' #using views and data stored on gist.github.com
 #' visu("https://my.cheminfo.org",
 #' "https://gist.githubusercontent.com/jwist/57512dc74595a7c2b66c3e2bf4e76ba1/raw/test.view.json",
 #' "https://gist.githubusercontent.com/jwist/3354274a2b1762e408af22a8217384d9/raw/data.json")
@@ -26,7 +34,9 @@ visu <- function( baseURL = getOption("baseURL"),
 
   vUrl <- paste( baseURL, "?viewURL=", viewURL, "&dataURL=", dataURL, sep = "" );
 
-  utils::browseURL( vUrl)
+  utils::browseURL( vUrl )
+
+  warning( vUrl )
 
 }
 

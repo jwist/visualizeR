@@ -17,5 +17,6 @@ Read json objects from https://github.com/npellet/visualizer.
 }
 \examples{
 example
-v <- readView("R/example_spectra_displayer.view.json")
+path <- file.path( system.file(package = "visualizeR"), "R", "views", "blank.view.json" )
+v <- readView( path )
 }

@@ -9,7 +9,9 @@
 
 createView <- function( name = "visualizeR" ) {
 
-  v <- readView( "R/blank.view.json" )
+  path <- file.path( system.file(package = "visualizeR"), "R", "views", "blank.view.json" )
+
+  v <- readView( path )
 
   v$configuration$title <- name
 

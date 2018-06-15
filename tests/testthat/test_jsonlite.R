@@ -5,6 +5,11 @@ source("../../R/readView.R")
 source("../../R/saveJSON.R")
 
 
+test_that('blank view exists', {
+  expect_true(system("ls ../../R/views/test.view.json") == 0)
+  expect_true(system("ls ../../R/views/blank.view.json") == 0)
+})
+
 test_that('data integrity', {
   v <- readView("../../R/views/blank.view.json")
   expect_that(length(v), equals(6))
