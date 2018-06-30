@@ -1,0 +1,16 @@
+#' Generate R documentation from inline comments.
+#'
+#' VisualizeR is for the one
+#'
+#' The only function you're likely to need from \pkg{visualizeR} is
+#' \code{\link{visualizeR}}. Otherwise refer to the vignettes to see
+#' how to format the documentation.
+#'
+#' \section{Introduction}
+#' this package is intended for the ones...
+
+
+"_PACKAGE"
+
+
+

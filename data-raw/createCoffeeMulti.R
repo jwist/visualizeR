@@ -6,15 +6,14 @@ load('data-raw/coffeeMulti.rda')
 load('data-raw/ppm.binned.rda')
 
 colnames(coffeeMulti$nmrBin) <- round(ppm.binned,3)
+levels(coffeeMulti$nmrParam$country1) <- c("Brazil", "Colombia", "Peru")
+levels(coffeeMulti$nmrParam$species) <- c("Unknown", "Arabica", "Mix", "Robusta", "l", "Arabica decaf.", "Robusta decaf.")
 
 param <- coffeeMulti$nmrParam
-irms <- coffeeMulti$irms$mean
-nmr <- coffeeMulti$nmrBin
-gc <- coffeeMulti$gc[,5:11]
 
-coffeeSpectra <-data.frame(param = param, irms = irms, nmr = nmr, gc = gc)
+coffeeNMRSpectra <-data.frame(param = param, nmr = coffeeMulti$nmrBin)
 
-devtools::use_data(coffeeSpectra)
+devtools::use_data(coffeeNMRSpectra)
 
 
 

@@ -30,7 +30,12 @@
 #' d <- appendData(data = d, variableName = "simpleArray3", variable = xy, type = "1D XY array")
 #'
 #' #chart
-#' chart <- data.frame("x" = x, "y" = cos(3*x), "highlight" = seq_along(x) - 1, "info"= paste0("ID: ", 0:31))
+#' chart <- data.frame("x" = x,
+#'                     "y" = cos(3*x),
+#'                     "highlight" = seq_along(x) - 1,
+#'                     "info"= paste0("ID: ", 0:31)
+#'                     )
+#'
 #' d <- appendData(data = d, variableName = "chart", variable = chart, type = "chart")
 #'
 #' opts = list(
@@ -55,8 +60,18 @@
 #' "flip" = "false"
 #' )
 #'
-#' chart1 <- data.frame("x" = x, "y" = cos(3*x), "highlight" = seq_along(x) - 1, "info"= paste0("cosID: ", 0:31) )
-#' chart2 <- data.frame("x" = x, "y" = sin(3*x), "highlight" = seq_along(x) - 1, "info"= paste0("sinID: ", 0:31) )
+#' chart1 <- data.frame("x" = x,
+#'                      "y" = cos(3*x),
+#'                      "highlight" = seq_along(x) - 1,
+#'                      "info"= paste0("cosID: ", 0:31)
+#'                      )
+#'
+#' chart2 <- data.frame("x" = x,
+#'                      "y" = sin(3*x),
+#'                      "highlight" = seq_along(x) - 1,
+#'                      "info"= paste0("sinID: ", 0:31)
+#'                      )
+#'
 #' chart = list( list(chart=chart1, options=opts), list(chart=chart2, options=opts))
 #' d <- appendData( data = d, variableName = "multiChart", variable = chart, type = "multiChart")
 #'
