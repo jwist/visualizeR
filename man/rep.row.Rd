@@ -4,10 +4,10 @@
 \alias{rep.row}
 \title{repeat a row when needed to match other matrix dimension (not exported)}
 \usage{
-\method{rep}{row}(x, n)
+\method{rep}{row}(v, n)
 }
 \arguments{
-\item{x}{a vector to be repeated}
+\item{v}{a vector to be repeated}
 
 \item{n}{number ot time to repeat the vector}
 }
@@ -18,5 +18,9 @@ a matrix
 repeat a row when needed to match other matrix dimension (not exported)
 }
 \examples{
+
 rep.row(c(1,2,3), 2)
+}
+\references{
+the original function was found here: \url{https://www.r-bloggers.com/a-quick-way-to-do-row-repeat-and-col-repeat-rep-row-rep-col/}
 }

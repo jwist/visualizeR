@@ -16,3 +16,7 @@ how to format the documentation.
 \section{Introduction}
 this package is intended for the ones...
 }
+\author{
+\strong{Maintainer}: 
+
+}
