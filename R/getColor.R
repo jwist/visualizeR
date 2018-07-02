@@ -1,16 +1,16 @@
-#' GetColorChart based on character (not used)
+#' GetColorChart based on character
 #'
 #' @param text a text used to pick the color
-#' @return a rgba color string
+#' @return a color
 #' @examples
-#' getColor("colombia")
+#' getColor2("colombia")
+#' @export
 
 getColor <- function(text) {
 
   t <- sapply(unlist(strsplit(text, NULL)), utf8ToInt)
-  l <- length(t) %/% 3
-  t <- apply(matrix(t[1:(3*l)], 3, l), 1, mean)
-  c <- paste0("rgba(",paste(t, collapse = ","),",1)")
+  c <- sum(t) %% 165
+  c <- rgb(crayola$R[c], crayola$G[c], crayola$B[c], 255, maxColorValue = 255)
   return(c)
 
 }

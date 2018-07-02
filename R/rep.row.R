@@ -1,5 +1,5 @@
 
-#' repeat a row when needed to match other matrix dimension (not exported)
+#' repeat a row when needed to match other matrix dimension
 #'
 #' @param v a vector to be repeated
 #' @param n number ot time to repeat the vector
@@ -12,6 +12,6 @@
 
 rep.row <- function(v, n){
 
-  matrix( rep(v,each = n), nrow = n )
+  matrix( rep(v, each = n), nrow = n )
 
 }
