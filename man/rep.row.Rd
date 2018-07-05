@@ -2,7 +2,7 @@
 % Please edit documentation in R/rep.row.R
 \name{rep.row}
 \alias{rep.row}
-\title{repeat a row when needed to match other matrix dimension (not exported)}
+\title{repeat a row when needed to match other matrix dimension}
 \usage{
 \method{rep}{row}(v, n)
 }
@@ -15,7 +15,7 @@
 a matrix
 }
 \description{
-repeat a row when needed to match other matrix dimension (not exported)
+repeat a row when needed to match other matrix dimension
 }
 \examples{
 

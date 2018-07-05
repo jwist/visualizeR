@@ -1,4 +1,6 @@
 
+#' Trigger the visualization into the browser
+#'
 #' Open the visualizer in the browser using the baseURL. The https://github.com/nepellet/visualizer works only
 #' online and for security reasons the browser should NOT be allowed to access local file. One option is to
 #' use gist.github.com to publish the two required files produced by https://github.com/jwist/visualizeR using the package
@@ -32,11 +34,13 @@
 #'    )
 #' @export
 
-visu <- function( baseURL = getOption("baseURL"),
+visu <- function( visuURL = getOption("visuURL"),
                   viewURL = getOption("viewURL"),
                   dataURL = getOption("dataURL") ){
 
-  vUrl <- paste( baseURL, "?viewURL=", viewURL, "&dataURL=", dataURL, sep = "" );
+  vUrl <- paste( visuURL, "?viewURL=", viewURL, "&dataURL=", dataURL, sep = "" );
+
+  initServer()
 
   utils::browseURL( vUrl )
 

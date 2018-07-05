@@ -2,7 +2,7 @@
 % Please edit documentation in R/getColor.R
 \name{getColor}
 \alias{getColor}
-\title{GetColorChart based on character (not used)}
+\title{GetColorChart based on character}
 \usage{
 getColor(text)
 }
@@ -10,11 +10,11 @@ getColor(text)
 \item{text}{a text used to pick the color}
 }
 \value{
-a rgba color string
+a color
 }
 \description{
-GetColorChart based on character (not used)
+GetColorChart based on character
 }
 \examples{
-getColor("colombia")
+getColor2("colombia")
 }

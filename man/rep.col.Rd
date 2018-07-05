@@ -2,7 +2,7 @@
 % Please edit documentation in R/rep.col.R
 \name{rep.col}
 \alias{rep.col}
-\title{repeat a column when needed to match other matrix dimension (not exported)}
+\title{repeat a column when needed to match other matrix dimension}
 \usage{
 \method{rep}{col}(c, n)
 }
@@ -15,7 +15,7 @@
 a matrix
 }
 \description{
-repeat a column when needed to match other matrix dimension (not exported)
+repeat a column when needed to match other matrix dimension
 }
 \examples{
 

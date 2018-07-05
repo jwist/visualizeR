@@ -2,24 +2,17 @@
 % Please edit documentation in R/visu.R
 \name{visu}
 \alias{visu}
-\title{Open the visualizer in the browser using the baseURL. The https://github.com/nepellet/visualizer works only
-online and for security reasons the browser should NOT be allowed to access local file. One option is to
-use gist.github.com to publish the two required files produced by https://github.com/jwist/visualizeR using the package
-gistr (see last example). If working with sensitive or large datasets, this option is not recommended. Instead
-it is possible to serve the data locally with a tiny webserver. Users with full featured webservers such as
-Apache, Nginx, will find it easy. For users that are not familiar with webservers, a tiny tool can be found at
-https://github.com/cheminfo/babel-proxy-server.git that will serve the files. This last option requires
-a working node.js. A final option is to clone and reinstall the full project locally.}
+\title{Trigger the visualization into the browser}
 \usage{
-visu(baseURL = getOption("baseURL"), viewURL = getOption("viewURL"),
+visu(visuURL = getOption("visuURL"), viewURL = getOption("viewURL"),
   dataURL = getOption("dataURL"))
 }
 \arguments{
-\item{baseURL}{url of the visualizer instance}
-
 \item{viewURL}{url of the view}
 
 \item{dataURL}{url of the data}
+
+\item{baseURL}{url of the visualizer instance}
 }
 \value{
 void
