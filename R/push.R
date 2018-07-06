@@ -7,19 +7,31 @@
 #' @param list the list object that contains the view or data
 #' @return an updated visualization object and new data/view.json on the server
 #' @examples
-#' example
-#' saveJSON(v, "~/view.json")
-#' saveJSON( object=exposeData(view=v, data=d), pathToFile="~/view.json")
+#'
+#' v <- createView()
+#' visu <- new("visualization")
+#' push(visu, type="view", v)
+#'
+#' @seealso \pkg{visualizeR::saveJSON()}
 #' @export
 
 push <- function(visualization, type, list) {
+
   switch (type,
-    "view" = {
-      fileName = visualization@view
-    },
-    "data" ={
-      fileName = visualization@data
-    }
+          "view" = {
+
+            path <- visualization@viewServer@rootDir
+            filename <- paste0(folder, visualization@view)
+
+          },
+          "data" ={
+
+            path <- visualization@dataServer@rootDir
+            filename <- paste0(folder, visualization@data)
+
+          }
   )
-return(fileName)
+
+  visualizeR::saveJSON(list, path, filename)
+
 }

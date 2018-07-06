@@ -4,21 +4,28 @@
 \alias{saveJSON}
 \title{Converts the list objects into json files}
 \usage{
-saveJSON(object, pathToFile)
+saveJSON(object, path, filename)
 }
 \arguments{
 \item{object}{the view list object to be saved}
 
-\item{pathToFile}{the path to file}
+\item{path}{the path to file}
+
+\item{filename}{the name of the file}
 }
 \value{
 a json file to be passed to the https://github.com/npellet/visualizer
 }
 \description{
-Converts the list objects into json files
+This function creates a JSON file from a list object using \pkg{jsonlite::toJSON()} function.
+It also create a time versioned of the file to ensure the data are not overwritten by the
+\pkg{visualizeR::push()} function.
 }
 \examples{
-example
-saveJSON(v, "~/view.json")
-saveJSON( object=exposeData(view=v, data=d), pathToFile="~/view.json")
+
+saveJSON(v, "~/", "view.json")
+
+}
+\seealso{
+\pkg{visualizeR::push()}
 }

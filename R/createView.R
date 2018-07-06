@@ -4,7 +4,9 @@
 #' @param name the name of the view that will appears in the browser
 #' @return a blank view list object
 #' @examples
+#'
 #' createView()
+#'
 #' @export
 
 createView <- function( name = "visualizeR" ) {

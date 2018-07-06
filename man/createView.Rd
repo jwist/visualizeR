@@ -16,5 +16,7 @@ a blank view list object
 This function creates a blank view list object
 }
 \examples{
+
 createView()
+
 }

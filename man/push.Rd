@@ -20,7 +20,12 @@ an updated visualization object and new data/view.json on the server
 Pushes new view.json or data.json to the visualization server
 }
 \examples{
-example
-saveJSON(v, "~/view.json")
-saveJSON( object=exposeData(view=v, data=d), pathToFile="~/view.json")
+
+v <- createView()
+visu <- new("visualization")
+push(visu, type="view", v)
+
+}
+\seealso{
+\pkg{visualizeR::saveJSON()}
 }
