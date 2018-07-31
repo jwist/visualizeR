@@ -20,14 +20,14 @@ push <- function(visualization, type, list) {
   switch (type,
           "view" = {
 
-            path <- visualization@viewServer@rootDir
-            filename <- paste0(folder, visualization@view)
+            path <- paste0(visualization@viewServer@rootDir, visualization@viewServer@path)
+            filename <- visualization@view
 
           },
           "data" ={
 
-            path <- visualization@dataServer@rootDir
-            filename <- paste0(folder, visualization@data)
+            path <- paste0(visualization@dataServer@rootDir, visualization@dataServer@path)
+            filename <- visualization@data
 
           }
   )

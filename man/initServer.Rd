@@ -4,7 +4,7 @@
 \alias{initServer}
 \title{checks if server is running and if not starts it}
 \usage{
-initServer(server)
+initServer(server, force = FALSE)
 }
 \arguments{
 \item{server}{a server object}

@@ -1,6 +1,10 @@
 #' An S4 class that contains a visualization
 #'
-#' @slot baseVisuURL baseURL to the github/npellet/visualizer index.html file
+#' @slot visuServer server object that defines how to serve the \emph{github.com/npellet/visualizer} tool
+#' @slot viewServer server object that defines how to serve local view.json
+#' @slot dataServer server object that defines how to serve local data.json
+#' @slot data name of data json file
+#' @slot view name of view json file
 #' @return a visualization object
 #' @examples
 #'
@@ -13,13 +17,11 @@ setClass("visualization",
                       viewServer = "server",
                       dataServer = "server",
                       data = "character",
-                      view = "character",
-                      localServer = "logical"),
+                      view = "character"),
          prototype = list(visuServer = new("server"),
-                          viewServer = new("server", path = "/view/"),
-                          dataServer = new("server", path = "/data/"),
+                          viewServer = new("server", path = "/view/", init = FALSE),
+                          dataServer = new("server", path = "/data/", init = FALSE),
                           data = "data.json",
-                          view = "view.json",
-                          localServer = TRUE)
+                          view = "view.json")
 
 )

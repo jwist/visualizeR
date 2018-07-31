@@ -16,8 +16,16 @@ setMethod("visualize",
           c(v = "visualization"),
           function(v) {
 
-            if (v@localServer == TRUE) {
-              initServer(v@visuServer)
+            if (v@visuServer@init == TRUE) {
+              initServer(v@visuServer, force = FALSE)
+            }
+
+            if (v@viewServer@init == TRUE) {
+              initServer(v@viewServer, force = FALSE)
+            }
+
+            if (v@dataServer@init == TRUE) {
+              initServer(v@dataServer, force = FALSE)
             }
 
             utils::browseURL( print(v) )

@@ -20,6 +20,8 @@ An S4 class for server
 \item{\code{path}}{the path relative to the server root directory}
 
 \item{\code{protocole}}{a protocole}
+
+\item{\code{init}}{if TRUE an instance of \pkg{servr::httw()} will be started to serve the files}
 }}
 
 \examples{

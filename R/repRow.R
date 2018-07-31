@@ -7,10 +7,10 @@
 #' @references the original function was found here: \url{https://www.r-bloggers.com/a-quick-way-to-do-row-repeat-and-col-repeat-rep-row-rep-col/}
 #' @examples
 #'
-#' rep.row(c(1,2,3), 2)
+#' repRow(c(1,2,3), 2)
 #' @export
 
-rep.row <- function(v, n){
+repRow <- function(v, n){
 
   matrix( rep(v, each = n), nrow = n )
 

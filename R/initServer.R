@@ -14,11 +14,15 @@
 #'
 #' @export
 
-initServer <- function (server) {
+initServer <- function (server, force = FALSE) {
 
   if (isS4(server)) {
 
-    if (is.null(servr::daemon_list())) {
+    if (force == FALSE) {
+      servr::daemon_stop()
+    }
+
+    #if (is.null(servr::daemon_list())) {
       servr::httw(dir = server@rootDir,
                   watch = server@rootDir,
                   port = server@port)
@@ -28,7 +32,7 @@ initServer <- function (server) {
         port = 0
       }
 
-    }
+    #}
   } else {
     warning("initServer: argument is not of class server, nothing is done")
   }

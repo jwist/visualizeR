@@ -13,7 +13,15 @@ An S4 class that contains a visualization
 \section{Slots}{
 
 \describe{
-\item{\code{baseVisuURL}}{baseURL to the github/npellet/visualizer index.html file}
+\item{\code{visuServer}}{server object that defines how to serve the \emph{github.com/npellet/visualizer} tool}
+
+\item{\code{viewServer}}{server object that defines how to serve local view.json}
+
+\item{\code{dataServer}}{server object that defines how to serve local data.json}
+
+\item{\code{data}}{name of data json file}
+
+\item{\code{view}}{name of view json file}
 }}
 
 \examples{
