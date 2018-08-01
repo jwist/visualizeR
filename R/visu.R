@@ -40,7 +40,7 @@ visu <- function( visuURL = getOption("visuURL"),
 
   vUrl <- paste( visuURL, "?viewURL=", viewURL, "&dataURL=", dataURL, sep = "" );
 
-  initServer()
+  #initServer()
 
   utils::browseURL( vUrl )
 
