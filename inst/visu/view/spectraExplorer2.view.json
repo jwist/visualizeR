@@ -1474,7 +1474,7 @@
                 ]
               ],
               "script": [
-                "\nvar currentSpectra = API.getData('currentSpectra')\nvar data = API.getData('data')\n\nvar currTrack = API.getData('currtrack')\nvar index = currTrack.minSpectra.indexClosest\n\nvar result = data.reduce(function (r, a) {\n        r[a.group] = r[a.group] || [];\n        r[a.group].push(a);\n        return r;\n    }, Object.create(null));\n\nvar indik = []\nObject.keys(result).forEach(e => \n    indik.push({\"index\": e,\n    \"indicator\": {\n      \"type\": \"sparkline\",\n      \"value\": result[e].map(x => x.dataMatrix[index*2+1]),\n      \"_options\": {\n        \"type\": \"box\",\n        \"raw\": false,\n        \"minValue\": -50,\n        \"maxValue\": 20,\n        \"boxLineColor\": \"black\",\n        \"boxFillColor\": \"lightgrey\",\n        \"whiskerColor\": \"black\",\n        \"medianColor\": \"red\",\n        \"lineColor\": \"black\",\n        \"target\": currentSpectra[index*2+1],\n        \"targetColor\": \"green\"\n      }\n    }})\n)\n\nindik.push({\"index\": \"All\",\n    \"indicator\": {\n      \"type\": \"sparkline\",\n      \"value\": data.map(x => x.dataMatrix[index*2+1]),\n      \"_options\": {\n        \"type\": \"box\",\n        \"raw\": false,\n        \"minValue\": -50,\n        \"maxValue\": 20,\n        \"boxLineColor\": \"black\",\n        \"boxFillColor\": \"lightgrey\",\n        \"whiskerColor\": \"black\",\n        \"medianColor\": \"red\",\n        \"lineColor\": \"black\",\n        \"target\": currentSpectra[index*2+1],\n        \"targetColor\": \"green\"}\n      }})\n\n\nAPI.createData('indik', indik);\n\n\n"
+                "\nvar currentSpectra = API.getData('currentSpectra')\nvar data = API.getData('data')\n\nvar currTrack = API.getData('currtrack')\nvar index = currTrack.minSpectra.indexClosest\nvar result = API.getData('dataByGroup')\n\nvar indik = []\nObject.keys(result).forEach(e => \n    indik.push({\"index\": e,\n    \"indicator\": {\n      \"type\": \"sparkline\",\n      \"value\": result[e].map(x => x.dataMatrix[index*2+1]),\n      \"_options\": {\n        \"type\": \"box\",\n        \"raw\": false,\n        \"minValue\": -50,\n        \"maxValue\": 20,\n        \"boxLineColor\": \"black\",\n        \"boxFillColor\": \"lightgrey\",\n        \"whiskerColor\": \"black\",\n        \"medianColor\": \"red\",\n        \"lineColor\": \"black\",\n        \"target\": currentSpectra[index*2+1],\n        \"targetColor\": \"green\"\n      }\n    }})\n)\n\nindik.push({\"index\": \"All\",\n    \"indicator\": {\n      \"type\": \"sparkline\",\n      \"value\": data.map(x => x.dataMatrix[index*2+1]),\n      \"_options\": {\n        \"type\": \"box\",\n        \"raw\": false,\n        \"minValue\": -50,\n        \"maxValue\": 20,\n        \"boxLineColor\": \"black\",\n        \"boxFillColor\": \"lightgrey\",\n        \"whiskerColor\": \"black\",\n        \"medianColor\": \"red\",\n        \"lineColor\": \"black\",\n        \"target\": currentSpectra[index*2+1],\n        \"targetColor\": \"green\"}\n      }})\n\n\nAPI.createData('indik', indik);\n\nconsole.log(\"sparkline tracking executed\")\n"
               ]
             }
           ],
@@ -1527,11 +1527,11 @@
           "name": "admin",
           "position": {
             "left": 2,
-            "top": 20
+            "top": 38
           },
           "size": {
             "width": 44,
-            "height": 19
+            "height": 15
           },
           "bgColor": [
             255,
@@ -1545,10 +1545,6 @@
         {
           "rel": "inputValue",
           "name": "currtrack"
-        },
-        {
-          "rel": "inputValue",
-          "name": "currentSpectra"
         }
       ],
       "actions_in": [
@@ -2022,7 +2018,7 @@
                 ]
               ],
               "script": [
-                "//http://www.cheminfo.org/Tutorial/6._Renderer/6.6_Sparklines/index.html\n//http://www.cheminfo.org/?viewURL=https%3A%2F%2Fcouch.cheminfo.org%2Fcheminfo-public%2Fb50564ac9d207212f8e5ae8167bcd627%2Fview.json&loadversion=true&fillsearch=6.4+Indicator\n\nlet data = API.getData('data')\n\nlet x = data[0].dataMatrix.filter(function(value, index, Arr) {\n    return index % 2 == 0\n})\n\nlet y = data.map( x => \n    x.dataMatrix.filter((value, index, Arr) => \n        index % 2 == 1\n    )\n)\n\n//console.time(\"timer\")\n//let sum = y.reduce((previous, current) => \n//    current.map((num, idx) => \n//        num + previous[idx]\n//    )\n//).map(x => x / y.length)\n//console.timeEnd(\"timer\")\n\n//console.time(\"timer2\")\n//let yT = _.zip(...y)\nlet yT = y[0].map((col, i) => y.map(row => row[i]))\n\nlet max = yT.map(x => Math.max(...x))\nlet min = yT.map(x => Math.min(...x))\n\nlet mean = yT.map(x => \n    x.reduce((a, c) => \n        a + c\n        )\n    ).map(x => x / y.length)\n//console.timeEnd(\"timer2\")\n\nvar s = []\nlet a = [1,2,3,4]\nlet meanS = x.map((v, ind) => [v, mean[ind]]).reduce((a,b) => a.concat(b) )\ns = []\nlet maxS = x.map((v, ind) => [x[ind], max[ind]]).reduce((a,b) => a.concat(b) )\ns = []\nlet minS = x.map((v, ind) => [v, min[ind]]).reduce((a,b) => a.concat(b) )\n\n\n//console.log(a.push(...a))\n//console.log(minS)\n//console.log(x)\n\n\nAPI.createData('minSpectra', minS)\nAPI.createData('maxSpectra', maxS)\nAPI.createData('meanSpecta', meanS)"
+                "//http://www.cheminfo.org/Tutorial/6._Renderer/6.6_Sparklines/index.html\n//http://www.cheminfo.org/?viewURL=https%3A%2F%2Fcouch.cheminfo.org%2Fcheminfo-public%2Fb50564ac9d207212f8e5ae8167bcd627%2Fview.json&loadversion=true&fillsearch=6.4+Indicator\n\nlet data = API.getData('data')\n\nlet x = data[0].dataMatrix.filter(function(value, index, Arr) {\n    return index % 2 == 0\n})\n\nlet y = data.map( x => \n    x.dataMatrix.filter((value, index, Arr) => \n        index % 2 == 1\n    )\n)\n\n//console.time(\"timer\")\n//let sum = y.reduce((previous, current) => \n//    current.map((num, idx) => \n//        num + previous[idx]\n//    )\n//).map(x => x / y.length)\n//console.timeEnd(\"timer\")\n\n//console.time(\"timer2\")\n//let yT = _.zip(...y)\nlet yT = y[0].map((col, i) => y.map(row => row[i]))\n\nlet max = yT.map(x => Math.max(...x))\nlet min = yT.map(x => Math.min(...x))\n\nlet mean = yT.map(x => \n    x.reduce((a, c) => \n        a + c\n        )\n    ).map(x => x / y.length)\n//console.timeEnd(\"timer2\")\n\nvar s = []\nlet a = [1,2,3,4]\nlet meanS = x.map((v, ind) => [v, mean[ind]]).reduce((a,b) => a.concat(b) )\ns = []\nlet maxS = x.map((v, ind) => [x[ind], max[ind]]).reduce((a,b) => a.concat(b) )\ns = []\nlet minS = x.map((v, ind) => [v, min[ind]]).reduce((a,b) => a.concat(b) )\n\n\n//console.log(a.push(...a))\n//console.log(minS)\n//console.log(x)\n\n\nAPI.createData('minSpectra', minS)\nAPI.createData('maxSpectra', maxS)\nAPI.createData('meanSpecta', meanS)\n\nvar result = data.reduce(function (r, a) {\n        r[a.group] = r[a.group] || [];\n        r[a.group].push(a);\n        return r;\n    }, Object.create(null));\n\nAPI.createData('dataByGroup', result)\n\n\nconsole.log(\"compute statistic executed\")"
               ]
             }
           ],
@@ -2068,16 +2064,16 @@
         },
         "admin": {
           "position": {
-            "left": 49,
-            "top": 20
+            "left": 47,
+            "top": 13
           },
           "size": {
             "width": 70,
-            "height": 53
+            "height": 44
           },
           "zIndex": 0,
           "display": true,
-          "title": "",
+          "title": "compute statistics",
           "bgColor": [
             255,
             255,
@@ -2146,7 +2142,7 @@
           ]
         }
       ],
-      "title": ""
+      "title": "compute statistics"
     },
     {
       "url": "modules/types/client_interaction/code_executor/",
@@ -2170,7 +2166,7 @@
                 ]
               ],
               "script": [
-                "var t = API.getData('trackData')\n\nt.minSpectra.indexClosest += 1\nt.maxSpectra.indexClosest += 1\nt.currentSpectra.indexClosest += 1\nt.overlaySpectra.indexClosest += 1\n\nconsole.log(t.minSpectra.indexClosest)\n\n\nAPI.createData('currtrack', t)"
+                "var t = API.getData('trackData')\n\nt.minSpectra.indexClosest += 1\nt.maxSpectra.indexClosest += 1\nt.currentSpectra.indexClosest += 1\nt.overlaySpectra.indexClosest += 1\n\n\nAPI.createData('currtrack', t)"
               ]
             }
           ],
@@ -2217,7 +2213,7 @@
         "admin": {
           "position": {
             "left": 2,
-            "top": 40
+            "top": 20
           },
           "size": {
             "width": 44,
@@ -2297,185 +2293,47 @@
       "title": "correct index"
     },
     {
-      "url": "modules/types/science/spectra/spectra_displayer/",
+      "url": "modules/types/client_interaction/code_executor/",
       "configuration": {
-        "sections": {
-          "graph": [
+        "sections": {},
+        "groups": {
+          "group": [
             {
-              "sections": {},
-              "groups": {
-                "graph": [
-                  {
-                    "url": [
-                      ""
-                    ],
-                    "zoom": [
-                      "none"
-                    ],
-                    "wheelAction": [
-                      "none"
-                    ],
-                    "wheelbaseline": [
-                      0
-                    ],
-                    "fullOut": [
-                      "both"
-                    ],
-                    "legend": [
-                      null
-                    ],
-                    "legendOptions": [
-                      [
-                        "isSerieHideable",
-                        "isSerieSelectable"
-                      ]
-                    ],
-                    "mouseTracking": [
-                      []
-                    ],
-                    "selectScatter": [
-                      []
-                    ],
-                    "independantYZoom": [
-                      []
-                    ]
-                  }
+              "display": [
+                [
+                  "editor",
+                  "buttons"
                 ]
-              }
+              ],
+              "execOnLoad": [
+                []
+              ],
+              "asyncAwait": [
+                [
+                  "top"
+                ]
+              ],
+              "script": [
+                "\nlet indik = API.getData('indik')\nvar currentSpectra = API.getData('currentSpectra')\nvar currTrack = API.getData('currtrack')\nvar index = currTrack.minSpectra.indexClosest\n\nindik.map( x => x.indicator._options.target = currentSpectra[index*2+1])\n\nAPI.createData('indik', indik);\n\nconsole.log(\"sparkline tracking spectra executed\")\n"
+              ]
             }
           ],
-          "axis": [
-            {
-              "sections": {},
-              "groups": {
-                "xAxis": [
-                  {
-                    "checkboxes": [
-                      [
-                        "display"
-                      ]
-                    ],
-                    "label": [
-                      ""
-                    ],
-                    "beforeSpacing": [
-                      "0"
-                    ],
-                    "afterSpacing": [
-                      0
-                    ],
-                    "min": [
-                      ""
-                    ],
-                    "max": [
-                      ""
-                    ],
-                    "nbTicksPrimary": [
-                      5
-                    ],
-                    "axismodification": [
-                      "none"
-                    ]
-                  }
-                ],
-                "yAxis": [
-                  {
-                    "checkboxes": [
-                      [
-                        "display"
-                      ]
-                    ],
-                    "label": [
-                      ""
-                    ],
-                    "beforeSpacing": [
-                      "0"
-                    ],
-                    "afterSpacing": [
-                      0
-                    ],
-                    "min": [
-                      ""
-                    ],
-                    "max": [
-                      ""
-                    ],
-                    "nbTicksPrimary": [
-                      5
-                    ],
-                    "fitToAxisOnFromTo": [
-                      []
-                    ]
-                  }
-                ]
-              }
-            }
+          "libs": [
+            [
+              {}
+            ]
           ],
-          "series": [
-            {
-              "sections": {},
-              "groups": {
-                "series": [
-                  {
-                    "overflow": [
-                      []
-                    ],
-                    "stackVerticalSpacing": [
-                      0
-                    ]
-                  }
-                ]
+          "buttons": [
+            [
+              {
+                "name": "button1",
+                "label": "Execute",
+                "hide": [],
+                "disable": []
               }
-            }
-          ],
-          "variables": [
-            {
-              "sections": {},
-              "groups": {
-                "variables": [
-                  [
-                    {
-                      "variable": "",
-                      "axis": "0",
-                      "adaptTo": "none",
-                      "plotcolor": [
-                        1,
-                        1,
-                        255,
-                        1
-                      ],
-                      "strokewidth": "1",
-                      "strokestyle": "1",
-                      "plotcontinuous": "continuous",
-                      "peakpicking": [],
-                      "markers": [],
-                      "markerShape": "1",
-                      "markerSize": 2,
-                      "normalize": "none",
-                      "optimizeSlots": [],
-                      "tracking": []
-                    }
-                  ]
-                ]
-              }
-            }
-          ],
-          "misc": [
-            {
-              "sections": {},
-              "groups": {
-                "misc": [
-                  {
-                    "highlightOptions": [
-                      "{}"
-                    ]
-                  }
-                ]
-              }
-            }
+            ]
           ]
-        },
-        "groups": {}
+        }
       },
       "layers": {
         "Default layer": {
@@ -2503,11 +2361,11 @@
         "admin": {
           "position": {
             "left": 2,
-            "top": 63
+            "top": 54
           },
           "size": {
             "width": 44,
-            "height": 27
+            "height": 15
           },
           "zIndex": 0,
           "display": true,
@@ -2523,11 +2381,11 @@
           "name": "admin"
         }
       },
-      "id": 17,
+      "id": 18,
       "vars_in": [
         {
-          "rel": "xyArray",
-          "name": "minSpectra"
+          "rel": "inputValue",
+          "name": "currentSpectra"
         }
       ],
       "actions_in": [
