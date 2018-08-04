@@ -1,8 +1,8 @@
 context("testing server objects and methods")
 
-
+s <- new("server")
 test_that('check number of slots in server object', {
-  expect_equal(length(slotNames(s)), 5)
+  expect_equal(length(slotNames(s)), 6)
 })
 
 test_that('check print.server S3 method', {
