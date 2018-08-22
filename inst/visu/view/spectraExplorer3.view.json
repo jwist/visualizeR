@@ -10,8 +10,8 @@
       "admin": {
         "name": "admin"
       },
-      "byGroup": {
-        "name": "byGroup"
+      "selectSpectra": {
+        "name": "selectSpectra"
       }
     }
   },
@@ -19,7 +19,7 @@
     {
       "url": "modules/types/display/single_value/",
       "id": 1,
-      "title": "Selected data (clicked)",
+      "title": "Selected data (double clicked)",
       "configuration": {
         "sections": {},
         "groups": {
@@ -83,7 +83,7 @@
         "Default layer": {
           "zIndex": 0,
           "display": true,
-          "title": "Selected data (clicked)",
+          "title": "Selected data (double clicked)",
           "wrapper": true,
           "created": true,
           "name": "Default layer",
@@ -124,9 +124,9 @@
             0
           ]
         },
-        "byGroup": {
+        "selectSpectra": {
           "zIndex": 0,
-          "display": true,
+          "display": false,
           "title": "Selected data (clicked)",
           "wrapper": true,
           "created": true,
@@ -434,7 +434,7 @@
           },
           "size": {
             "width": 88,
-            "height": 40
+            "height": 38
           },
           "bgColor": [
             255,
@@ -465,7 +465,7 @@
             0
           ]
         },
-        "byGroup": {
+        "selectSpectra": {
           "zIndex": 0,
           "display": false,
           "title": "spectra 1H-NMR",
@@ -519,7 +519,16 @@
       ],
       "actions_out": [
         {
-          "jpath": []
+          "event": "onZoomChange",
+          "rel": "fromToX",
+          "jpath": [],
+          "name": "currentAxis"
+        },
+        {
+          "event": "onZoomChange",
+          "rel": "fromToY",
+          "jpath": [],
+          "name": "currentAxisY"
         }
       ],
       "toolbar": {
@@ -624,7 +633,7 @@
           "created": true,
           "name": "Default layer",
           "position": {
-            "left": 49,
+            "left": 47,
             "top": 2
           },
           "size": {
@@ -638,7 +647,7 @@
             0
           ]
         },
-        "byGroup": {
+        "selectSpectra": {
           "zIndex": 0,
           "display": false,
           "title": "Metadata viewer (hovered line)",
@@ -755,14 +764,14 @@
               {
                 "name": "ID",
                 "jpath": "element.ID",
-                "editable": "select",
-                "number": []
+                "number": [],
+                "editable": "select"
               },
               {
                 "name": "Group",
                 "jpath": "element.group",
-                "editable": "checkbox",
-                "number": []
+                "number": [],
+                "editable": "checkbox"
               }
             ]
           ]
@@ -770,28 +779,6 @@
       },
       "layers": {
         "Default layer": {
-          "zIndex": 0,
-          "display": true,
-          "title": "Data selector",
-          "wrapper": true,
-          "created": true,
-          "name": "Default layer",
-          "position": {
-            "left": 1,
-            "top": 12
-          },
-          "size": {
-            "width": 30,
-            "height": 73
-          },
-          "bgColor": [
-            255,
-            255,
-            255,
-            0
-          ]
-        },
-        "admin": {
           "zIndex": 0,
           "display": false,
           "title": "Data selector",
@@ -813,9 +800,31 @@
             0
           ]
         },
-        "byGroup": {
+        "admin": {
           "zIndex": 0,
           "display": true,
+          "title": "Data selector",
+          "wrapper": true,
+          "created": true,
+          "name": "Default layer",
+          "position": {
+            "left": 160,
+            "top": 3
+          },
+          "size": {
+            "width": 30,
+            "height": 73
+          },
+          "bgColor": [
+            255,
+            255,
+            255,
+            0
+          ]
+        },
+        "selectSpectra": {
+          "zIndex": 0,
+          "display": false,
           "title": "Data selector",
           "wrapper": true,
           "created": true,
@@ -854,60 +863,60 @@
         {
           "event": "onHover",
           "rel": "row",
-          "name": "currentSpectra",
           "jpath": [
             "dataMatrix"
-          ]
+          ],
+          "name": "currentSpectra"
         },
         {
           "event": "onSelect",
           "rel": "row",
-          "name": "overlaySpectra",
           "jpath": [
             "dataMatrix"
-          ]
+          ],
+          "name": "overlaySpectra"
         },
         {
           "event": "onHover",
           "rel": "row",
-          "name": "currentMetadata",
           "jpath": [
             "metadata"
-          ]
+          ],
+          "name": "currentMetadata"
         },
         {
           "event": "onHover",
           "rel": "row",
-          "name": "currentColor",
           "jpath": [
             "color"
-          ]
+          ],
+          "name": "currentColor"
         },
         {
           "event": "onSelect",
           "rel": "row",
-          "name": "overlayCatalogID",
           "jpath": [
             "metadata",
             "catalogID"
-          ]
+          ],
+          "name": "overlayCatalogID"
         },
         {
           "event": "onHover",
           "rel": "row",
-          "name": "currentCatalogID",
           "jpath": [
             "metadata",
             "catalogID"
-          ]
+          ],
+          "name": "currentCatalogID"
         },
         {
           "event": "onSelect",
           "rel": "row",
-          "name": "overlayColor",
           "jpath": [
             "color"
-          ]
+          ],
+          "name": "overlayColor"
         }
       ],
       "toolbar": {
@@ -1026,9 +1035,9 @@
             0
           ]
         },
-        "byGroup": {
+        "selectSpectra": {
           "zIndex": 0,
-          "display": true,
+          "display": false,
           "title": "current values",
           "wrapper": false,
           "created": true,
@@ -1196,7 +1205,7 @@
             0
           ]
         },
-        "byGroup": {
+        "selectSpectra": {
           "zIndex": 0,
           "display": false,
           "title": "",
@@ -1279,7 +1288,7 @@
     {
       "url": "modules/types/display/single_value/",
       "id": 7,
-      "title": "Boxplot of current variable (hoovered)",
+      "title": "Boxplot of current variable (clicked)",
       "configuration": {
         "sections": {},
         "groups": {
@@ -1343,7 +1352,7 @@
         "Default layer": {
           "zIndex": 0,
           "display": true,
-          "title": "Boxplot of current variable (hoovered)",
+          "title": "Boxplot of current variable (clicked)",
           "wrapper": true,
           "created": true,
           "name": "Default layer",
@@ -1384,7 +1393,7 @@
             0
           ]
         },
-        "byGroup": {
+        "selectSpectra": {
           "zIndex": 0,
           "display": false,
           "title": "Boxplot of current variable (hoovered)",
@@ -1463,8 +1472,175 @@
       ]
     },
     {
-      "url": "modules/types/client_interaction/code_executor/",
+      "url": "modules/types/edition/object_editor/",
       "id": 8,
+      "title": "current metadata (hoovered)",
+      "configuration": {
+        "sections": {},
+        "groups": {
+          "group": [
+            {
+              "editable": [
+                "view"
+              ],
+              "expanded": [
+                []
+              ],
+              "storeObject": [
+                []
+              ],
+              "displayValue": [
+                []
+              ],
+              "searchBox": [
+                [
+                  "search"
+                ]
+              ],
+              "sendButton": [
+                []
+              ],
+              "output": [
+                "new"
+              ],
+              "storedObject": [
+                "{}"
+              ]
+            }
+          ]
+        }
+      },
+      "layers": {
+        "Default layer": {
+          "zIndex": 0,
+          "display": true,
+          "title": "current metadata (hoovered)",
+          "wrapper": true,
+          "created": true,
+          "name": "Default layer",
+          "position": {
+            "left": 1,
+            "top": 86
+          },
+          "size": {
+            "width": 119,
+            "height": 21
+          },
+          "bgColor": [
+            255,
+            255,
+            255,
+            0
+          ]
+        },
+        "admin": {
+          "zIndex": 0,
+          "display": false,
+          "title": "",
+          "wrapper": true,
+          "created": true,
+          "name": "admin",
+          "position": {
+            "left": 101,
+            "top": 19
+          },
+          "size": {
+            "width": 55,
+            "height": 46
+          },
+          "bgColor": [
+            255,
+            255,
+            255,
+            0
+          ]
+        },
+        "selectSpectra": {
+          "zIndex": 0,
+          "display": false,
+          "title": "current metadata (hoovered)",
+          "wrapper": true,
+          "created": true,
+          "name": "Default layer",
+          "position": {
+            "left": 32,
+            "top": 53
+          },
+          "size": {
+            "width": 88,
+            "height": 32
+          },
+          "bgColor": [
+            255,
+            255,
+            255,
+            0
+          ]
+        }
+      },
+      "vars_in": [
+        {
+          "rel": "value",
+          "name": "currentMetadata"
+        }
+      ],
+      "actions_in": [
+        {}
+      ],
+      "vars_out": [
+        {
+          "event": "onObjectChange",
+          "rel": "output",
+          "jpath": [],
+          "name": "modifiedQuantile"
+        }
+      ],
+      "actions_out": [
+        {
+          "jpath": []
+        }
+      ],
+      "toolbar": {
+        "custom": [
+          [
+            {
+              "title": "",
+              "icon": "",
+              "action": "",
+              "position": "begin",
+              "color": [
+                100,
+                100,
+                100,
+                1
+              ]
+            }
+          ]
+        ],
+        "common": [
+          {
+            "toolbar": [
+              [
+                "Open Preferences"
+              ]
+            ]
+          }
+        ]
+      },
+      "css": [
+        {
+          "fontSize": [
+            ""
+          ],
+          "fontFamily": [
+            ""
+          ]
+        }
+      ]
+    },
+    {
+      "url": "modules/types/client_interaction/code_executor/",
+      "id": 9,
       "title": "sparkline tracking",
       "configuration": {
         "sections": {},
@@ -1486,7 +1662,7 @@
                 ]
               ],
               "script": [
-                "\nvar currentSpectra = API.getData('currentSpectra')\nvar data = API.getData('data')\n\nvar currTrack = API.getData('currtrack')\nvar index = currTrack.minSpectra.indexClosest\nvar result = API.getData('dataByGroup')\n\nvar indik = []\nObject.keys(result).forEach(e => \n    indik.push({\"index\": e,\n    \"indicator\": {\n      \"type\": \"sparkline\",\n      \"value\": result[e].map(x => x.dataMatrix[index*2+1]),\n      \"_options\": {\n        \"type\": \"box\",\n        \"raw\": false,\n        \"minValue\": -50,\n        \"maxValue\": 20,\n        \"boxLineColor\": \"black\",\n        \"boxFillColor\": \"lightgrey\",\n        \"whiskerColor\": \"black\",\n        \"medianColor\": \"red\",\n        \"lineColor\": \"black\",\n        \"target\": currentSpectra[index*2+1],\n        \"targetColor\": \"green\"\n      }\n    }})\n)\n\nindik.push({\"index\": \"All\",\n    \"indicator\": {\n      \"type\": \"sparkline\",\n      \"value\": data.map(x => x.dataMatrix[index*2+1]),\n      \"_options\": {\n        \"type\": \"box\",\n        \"raw\": false,\n        \"minValue\": -50,\n        \"maxValue\": 20,\n        \"boxLineColor\": \"black\",\n        \"boxFillColor\": \"lightgrey\",\n        \"whiskerColor\": \"black\",\n        \"medianColor\": \"red\",\n        \"lineColor\": \"black\",\n        \"target\": currentSpectra[index*2+1],\n        \"targetColor\": \"green\"}\n      }})\n\n\nAPI.createData('indik', indik);\n\nconsole.log(\"sparkline tracking executed\")\n"
+                "\nlet currentSpectra = API.getData('currentSpectra')\nlet data = API.getData('data')\n\nlet currTrack = API.getData('currtrack')\nlet index = currTrack.minSpectra.indexClosest\nlet result = API.getData('dataByGroup')\n\nlet quantiles = API.getData('quantileByGroup')\n\nfunction Boxplot (title, boxData) {\n  this.title = title,\n  this.data = new Array(boxData)\n}\n\nfunction BoxData (x, q1, q2, q3, whiskers, outliers) {\n    this.type = 'box',\n    this.boxes = new Array(   \n    {'x' : x,    \n    'Q1' : q1, \n    'Q2' : q2, \n    'Q3' : q3, \n    'whiskers' : whiskers, \n    'outliers' : outliers})\n}\n\n//let q = quantiles.map(x => new Boxplot(\"\"))\nlet boxData = new BoxData(0, 0, 1, 3, [-1, 5], [10, 12])\nlet boxPlot = new Boxplot('dd', boxData)\n\nAPI.createData('boxPlot', boxPlot)\nconsole.log(boxPlot)\n\nconsole.log(quantiles)\n\nlet indik = []\nObject.keys(result).forEach(e => \n    indik.push({\"index\": e,\n    \"indicator\": {\n      \"type\": \"sparkline\",\n      \"value\": result[e].map(x => x.dataMatrix[index*2+1]),\n      \"_options\": {\n        \"type\": \"box\",\n        \"raw\": false,\n        \"minValue\": -50,\n        \"maxValue\": 20,\n        \"boxLineColor\": \"black\",\n        \"boxFillColor\": \"lightgrey\",\n        \"whiskerColor\": \"black\",\n        \"medianColor\": \"red\",\n        \"lineColor\": \"black\",\n        \"target\": currentSpectra[index*2+1],\n        \"targetColor\": \"green\"\n      }\n    }})\n)\n\nindik.push({\"index\": \"All\",\n    \"indicator\": {\n      \"type\": \"sparkline\",\n      \"value\": data.map(x => x.dataMatrix[index*2+1]),\n      \"_options\": {\n        \"type\": \"box\",\n        \"raw\": false,\n        \"minValue\": -50,\n        \"maxValue\": 20,\n        \"boxLineColor\": \"black\",\n        \"boxFillColor\": \"lightgrey\",\n        \"whiskerColor\": \"black\",\n        \"medianColor\": \"red\",\n        \"lineColor\": \"black\",\n        \"target\": currentSpectra[index*2+1],\n        \"targetColor\": \"green\"}\n      }})\n\n\nAPI.createData('indik', indik);\n\nconsole.log(\"sparkline tracking executed\")\n"
               ]
             }
           ],
@@ -1538,12 +1714,12 @@
           "created": true,
           "name": "admin",
           "position": {
-            "left": 2,
-            "top": 38
+            "left": 97,
+            "top": 13
           },
           "size": {
-            "width": 44,
-            "height": 26
+            "width": 62,
+            "height": 54
           },
           "bgColor": [
             255,
@@ -1552,7 +1728,7 @@
             0
           ]
         },
-        "byGroup": {
+        "selectSpectra": {
           "zIndex": 0,
           "display": false,
           "title": "",
@@ -1764,11 +1940,11 @@
           },
           "size": {
             "width": 51,
-            "height": 32
+            "height": 54
           },
           "zIndex": 0,
           "display": true,
-          "title": "Boxplot of current variable (hoovered) with current value (green \"+\")",
+          "title": "Boxplot of current variable (clicked) with current value (green \"+\")",
           "bgColor": [
             255,
             255,
@@ -1801,7 +1977,7 @@
           "created": true,
           "name": "admin"
         },
-        "byGroup": {
+        "selectSpectra": {
           "position": {
             "left": 121,
             "top": 53
@@ -1824,7 +2000,7 @@
           "name": "Default layer"
         }
       },
-      "id": 9,
+      "id": 10,
       "vars_in": [
         {
           "rel": "list",
@@ -1884,11 +2060,11 @@
           ]
         }
       ],
-      "title": "Boxplot of current variable (hoovered) with current value (green \"+\")"
+      "title": "Boxplot of current variable (clicked) with current value (green \"+\")"
     },
     {
       "url": "modules/types/display/single_value/",
-      "id": 10,
+      "id": 11,
       "title": "current data (hoovered)",
       "configuration": {
         "sections": {},
@@ -1994,9 +2170,9 @@
             0
           ]
         },
-        "byGroup": {
+        "selectSpectra": {
           "zIndex": 0,
-          "display": true,
+          "display": false,
           "title": "current data (hoovered)",
           "wrapper": true,
           "created": true,
@@ -2096,7 +2272,7 @@
                 ]
               ],
               "script": [
-                "//http://www.cheminfo.org/Tutorial/6._Renderer/6.6_Sparklines/index.html\n//http://www.cheminfo.org/?viewURL=https%3A%2F%2Fcouch.cheminfo.org%2Fcheminfo-public%2Fb50564ac9d207212f8e5ae8167bcd627%2Fview.json&loadversion=true&fillsearch=6.4+Indicator\n\nlet data = API.getData('data')\n\nlet x = data[0].dataMatrix.filter(function(value, index, Arr) {\n    return index % 2 == 0\n})\n\nlet y = data.map( x => \n    x.dataMatrix.filter((value, index, Arr) => \n        index % 2 == 1\n    )\n)\n\n//console.time(\"timer\")\n//let sum = y.reduce((previous, current) => \n//    current.map((num, idx) => \n//        num + previous[idx]\n//    )\n//).map(x => x / y.length)\n//console.timeEnd(\"timer\")\n\n//console.time(\"timer2\")\n//let yT = _.zip(...y)\nlet yT = y[0].map((col, i) => y.map(row => row[i]))\n\nlet max = yT.map(x => Math.max(...x))\nlet min = yT.map(x => Math.min(...x))\n\nlet mean = yT.map(x => \n    x.reduce((a, c) => \n        a + c\n        )\n    ).map(x => x / y.length)\n//console.timeEnd(\"timer2\")\n\nvar s = []\nlet a = [1,2,3,4]\nlet meanS = x.map((v, ind) => [v, mean[ind]]).reduce((a,b) => a.concat(b) )\ns = []\nlet maxS = x.map((v, ind) => [x[ind], max[ind]]).reduce((a,b) => a.concat(b) )\ns = []\nlet minS = x.map((v, ind) => [v, min[ind]]).reduce((a,b) => a.concat(b) )\n\n\n//console.log(a.push(...a))\n//console.log(minS)\n//console.log(x)\n\n\nAPI.createData('minSpectra', minS)\nAPI.createData('maxSpectra', maxS)\nAPI.createData('meanSpecta', meanS)\n\nvar result = data.reduce(function (r, a) {\n        r[a.group] = r[a.group] || [];\n        r[a.group].push(a);\n        return r;\n    }, Object.create(null));\n\nAPI.createData('dataByGroup', result)\n\n\nconsole.log(\"compute statistic executed\")"
+                "//http://www.cheminfo.org/Tutorial/6._Renderer/6.6_Sparklines/index.html\n//http://www.cheminfo.org/?viewURL=https%3A%2F%2Fcouch.cheminfo.org%2Fcheminfo-public%2Fb50564ac9d207212f8e5ae8167bcd627%2Fview.json&loadversion=true&fillsearch=6.4+Indicator\n//https://www.cheminfo.org/?viewURL=https%3A%2F%2Fcouch.cheminfo.org%2Fcheminfo-public%2F9cfcc8ba7999bf41e2c88a92a96a0201%2Fview.json&loadversion=true&fillsearch=7.3+Superagent+and+files+from+GitHub+Ajax\n//http://www.cheminfo.org/ML/Regression/index.html\n\nlet data = API.getData('data')\n\nlet x = data[0].dataMatrix.filter(function(value, index, Arr) {\n    return index % 2 == 0\n})\n\nlet y = data.map( x => \n    x.dataMatrix.filter((value, index, Arr) => \n        index % 2 == 1\n    )\n)\n\n//console.time(\"timer\")\n//let sum = y.reduce((previous, current) => \n//    current.map((num, idx) => \n//        num + previous[idx]\n//    )\n//).map(x => x / y.length)\n//console.timeEnd(\"timer\")\n\n//console.time(\"timer2\")\n//let yT = _.zip(...y)\n\nlet yT = y[0].map((col, i) => y.map(row => row[i]))\n\nlet max = yT.map(x => Math.max(...x))\nlet min = yT.map(x => Math.min(...x))\n\nlet mean = yT.map(x => \n    x.reduce((a, c) => \n        a + c\n        )\n    ).map(x => x / y.length)\n//console.timeEnd(\"timer2\")\n\nvar s = []\nlet a = [1,2,3,4]\nlet meanS = x.map((v, ind) => [v, mean[ind]]).reduce((a,b) => a.concat(b) )\ns = []\nlet maxS = x.map((v, ind) => [x[ind], max[ind]]).reduce((a,b) => a.concat(b) )\ns = []\nlet minS = x.map((v, ind) => [v, min[ind]]).reduce((a,b) => a.concat(b) )\n\n\nAPI.createData('minSpectra', minS)\nAPI.createData('maxSpectra', maxS)\nAPI.createData('meanSpecta', meanS)\n\nvar result = data.reduce(function (r, a) {\n        r[a.group] = r[a.group] || [];\n        r[a.group].push(a);\n        return r;\n    }, Object.create(null));\n\nAPI.createData('dataByGroup', result)\n\n\nconsole.log(\"compute statistic executed\")"
               ]
             }
           ],
@@ -2146,8 +2322,8 @@
             "top": 13
           },
           "size": {
-            "width": 70,
-            "height": 44
+            "width": 49,
+            "height": 54
           },
           "zIndex": 0,
           "display": true,
@@ -2162,7 +2338,7 @@
           "created": true,
           "name": "admin"
         },
-        "byGroup": {
+        "selectSpectra": {
           "position": {
             "left": 0,
             "top": 0
@@ -2185,7 +2361,7 @@
           "name": "Default layer"
         }
       },
-      "id": 11,
+      "id": 12,
       "vars_in": [
         {
           "rel": "inputValue",
@@ -2332,7 +2508,7 @@
           "created": true,
           "name": "admin"
         },
-        "byGroup": {
+        "selectSpectra": {
           "position": {
             "left": 0,
             "top": 0
@@ -2355,7 +2531,7 @@
           "name": "Default layer"
         }
       },
-      "id": 12,
+      "id": 13,
       "vars_in": [
         {
           "rel": "inputValue",
@@ -2436,7 +2612,7 @@
                 ]
               ],
               "script": [
-                "\nlet indik = API.getData('indik')\nvar currentSpectra = API.getData('currentSpectra')\nvar currTrack = API.getData('currtrack')\nvar index = currTrack.minSpectra.indexClosest\n\nindik.map( x => x.indicator._options.target = currentSpectra[index*2+1])\n\nAPI.createData('indik', indik);\n\nconsole.log(\"sparkline tracking spectra executed\")\n"
+                "\nlet indik = API.getData('indik')\nvar currentSpectra = API.getData('currentSpectra')\nvar currTrack = API.getData('currtrack')\nvar index = currTrack.minSpectra.indexClosest\n\nindik.map( x => x.indicator._options.target = currentSpectra[index*2+1])\n\nAPI.createData('indik', indik);\n\nconsole.log(\"sparkline target update executed\")\n"
               ]
             }
           ],
@@ -2483,15 +2659,15 @@
         "admin": {
           "position": {
             "left": 2,
-            "top": 65
+            "top": 38
           },
           "size": {
             "width": 44,
-            "height": 27
+            "height": 17
           },
           "zIndex": 0,
           "display": true,
-          "title": "",
+          "title": "Sparkline target update ",
           "bgColor": [
             255,
             255,
@@ -2502,7 +2678,7 @@
           "created": true,
           "name": "admin"
         },
-        "byGroup": {
+        "selectSpectra": {
           "position": {
             "left": 0,
             "top": 0
@@ -2525,7 +2701,7 @@
           "name": "Default layer"
         }
       },
-      "id": 13,
+      "id": 14,
       "vars_in": [
         {
           "rel": "inputValue",
@@ -2582,7 +2758,1024 @@
           ]
         }
       ],
+      "title": "Sparkline target update "
+    },
+    {
+      "url": "modules/types/display/single_value/",
+      "configuration": {
+        "sections": {},
+        "groups": {
+          "group": [
+            {
+              "append": [
+                []
+              ],
+              "maxEntries": [
+                1
+              ],
+              "editable": [
+                []
+              ],
+              "debounce": [
+                0
+              ],
+              "defaultvalue": [
+                null
+              ],
+              "font": [
+                null
+              ],
+              "fontcolor": [
+                [
+                  0,
+                  0,
+                  0,
+                  1
+                ]
+              ],
+              "fontsize": [
+                null
+              ],
+              "align": [
+                null
+              ],
+              "valign": [
+                null
+              ],
+              "rendererOptions": [
+                ""
+              ],
+              "forceType": [
+                "chart"
+              ],
+              "sprintf": [
+                null
+              ],
+              "sprintfOrder": [
+                null
+              ],
+              "preformatted": [
+                []
+              ]
+            }
+          ]
+        }
+      },
+      "layers": {
+        "Default layer": {
+          "position": {
+            "left": 0,
+            "top": 0
+          },
+          "size": {
+            "width": 20,
+            "height": 20
+          },
+          "zIndex": 0,
+          "display": false,
+          "title": "",
+          "bgColor": [
+            255,
+            255,
+            255,
+            0
+          ],
+          "wrapper": true,
+          "created": true,
+          "name": "Default layer"
+        },
+        "admin": {
+          "position": {
+            "left": 2,
+            "top": 56
+          },
+          "size": {
+            "width": 44,
+            "height": 38
+          },
+          "zIndex": 0,
+          "display": true,
+          "title": "",
+          "bgColor": [
+            255,
+            255,
+            255,
+            0
+          ],
+          "wrapper": true,
+          "created": true,
+          "name": "admin"
+        },
+        "selectSpectra": {
+          "position": {
+            "left": 0,
+            "top": 0
+          },
+          "size": {
+            "width": 20,
+            "height": 20
+          },
+          "zIndex": 0,
+          "display": false,
+          "title": "",
+          "bgColor": [
+            255,
+            255,
+            255,
+            0
+          ],
+          "wrapper": true,
+          "created": true,
+          "name": "Default layer"
+        }
+      },
+      "id": 15,
+      "vars_in": [
+        {
+          "rel": "value",
+          "name": "boxPlot"
+        }
+      ],
+      "actions_in": [
+        {}
+      ],
+      "actions_out": [
+        {
+          "jpath": []
+        }
+      ],
+      "vars_out": [],
+      "toolbar": {
+        "custom": [
+          [
+            {
+              "title": "",
+              "icon": "",
+              "action": "",
+              "position": "begin",
+              "color": [
+                100,
+                100,
+                100,
+                1
+              ]
+            }
+          ]
+        ],
+        "common": [
+          {
+            "toolbar": [
+              [
+                "Open Preferences"
+              ]
+            ]
+          }
+        ]
+      },
+      "css": [
+        {
+          "fontSize": [
+            ""
+          ],
+          "fontFamily": [
+            ""
+          ]
+        }
+      ],
       "title": ""
+    },
+    {
+      "url": "modules/types/edition/object_editor/",
+      "configuration": {
+        "sections": {},
+        "groups": {
+          "group": [
+            {
+              "editable": [
+                "view"
+              ],
+              "expanded": [
+                []
+              ],
+              "storeObject": [
+                []
+              ],
+              "displayValue": [
+                []
+              ],
+              "searchBox": [
+                [
+                  "search"
+                ]
+              ],
+              "sendButton": [
+                []
+              ],
+              "output": [
+                "new"
+              ],
+              "storedObject": [
+                "{}"
+              ]
+            }
+          ]
+        }
+      },
+      "layers": {
+        "Default layer": {
+          "position": {
+            "left": 0,
+            "top": 0
+          },
+          "size": {
+            "width": 20,
+            "height": 20
+          },
+          "zIndex": 0,
+          "display": false,
+          "title": "",
+          "bgColor": [
+            255,
+            255,
+            255,
+            0
+          ],
+          "wrapper": true,
+          "created": true,
+          "name": "Default layer"
+        },
+        "admin": {
+          "position": {
+            "left": 47,
+            "top": 68
+          },
+          "size": {
+            "width": 49,
+            "height": 26
+          },
+          "zIndex": 0,
+          "display": true,
+          "title": "",
+          "bgColor": [
+            255,
+            255,
+            255,
+            0
+          ],
+          "wrapper": true,
+          "created": true,
+          "name": "admin"
+        },
+        "selectSpectra": {
+          "position": {
+            "left": 0,
+            "top": 0
+          },
+          "size": {
+            "width": 20,
+            "height": 20
+          },
+          "zIndex": 0,
+          "display": false,
+          "title": "",
+          "bgColor": [
+            255,
+            255,
+            255,
+            0
+          ],
+          "wrapper": true,
+          "created": true,
+          "name": "Default layer"
+        }
+      },
+      "id": 16,
+      "vars_in": [
+        {
+          "rel": "value",
+          "name": "boxPlot"
+        }
+      ],
+      "actions_in": [
+        {}
+      ],
+      "vars_out": [
+        {
+          "jpath": []
+        }
+      ],
+      "actions_out": [
+        {
+          "jpath": []
+        }
+      ],
+      "toolbar": {
+        "custom": [
+          [
+            {
+              "title": "",
+              "icon": "",
+              "action": "",
+              "position": "begin",
+              "color": [
+                100,
+                100,
+                100,
+                1
+              ]
+            }
+          ]
+        ],
+        "common": [
+          {
+            "toolbar": [
+              [
+                "Open Preferences"
+              ]
+            ]
+          }
+        ]
+      },
+      "css": [
+        {
+          "fontSize": [
+            ""
+          ],
+          "fontFamily": [
+            ""
+          ]
+        }
+      ],
+      "title": ""
+    },
+    {
+      "url": "modules/types/science/spectra/spectra_displayer/",
+      "configuration": {
+        "sections": {
+          "graph": [
+            {
+              "sections": {},
+              "groups": {
+                "graph": [
+                  {
+                    "url": [
+                      ""
+                    ],
+                    "zoom": [
+                      "x"
+                    ],
+                    "wheelAction": [
+                      "zoomY"
+                    ],
+                    "wheelbaseline": [
+                      0
+                    ],
+                    "fullOut": [
+                      "none"
+                    ],
+                    "legend": [
+                      "none"
+                    ],
+                    "legendOptions": [
+                      [
+                        "isSerieHideable",
+                        "isSerieSelectable",
+                        "movable"
+                      ]
+                    ],
+                    "mouseTracking": [
+                      []
+                    ],
+                    "selectScatter": [
+                      []
+                    ],
+                    "independantYZoom": [
+                      [
+                        "yes"
+                      ]
+                    ]
+                  }
+                ]
+              }
+            }
+          ],
+          "axis": [
+            {
+              "sections": {},
+              "groups": {
+                "xAxis": [
+                  {
+                    "checkboxes": [
+                      [
+                        "display",
+                        "flip",
+                        "main"
+                      ]
+                    ],
+                    "label": [
+                      "ppm"
+                    ],
+                    "beforeSpacing": [
+                      "0"
+                    ],
+                    "afterSpacing": [
+                      0
+                    ],
+                    "min": [
+                      ""
+                    ],
+                    "max": [
+                      ""
+                    ],
+                    "nbTicksPrimary": [
+                      5
+                    ],
+                    "axismodification": [
+                      "none"
+                    ]
+                  }
+                ],
+                "yAxis": [
+                  {
+                    "checkboxes": [
+                      [
+                        "display",
+                        "main"
+                      ]
+                    ],
+                    "label": [
+                      "Relative Intensity"
+                    ],
+                    "beforeSpacing": [
+                      "0"
+                    ],
+                    "afterSpacing": [
+                      0
+                    ],
+                    "min": [
+                      ""
+                    ],
+                    "max": [
+                      ""
+                    ],
+                    "nbTicksPrimary": [
+                      5
+                    ],
+                    "fitToAxisOnFromTo": [
+                      []
+                    ]
+                  }
+                ]
+              }
+            }
+          ],
+          "series": [
+            {
+              "sections": {},
+              "groups": {
+                "series": [
+                  {
+                    "overflow": [
+                      []
+                    ],
+                    "stackVerticalSpacing": [
+                      0
+                    ]
+                  }
+                ]
+              }
+            }
+          ],
+          "variables": [
+            {
+              "sections": {},
+              "groups": {
+                "variables": [
+                  [
+                    {
+                      "variable": "",
+                      "axis": "0",
+                      "adaptTo": "none",
+                      "plotcolor": [
+                        1,
+                        1,
+                        255,
+                        1
+                      ],
+                      "strokewidth": "1",
+                      "strokestyle": "1",
+                      "plotcontinuous": "continuous",
+                      "peakpicking": [],
+                      "markers": [],
+                      "markerShape": "1",
+                      "markerSize": 2,
+                      "normalize": "none",
+                      "optimizeSlots": [],
+                      "tracking": []
+                    }
+                  ]
+                ]
+              }
+            }
+          ],
+          "misc": [
+            {
+              "sections": {},
+              "groups": {
+                "misc": [
+                  {
+                    "highlightOptions": [
+                      "{}"
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "groups": {}
+      },
+      "layers": {
+        "Default layer": {
+          "position": {
+            "left": 32,
+            "top": 51
+          },
+          "size": {
+            "width": 88,
+            "height": 34
+          },
+          "zIndex": 0,
+          "display": true,
+          "title": "Select multiple spectra in the table to display them here",
+          "bgColor": [
+            255,
+            255,
+            255,
+            0
+          ],
+          "wrapper": true,
+          "created": true,
+          "name": "Default layer"
+        },
+        "admin": {
+          "position": {
+            "left": 0,
+            "top": 0
+          },
+          "size": {
+            "width": 20,
+            "height": 20
+          },
+          "zIndex": 0,
+          "display": false,
+          "title": "",
+          "bgColor": [
+            255,
+            255,
+            255,
+            0
+          ],
+          "wrapper": true,
+          "created": true,
+          "name": "admin"
+        },
+        "selectSpectra": {
+          "position": {
+            "left": 1,
+            "top": 3
+          },
+          "size": {
+            "width": 89,
+            "height": 50
+          },
+          "zIndex": 0,
+          "display": true,
+          "title": "",
+          "bgColor": [
+            255,
+            255,
+            255,
+            0
+          ],
+          "wrapper": true,
+          "created": true,
+          "name": "test"
+        }
+      },
+      "id": 17,
+      "vars_in": [
+        {
+          "rel": "chart",
+          "name": "spectraToDisplay"
+        },
+        {
+          "rel": "chart",
+          "name": "currentSpectraToDisplay"
+        }
+      ],
+      "actions_in": [
+        {
+          "rel": "fromToX",
+          "name": "currentAxis"
+        },
+        {
+          "rel": "fromToY",
+          "name": "currentAxisY"
+        }
+      ],
+      "vars_out": [
+        {
+          "event": "onMouseOverMarker",
+          "rel": "markerInfos",
+          "jpath": [],
+          "name": "testShape"
+        }
+      ],
+      "actions_out": [
+        {
+          "jpath": []
+        }
+      ],
+      "toolbar": {
+        "custom": [
+          [
+            {
+              "title": "",
+              "icon": "",
+              "action": "",
+              "position": "begin",
+              "color": [
+                100,
+                100,
+                100,
+                1
+              ]
+            }
+          ]
+        ],
+        "common": [
+          {
+            "toolbar": [
+              [
+                "Open Preferences",
+                "Show fullscreen",
+                "Export Data",
+                "Print"
+              ]
+            ]
+          }
+        ]
+      },
+      "css": [
+        {
+          "fontSize": [
+            ""
+          ],
+          "fontFamily": [
+            ""
+          ]
+        }
+      ],
+      "title": "Select multiple spectra in the table to display them here"
+    },
+    {
+      "url": "modules/types/edition/object_editor/",
+      "configuration": {
+        "sections": {},
+        "groups": {
+          "group": [
+            {
+              "editable": [
+                "view"
+              ],
+              "expanded": [
+                []
+              ],
+              "storeObject": [
+                []
+              ],
+              "displayValue": [
+                []
+              ],
+              "searchBox": [
+                [
+                  "search"
+                ]
+              ],
+              "sendButton": [
+                []
+              ],
+              "output": [
+                "new"
+              ],
+              "storedObject": [
+                "{}"
+              ]
+            }
+          ]
+        }
+      },
+      "layers": {
+        "Default layer": {
+          "position": {
+            "left": 0,
+            "top": 0
+          },
+          "size": {
+            "width": 20,
+            "height": 20
+          },
+          "zIndex": 0,
+          "display": false,
+          "title": "",
+          "bgColor": [
+            255,
+            255,
+            255,
+            0
+          ],
+          "wrapper": true,
+          "created": true,
+          "name": "Default layer"
+        },
+        "admin": {
+          "position": {
+            "left": 0,
+            "top": 0
+          },
+          "size": {
+            "width": 20,
+            "height": 20
+          },
+          "zIndex": 0,
+          "display": false,
+          "title": "",
+          "bgColor": [
+            255,
+            255,
+            255,
+            0
+          ],
+          "wrapper": true,
+          "created": true,
+          "name": "admin"
+        },
+        "selectSpectra": {
+          "position": {
+            "left": 91,
+            "top": 3
+          },
+          "size": {
+            "width": 60,
+            "height": 46
+          },
+          "zIndex": 0,
+          "display": true,
+          "title": "",
+          "bgColor": [
+            255,
+            255,
+            255,
+            0
+          ],
+          "wrapper": true,
+          "created": true,
+          "name": "test"
+        }
+      },
+      "id": 18,
+      "vars_in": [
+        {
+          "rel": "value",
+          "name": "currentSpectraToDisplay"
+        }
+      ],
+      "actions_in": [
+        {}
+      ],
+      "vars_out": [
+        {
+          "jpath": []
+        }
+      ],
+      "actions_out": [
+        {
+          "jpath": []
+        }
+      ],
+      "toolbar": {
+        "custom": [
+          [
+            {
+              "title": "",
+              "icon": "",
+              "action": "",
+              "position": "begin",
+              "color": [
+                100,
+                100,
+                100,
+                1
+              ]
+            }
+          ]
+        ],
+        "common": [
+          {
+            "toolbar": [
+              [
+                "Open Preferences"
+              ]
+            ]
+          }
+        ]
+      },
+      "css": [
+        {
+          "fontSize": [
+            ""
+          ],
+          "fontFamily": [
+            ""
+          ]
+        }
+      ],
+      "title": ""
+    },
+    {
+      "url": "modules/types/client_interaction/code_executor/",
+      "configuration": {
+        "sections": {},
+        "groups": {
+          "group": [
+            {
+              "display": [
+                [
+                  "editor",
+                  "buttons"
+                ]
+              ],
+              "execOnLoad": [
+                []
+              ],
+              "asyncAwait": [
+                [
+                  "top"
+                ]
+              ],
+              "script": [
+                "let data = API.getData('selectedSpectra')\nlet currentData = API.getData('currentSpectra')\n\nlet currTrack = API.getData('currtrack')\nlet index = currTrack.minSpectra.indexClosest\n\nlet dataByGroup = API.getData('dataByGroup')\n\nlet x = data[0].dataMatrix.filter(function(value, index, Arr) {\n    return index % 2 == 0\n})\n\nlet color = []\nlet col = []\nx.forEach( i => col.push({'_rgb':[0,0,255,1]}) )\n//color.forEach((ele, ind, arr) => arr[ind]._rgb[0] = 0)\n\n\nlet y = data.map( x => \n    x.dataMatrix.filter((value, index, Arr) => \n        index % 2 == 1\n    )\n)\n\nlet spectra = data.map((e, i) => {\n    let groupColor = e.color.split(\"(\")[1].split(\")\")[0].split(\",\").map(Number)\n    color =[]\n    x.forEach( () => color.push({'_rgb':groupColor}) )\n    let s = (\n        {'type': 'color',\n            'y': y[i],\n            'x': x,\n            'color': color\n        })\n    return s\n    }\n)\n//console.log(data[0].dataMatrix[1])\n//console.log(y[0][0])\n\nlet currentSpectra = (\n        {'type': 'color',\n            'y': currentData.filter((value, index, Arr) => index % 2 == 1),\n            'x': x,\n            'color': col\n        }\n)\n\n\nAPI.createData('spectraToDisplay', {'data':spectra})\nAPI.createData('currentSpectraToDisplay', {'data':currentSpectra})\n"
+              ]
+            }
+          ],
+          "libs": [
+            [
+              {}
+            ]
+          ],
+          "buttons": [
+            [
+              {
+                "name": "button1",
+                "label": "Execute",
+                "hide": [],
+                "disable": []
+              }
+            ]
+          ]
+        }
+      },
+      "layers": {
+        "Default layer": {
+          "position": {
+            "left": 0,
+            "top": 0
+          },
+          "size": {
+            "width": 20,
+            "height": 20
+          },
+          "zIndex": 0,
+          "display": false,
+          "title": "",
+          "bgColor": [
+            255,
+            255,
+            255,
+            0
+          ],
+          "wrapper": true,
+          "created": true,
+          "name": "Default layer"
+        },
+        "admin": {
+          "position": {
+            "left": 0,
+            "top": 0
+          },
+          "size": {
+            "width": 20,
+            "height": 20
+          },
+          "zIndex": 0,
+          "display": false,
+          "title": "",
+          "bgColor": [
+            255,
+            255,
+            255,
+            0
+          ],
+          "wrapper": true,
+          "created": true,
+          "name": "admin"
+        },
+        "selectSpectra": {
+          "position": {
+            "left": 91,
+            "top": 50
+          },
+          "size": {
+            "width": 60,
+            "height": 40
+          },
+          "zIndex": 0,
+          "display": true,
+          "title": "Format selected spectra as chart",
+          "bgColor": [
+            255,
+            255,
+            255,
+            0
+          ],
+          "wrapper": true,
+          "created": true,
+          "name": "test"
+        }
+      },
+      "id": 19,
+      "vars_in": [
+        {
+          "rel": "inputValue",
+          "name": "selectedSpectra"
+        },
+        {
+          "rel": "inputValue",
+          "name": "currentSpectra"
+        }
+      ],
+      "actions_in": [
+        {}
+      ],
+      "vars_out": [
+        {
+          "jpath": []
+        }
+      ],
+      "actions_out": [
+        {
+          "jpath": []
+        }
+      ],
+      "toolbar": {
+        "custom": [
+          [
+            {
+              "title": "",
+              "icon": "",
+              "action": "",
+              "position": "begin",
+              "color": [
+                100,
+                100,
+                100,
+                1
+              ]
+            }
+          ]
+        ],
+        "common": [
+          {
+            "toolbar": [
+              [
+                "Open Preferences"
+              ]
+            ]
+          }
+        ]
+      },
+      "css": [
+        {
+          "fontSize": [
+            ""
+          ],
+          "fontFamily": [
+            ""
+          ]
+        }
+      ],
+      "title": "Format selected spectra as chart"
     },
     {
       "url": "modules/types/edition/slick_grid/",
@@ -2599,7 +3792,8 @@
                   "highlightScroll",
                   "forgetLastActive",
                   "editable",
-                  "filterColumns"
+                  "filterColumns",
+                  "keepSelected"
                 ]
               ],
               "copyPaste": [
@@ -2729,16 +3923,16 @@
       "layers": {
         "Default layer": {
           "position": {
-            "left": 0,
-            "top": 0
+            "left": 1,
+            "top": 12
           },
           "size": {
-            "width": 20,
-            "height": 20
+            "width": 30,
+            "height": 73
           },
           "zIndex": 0,
-          "display": false,
-          "title": "",
+          "display": true,
+          "title": "Data Selector",
           "bgColor": [
             255,
             255,
@@ -2771,14 +3965,14 @@
           "created": true,
           "name": "admin"
         },
-        "byGroup": {
+        "selectSpectra": {
           "position": {
-            "left": 121,
-            "top": 1
+            "left": 1,
+            "top": 54
           },
           "size": {
-            "width": 39,
-            "height": 50
+            "width": 89,
+            "height": 36
           },
           "zIndex": 0,
           "display": true,
@@ -2791,10 +3985,10 @@
           ],
           "wrapper": true,
           "created": true,
-          "name": "byGroup"
+          "name": "test"
         }
       },
-      "id": 14,
+      "id": 20,
       "vars_in": [
         {
           "rel": "list",
@@ -2814,7 +4008,55 @@
           "event": "onRowsSelect",
           "rel": "rows",
           "jpath": [],
-          "name": "selectedRows"
+          "name": "selectedSpectra"
+        },
+        {
+          "event": "onHover",
+          "rel": "row",
+          "jpath": [
+            "dataMatrix"
+          ],
+          "name": "currentSpectra"
+        },
+        {
+          "event": "onDoubleClick",
+          "rel": "row",
+          "jpath": [
+            "dataMatrix"
+          ],
+          "name": "overlaySpectra"
+        },
+        {
+          "event": "onHover",
+          "rel": "row",
+          "jpath": [
+            "color"
+          ],
+          "name": "currentColor"
+        },
+        {
+          "event": "onDoubleClick",
+          "rel": "row",
+          "jpath": [
+            "color"
+          ],
+          "name": "overlayColor"
+        },
+        {
+          "event": "onHover",
+          "rel": "row",
+          "jpath": [
+            "ID"
+          ],
+          "name": "currentCatalogID"
+        },
+        {
+          "event": "onDoubleClick",
+          "rel": "row",
+          "jpath": [
+            "ID"
+          ],
+          "name": "overlayCatalogID"
         }
       ],
       "toolbar": {
@@ -2839,6 +4081,7 @@
             "toolbar": [
               [
                 "Open Preferences",
+                "Show fullscreen",
                 "Export Data",
                 "Print"
               ]
@@ -2856,654 +4099,7 @@
           ]
         }
       ],
-      "title": ""
-    },
-    {
-      "url": "modules/types/client_interaction/code_executor/",
-      "configuration": {
-        "sections": {},
-        "groups": {
-          "group": [
-            {
-              "display": [
-                [
-                  "editor",
-                  "buttons"
-                ]
-              ],
-              "execOnLoad": [
-                []
-              ],
-              "asyncAwait": [
-                [
-                  "top"
-                ]
-              ],
-              "script": [
-                "let rows = API.getData('selectedRows')\n\n\nlet x = rows[0].dataMatrix.filter(function(value, index, Arr) {\n    return index % 2 == 0\n})\n\nlet y = rows.map( x => \n    x.dataMatrix.filter((value, index, Arr) => \n        index % 2 == 1\n    )\n)\n\n\nfunction DataOptions() {\n    this.fill = \"red\",\n    this.shape = \"rectangle\",\n    this.cx = 0,\n    this.cy = 0,\n    this.r = 1,\n    this.height = \"1px\",\n    this.width = \"1px\",\n    this.stroke = \"red\"\n\n}\n          \nfunction DataSerie(x,y) {\n    //this.xAxis = 0,\n    //this.yAxis = 1,\n    //this.options = opts,\n    //this.type = \"scatter\",\n    this.x = x,\n    this.y = y,\n    this.info = [],\n    this.style = { \n        selected: x.map(x => new DataOptions()), \n        unselected: x.map(x => new DataOptions()),\n    }\n}\n\nlet v = y.map(y => new DataSerie(x,y))\n\nlet title = \"selected spectra\"\n\nlet chart =  {\n    title: title,\n    data: v\n}\n\nconsole.log(v)\n\n\nAPI.createData('selectedSpectra', chart)\n\n\n"
-              ]
-            }
-          ],
-          "libs": [
-            [
-              {}
-            ]
-          ],
-          "buttons": [
-            [
-              {
-                "name": "button1",
-                "label": "Execute",
-                "hide": [],
-                "disable": []
-              }
-            ]
-          ]
-        }
-      },
-      "layers": {
-        "Default layer": {
-          "position": {
-            "left": 0,
-            "top": 0
-          },
-          "size": {
-            "width": 20,
-            "height": 20
-          },
-          "zIndex": 0,
-          "display": false,
-          "title": "",
-          "bgColor": [
-            255,
-            255,
-            255,
-            0
-          ],
-          "wrapper": true,
-          "created": true,
-          "name": "Default layer"
-        },
-        "admin": {
-          "position": {
-            "left": 0,
-            "top": 0
-          },
-          "size": {
-            "width": 20,
-            "height": 20
-          },
-          "zIndex": 0,
-          "display": false,
-          "title": "",
-          "bgColor": [
-            255,
-            255,
-            255,
-            0
-          ],
-          "wrapper": true,
-          "created": true,
-          "name": "admin"
-        },
-        "byGroup": {
-          "position": {
-            "left": 32,
-            "top": 53
-          },
-          "size": {
-            "width": 57,
-            "height": 59
-          },
-          "zIndex": 0,
-          "display": true,
-          "title": "",
-          "bgColor": [
-            255,
-            255,
-            255,
-            0
-          ],
-          "wrapper": true,
-          "created": true,
-          "name": "byGroup"
-        }
-      },
-      "id": 15,
-      "vars_in": [
-        {
-          "rel": "inputValue",
-          "name": "selectedRows"
-        }
-      ],
-      "actions_in": [
-        {}
-      ],
-      "vars_out": [
-        {
-          "jpath": []
-        }
-      ],
-      "actions_out": [
-        {
-          "jpath": []
-        }
-      ],
-      "toolbar": {
-        "custom": [
-          [
-            {
-              "title": "",
-              "icon": "",
-              "action": "",
-              "position": "begin",
-              "color": [
-                100,
-                100,
-                100,
-                1
-              ]
-            }
-          ]
-        ],
-        "common": [
-          {
-            "toolbar": [
-              [
-                "Open Preferences"
-              ]
-            ]
-          }
-        ]
-      },
-      "css": [
-        {
-          "fontSize": [
-            ""
-          ],
-          "fontFamily": [
-            ""
-          ]
-        }
-      ],
-      "title": ""
-    },
-    {
-      "url": "modules/types/science/spectra/spectra_displayer/",
-      "configuration": {
-        "sections": {
-          "graph": [
-            {
-              "sections": {},
-              "groups": {
-                "graph": [
-                  {
-                    "url": [
-                      ""
-                    ],
-                    "zoom": [
-                      "x"
-                    ],
-                    "wheelAction": [
-                      "zoomY"
-                    ],
-                    "wheelbaseline": [
-                      0
-                    ],
-                    "fullOut": [
-                      "none"
-                    ],
-                    "legend": [
-                      null
-                    ],
-                    "legendOptions": [
-                      [
-                        "isSerieHideable",
-                        "isSerieSelectable"
-                      ]
-                    ],
-                    "mouseTracking": [
-                      [
-                        "track"
-                      ]
-                    ],
-                    "selectScatter": [
-                      []
-                    ],
-                    "independantYZoom": [
-                      []
-                    ]
-                  }
-                ]
-              }
-            }
-          ],
-          "axis": [
-            {
-              "sections": {},
-              "groups": {
-                "xAxis": [
-                  {
-                    "checkboxes": [
-                      [
-                        "display",
-                        "flip",
-                        "main"
-                      ]
-                    ],
-                    "label": [
-                      "ppm"
-                    ],
-                    "beforeSpacing": [
-                      "0"
-                    ],
-                    "afterSpacing": [
-                      0
-                    ],
-                    "min": [
-                      ""
-                    ],
-                    "max": [
-                      ""
-                    ],
-                    "nbTicksPrimary": [
-                      5
-                    ],
-                    "axismodification": [
-                      "none"
-                    ]
-                  }
-                ],
-                "yAxis": [
-                  {
-                    "checkboxes": [
-                      [
-                        "display",
-                        "main"
-                      ]
-                    ],
-                    "label": [
-                      "Relative Intensity"
-                    ],
-                    "beforeSpacing": [
-                      "0"
-                    ],
-                    "afterSpacing": [
-                      0
-                    ],
-                    "min": [
-                      ""
-                    ],
-                    "max": [
-                      ""
-                    ],
-                    "nbTicksPrimary": [
-                      5
-                    ],
-                    "fitToAxisOnFromTo": [
-                      []
-                    ]
-                  }
-                ]
-              }
-            }
-          ],
-          "series": [
-            {
-              "sections": {},
-              "groups": {
-                "series": [
-                  {
-                    "overflow": [
-                      []
-                    ],
-                    "stackVerticalSpacing": [
-                      0
-                    ]
-                  }
-                ]
-              }
-            }
-          ],
-          "variables": [
-            {
-              "sections": {},
-              "groups": {
-                "variables": [
-                  [
-                    {
-                      "variable": "selectedSpectra",
-                      "axis": "0",
-                      "adaptTo": "none",
-                      "plotcolor": [
-                        1,
-                        1,
-                        255,
-                        1
-                      ],
-                      "strokewidth": "1",
-                      "strokestyle": "1",
-                      "plotcontinuous": "continuous",
-                      "peakpicking": [],
-                      "markers": [],
-                      "markerShape": "1",
-                      "markerSize": 2,
-                      "normalize": "none",
-                      "optimizeSlots": [],
-                      "tracking": []
-                    }
-                  ]
-                ]
-              }
-            }
-          ],
-          "misc": [
-            {
-              "sections": {},
-              "groups": {
-                "misc": [
-                  {
-                    "highlightOptions": [
-                      "{}"
-                    ]
-                  }
-                ]
-              }
-            }
-          ]
-        },
-        "groups": {}
-      },
-      "layers": {
-        "Default layer": {
-          "position": {
-            "left": 0,
-            "top": 0
-          },
-          "size": {
-            "width": 20,
-            "height": 20
-          },
-          "zIndex": 0,
-          "display": false,
-          "title": "",
-          "bgColor": [
-            255,
-            255,
-            255,
-            0
-          ],
-          "wrapper": true,
-          "created": true,
-          "name": "Default layer"
-        },
-        "admin": {
-          "position": {
-            "left": 0,
-            "top": 0
-          },
-          "size": {
-            "width": 20,
-            "height": 20
-          },
-          "zIndex": 0,
-          "display": false,
-          "title": "",
-          "bgColor": [
-            255,
-            255,
-            255,
-            0
-          ],
-          "wrapper": true,
-          "created": true,
-          "name": "admin"
-        },
-        "byGroup": {
-          "position": {
-            "left": 32,
-            "top": 12
-          },
-          "size": {
-            "width": 88,
-            "height": 40
-          },
-          "zIndex": 0,
-          "display": true,
-          "title": "",
-          "bgColor": [
-            255,
-            255,
-            255,
-            0
-          ],
-          "wrapper": true,
-          "created": true,
-          "name": "byGroup"
-        }
-      },
-      "id": 16,
-      "vars_in": [
-        {
-          "rel": "chart",
-          "name": "selectedSpectra"
-        }
-      ],
-      "actions_in": [
-        {}
-      ],
-      "vars_out": [
-        {
-          "jpath": []
-        }
-      ],
-      "actions_out": [
-        {
-          "jpath": []
-        }
-      ],
-      "toolbar": {
-        "custom": [
-          [
-            {
-              "title": "",
-              "icon": "",
-              "action": "",
-              "position": "begin",
-              "color": [
-                100,
-                100,
-                100,
-                1
-              ]
-            }
-          ]
-        ],
-        "common": [
-          {
-            "toolbar": [
-              [
-                "Open Preferences"
-              ]
-            ]
-          }
-        ]
-      },
-      "css": [
-        {
-          "fontSize": [
-            ""
-          ],
-          "fontFamily": [
-            ""
-          ]
-        }
-      ],
-      "title": ""
-    },
-    {
-      "url": "modules/types/edition/object_editor/",
-      "configuration": {
-        "sections": {},
-        "groups": {
-          "group": [
-            {
-              "editable": [
-                "view"
-              ],
-              "expanded": [
-                []
-              ],
-              "storeObject": [
-                []
-              ],
-              "displayValue": [
-                []
-              ],
-              "searchBox": [
-                [
-                  "search"
-                ]
-              ],
-              "sendButton": [
-                []
-              ],
-              "output": [
-                "new"
-              ],
-              "storedObject": [
-                "{}"
-              ]
-            }
-          ]
-        }
-      },
-      "layers": {
-        "Default layer": {
-          "position": {
-            "left": 0,
-            "top": 0
-          },
-          "size": {
-            "width": 20,
-            "height": 20
-          },
-          "zIndex": 0,
-          "display": false,
-          "title": "",
-          "bgColor": [
-            255,
-            255,
-            255,
-            0
-          ],
-          "wrapper": true,
-          "created": true,
-          "name": "Default layer"
-        },
-        "admin": {
-          "position": {
-            "left": 0,
-            "top": 0
-          },
-          "size": {
-            "width": 20,
-            "height": 20
-          },
-          "zIndex": 0,
-          "display": false,
-          "title": "",
-          "bgColor": [
-            255,
-            255,
-            255,
-            0
-          ],
-          "wrapper": true,
-          "created": true,
-          "name": "admin"
-        },
-        "byGroup": {
-          "position": {
-            "left": 91,
-            "top": 66
-          },
-          "size": {
-            "width": 37,
-            "height": 32
-          },
-          "zIndex": 0,
-          "display": true,
-          "title": "",
-          "bgColor": [
-            255,
-            255,
-            255,
-            0
-          ],
-          "wrapper": true,
-          "created": true,
-          "name": "byGroup"
-        }
-      },
-      "id": 17,
-      "vars_in": [
-        {
-          "rel": "value",
-          "name": "selectedSpectra"
-        }
-      ],
-      "actions_in": [
-        {}
-      ],
-      "vars_out": [
-        {
-          "jpath": []
-        }
-      ],
-      "actions_out": [
-        {
-          "jpath": []
-        }
-      ],
-      "toolbar": {
-        "custom": [
-          [
-            {
-              "title": "",
-              "icon": "",
-              "action": "",
-              "position": "begin",
-              "color": [
-                100,
-                100,
-                100,
-                1
-              ]
-            }
-          ]
-        ],
-        "common": [
-          {
-            "toolbar": [
-              [
-                "Open Preferences"
-              ]
-            ]
-          }
-        ]
-      },
-      "css": [
-        {
-          "fontSize": [
-            ""
-          ],
-          "fontFamily": [
-            ""
-          ]
-        }
-      ],
-      "title": ""
+      "title": "Data Selector"
     }
   ],
   "variables": [
@@ -3526,13 +4122,19 @@
       "jpath": [
         "img"
       ]
+    },
+    {
+      "varname": "quantileByGroup",
+      "jpath": [
+        "quantileByGroup"
+      ]
     }
   ],
   "aliases": [
     {}
   ],
   "configuration": {
-    "title": "visualizeR spectraExplorer3"
+    "title": "visualizeR dataExplorer 3"
   },
   "actionscripts": [
     {

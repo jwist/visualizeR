@@ -213,6 +213,60 @@ appendData <- function(data, variable, variableName, type) {
                                              )
                                            )
                                          ))
+          },
+          "score" = {
+            data[[variableName]] <- list(
+                                           title = jsonlite::unbox("score plot"),
+                                           data = list(list(
+                                             type = jsonlite::unbox("scatter"),
+                                             info = mapply(
+                                               function(x, y)
+                                                 list(
+                                                   id = jsonlite::unbox(as.character(x)),
+                                                   "_hightlight" = list(y)
+                                                 ),
+                                               variable$info,
+                                               variable$highlight,
+                                               SIMPLIFY = FALSE
+                                             ),
+                                             x = variable$x,
+                                             y = variable$y,
+                                             styles = list(
+                                               unselected = mapply(
+                                                 function(x, y)
+                                                   list(
+                                                     fill = "red",
+                                                     shape = "circle",
+                                                     cx = 0,
+                                                     cy = 0,
+                                                     r = 3,
+                                                     height = "5px",
+                                                     width = "5px",
+                                                     stroke = "transparent"
+                                                   ),
+                                                 variable$info,
+                                                 variable$highlight,
+                                                 SIMPLIFY = FALSE
+                                                ),
+                                               selected = mapply(
+                                                 function(x, y)
+                                                   list(
+                                                     fill = "blue",
+                                                     shape = "circle",
+                                                     cx = 0,
+                                                     cy = 0,
+                                                     r = 8,
+                                                     height = "5px",
+                                                     width = "5px",
+                                                     stroke = "transparent"
+                                                   ),
+                                                 variable$info,
+                                                 variable$highlight,
+                                                 SIMPLIFY = FALSE
+                                               )
+                                             )
+                                           ))
+                                         )
           })
 
   return(data)
