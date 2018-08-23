@@ -104,7 +104,7 @@ appendData <- function(data, variable, variableName, type) {
                                                function(x, y)
                                                  list(
                                                    id = jsonlite::unbox(as.character(x)),
-                                                   "_hightlight" = list(y)
+                                                   "_highlight" = list(y)
                                                  ),
                                                variable$info,
                                                variable$highlight,
@@ -164,7 +164,7 @@ appendData <- function(data, variable, variableName, type) {
                                                function(x, y)
                                                  list(
                                                    id = jsonlite::unbox(as.character(x)),
-                                                   "_hightlight" = list(y)
+                                                   "_highlight" = list(y)
                                                  ),
                                                x$chart$info,
                                                x$chart$highlight,
@@ -172,7 +172,7 @@ appendData <- function(data, variable, variableName, type) {
                                              ),
                                              x = x$chart$x,
                                              y = x$chart$y,
-                                             "_hightlight" = x$chart$highlight,
+                                             "_highlight" = x$chart$highlight,
                                              #"options" = x$options,
                                              #if ( missing( variable$selected ) && missing( variable$unselected )) {
                                                style = list(
@@ -223,7 +223,7 @@ appendData <- function(data, variable, variableName, type) {
                                                function(x, y)
                                                  list(
                                                    id = jsonlite::unbox(as.character(x)),
-                                                   "_hightlight" = list(y)
+                                                   "_highlight" = list(y)
                                                  ),
                                                variable$info,
                                                variable$highlight,
@@ -235,7 +235,7 @@ appendData <- function(data, variable, variableName, type) {
                                                unselected = mapply(
                                                  function(x, y)
                                                    list(
-                                                     fill = "red",
+                                                     fill = x,
                                                      shape = "circle",
                                                      cx = 0,
                                                      cy = 0,
@@ -244,14 +244,14 @@ appendData <- function(data, variable, variableName, type) {
                                                      width = "5px",
                                                      stroke = "transparent"
                                                    ),
-                                                 variable$info,
+                                                 variable$color,
                                                  variable$highlight,
                                                  SIMPLIFY = FALSE
                                                 ),
                                                selected = mapply(
                                                  function(x, y)
                                                    list(
-                                                     fill = "blue",
+                                                     fill = x,
                                                      shape = "circle",
                                                      cx = 0,
                                                      cy = 0,
@@ -260,7 +260,7 @@ appendData <- function(data, variable, variableName, type) {
                                                      width = "5px",
                                                      stroke = "transparent"
                                                    ),
-                                                 variable$info,
+                                                 variable$color,
                                                  variable$highlight,
                                                  SIMPLIFY = FALSE
                                                )
