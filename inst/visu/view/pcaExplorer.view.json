@@ -32,7 +32,7 @@
                 ]
               ],
               "script": [
-                "\nlet marker = API.getData('selectedMarker')\nconsole.log(marker[0]._highlight[0])\n\n\nlet data = API.getData('data')\nconsole.log(data[0]._highlight)\n\nlet selectedMarkers = marker.map( r => r._highlight[0] )\n\nlet selectedData = data.filter( (val, ind, arr) => \n    {return selectedMarkers.includes(val._highlight - 1)}\n    )\n\n\nAPI.createData('selectedData', selectedData)\n\nAPI.createData('selectedIndex', selectedMarkers)\n\nlet currentID = API.getData('currentID')\nlet score = API.getData('score')\n\nlet a = 2\nlet currentChart = ({\"title\": \"score plot\",\n    \"data\": [{\n        \"type\": \"scatter\",\n        \"info\":[],\n        \"x\":[score.data[0].x[1]],\n        \"y\":[score.data[0].y[1]],\n        \"styles\": {\n            \"unselected\": [\n                {\"fill\": \"red\",\n                \"shape\": \"circle\",\n                \"cx\": 0,\n                \"cy\": 0,\n                \"r\": 8,\n                \"height\": \"5px\",\n                \"width\": \"5px\",\n                \"stroke\": \"transparent\"}]\n            }\n        }]\n})\n\nAPI.createData('currentChart', currentChart)\nAPI.createData('score', score)"
+                "\nlet marker = API.getData('selectedMarker')\nconsole.log(marker[0]._highlight[0])\n\n\nlet data = API.getData('data')\nconsole.log(data[1].ID)\n\nconsole.log(data[1]._highlight)\n\nlet selectedMarkers = marker.map( r => r._highlight[0] )\n\nlet selectedData = data.filter( (val, ind, arr) => \n    {return selectedMarkers.includes(val._highlight)}\n    )\n\n\nAPI.createData('selectedData', selectedData)\n\nAPI.createData('selectedIndex', selectedMarkers)\n\n"
               ]
             }
           ],
@@ -77,15 +77,11 @@
           "name": "Default layer"
         }
       },
-      "id": 7,
+      "id": 1,
       "vars_in": [
         {
           "rel": "inputValue",
           "name": "selectedMarker"
-        },
-        {
-          "rel": "inputValue",
-          "name": "currentData"
         }
       ],
       "actions_in": [
@@ -287,7 +283,7 @@
         "Default layer": {
           "position": {
             "left": 3,
-            "top": 13
+            "top": 5
           },
           "size": {
             "width": 44,
@@ -307,7 +303,7 @@
           "name": "Default layer"
         }
       },
-      "id": 8,
+      "id": 2,
       "vars_in": [
         {
           "rel": "list",
@@ -319,7 +315,10 @@
       ],
       "actions_out": [
         {
-          "jpath": []
+          "event": "onDoubleClick",
+          "rel": "row",
+          "jpath": [],
+          "name": "reset"
         }
       ],
       "vars_out": [
@@ -611,19 +610,18 @@
           "name": "Default layer"
         }
       },
-      "id": 9,
+      "id": 3,
       "vars_in": [
         {
           "rel": "chart",
-          "name": "score"
-        },
-        {
-          "rel": "chart",
-          "name": "currentChart"
+          "name": "modifiedScores"
         }
       ],
       "actions_in": [
-        {}
+        {
+          "rel": "selectSerie",
+          "name": "reset"
+        }
       ],
       "vars_out": [
         {
@@ -741,7 +739,7 @@
           "name": "Default layer"
         }
       },
-      "id": 10,
+      "id": 4,
       "vars_in": [
         {
           "rel": "value",
@@ -861,7 +859,7 @@
           "name": "Default layer"
         }
       },
-      "id": 11,
+      "id": 5,
       "vars_in": [
         {
           "rel": "value",
@@ -1000,7 +998,7 @@
           "name": "Default layer"
         }
       },
-      "id": 12,
+      "id": 6,
       "vars_in": [
         {}
       ],
@@ -1013,6 +1011,132 @@
         }
       ],
       "vars_out": [],
+      "toolbar": {
+        "custom": [
+          [
+            {
+              "title": "",
+              "icon": "",
+              "action": "",
+              "position": "begin",
+              "color": [
+                100,
+                100,
+                100,
+                1
+              ]
+            }
+          ]
+        ],
+        "common": [
+          {
+            "toolbar": [
+              [
+                "Open Preferences"
+              ]
+            ]
+          }
+        ]
+      },
+      "css": [
+        {
+          "fontSize": [
+            ""
+          ],
+          "fontFamily": [
+            ""
+          ]
+        }
+      ],
+      "title": ""
+    },
+    {
+      "url": "modules/types/client_interaction/code_executor/",
+      "configuration": {
+        "sections": {},
+        "groups": {
+          "group": [
+            {
+              "display": [
+                [
+                  "editor",
+                  "buttons"
+                ]
+              ],
+              "execOnLoad": [
+                []
+              ],
+              "asyncAwait": [
+                [
+                  "top"
+                ]
+              ],
+              "script": [
+                "let currentID = API.getData('currentID')\n\nif (currentID != null) { \nlet score = JSON.parse(JSON.stringify(API.getData('score')))\n\nconsole.log(currentID.s_)\n\nlet index = score.data[0].info.filter( val => val.id == currentID.s_ )[0]._highlight[0]\nconsole.log(index)\n\n//score.data[0].styles.unselected[index].fill = \"transparent\"\nscore.data[0].styles.unselected[index].r = 6\nscore.data[0].styles.unselected[index].stroke = \"red\"\n\nlet currentChart = ({\"title\": \"score plot\",\n    \"data\": [{\n        \"type\": \"scatter\",\n        \"info\":[],\n        \"x\":[score.data[0].x[1]],\n        \"y\":[score.data[0].y[1]],\n        \"styles\": {\n            \"unselected\": [\n                {\"fill\": \"transparent\",\n                \"shape\": \"circle\",\n                \"cx\": 0,\n                \"cy\": 0,\n                \"r\": 8,\n                \"height\": \"5px\",\n                \"width\": \"5px\",\n                \"stroke\": \"red\"}]\n            }\n        }]\n})\n\nAPI.createData('currentChart', currentChart)\nAPI.createData('modifiedScores', score)\nAPI.createData('currentID', null)\nconsole.log('executed')\n}\n\n"
+              ]
+            }
+          ],
+          "libs": [
+            [
+              {}
+            ]
+          ],
+          "buttons": [
+            [
+              {
+                "name": "button1",
+                "label": "Execute",
+                "hide": [],
+                "disable": []
+              }
+            ]
+          ]
+        }
+      },
+      "layers": {
+        "Default layer": {
+          "position": {
+            "left": 3,
+            "top": 71
+          },
+          "size": {
+            "width": 73,
+            "height": 44
+          },
+          "zIndex": 0,
+          "display": true,
+          "title": "",
+          "bgColor": [
+            255,
+            255,
+            255,
+            0
+          ],
+          "wrapper": true,
+          "created": true,
+          "name": "Default layer"
+        }
+      },
+      "id": 7,
+      "vars_in": [
+        {
+          "rel": "inputValue",
+          "name": "currentID"
+        }
+      ],
+      "actions_in": [
+        {}
+      ],
+      "vars_out": [
+        {
+          "jpath": []
+        }
+      ],
+      "actions_out": [
+        {
+          "jpath": []
+        }
+      ],
       "toolbar": {
         "custom": [
           [
@@ -1103,7 +1227,7 @@
         "general": [
           {
             "script": [
-              null
+              "let scores = API.getData('score')\nAPI.createData('modifiedScores', scores)"
             ]
           }
         ]
