@@ -18,8 +18,8 @@ test_that('data integrity', {
 
 test_that('import export with jsonlite', {
   v <- readView("../../inst/visu/view/test.view.json")
-  saveJSON(v, "viewTestThat.json")
-  expect_true(system("diff viewTestThat.json ../../inst/visu/view/test.view.json") == 0)
+  saveJSON(v, "./", "TestThat.json")
+  expect_true(system("diff ./TestThat.json ../../inst/visu/view/test.view.json") == 0)
   expect_is(v$variables[[1]]$jpath, "list")
 })
 
