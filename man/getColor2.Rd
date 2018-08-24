@@ -4,7 +4,7 @@
 \alias{getColor2}
 \title{GetColorChart based on character}
 \usage{
-getColor2(text)
+getColor2(text, colorFormat = "rgb")
 }
 \arguments{
 \item{text}{a text used to pick the color}
