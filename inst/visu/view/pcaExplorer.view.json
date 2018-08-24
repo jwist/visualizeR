@@ -32,7 +32,7 @@
                 ]
               ],
               "script": [
-                "\nlet marker = API.getData('selectedMarker')\nconsole.log(marker[0]._highlight[0])\n\n\nlet data = API.getData('data')\nconsole.log(data[0]._highlight)\n\nlet selectedMarkers = marker.map( r => r._highlight[0] )\n\nlet selectedData = data.filter( (val, ind, arr) => \n    {return selectedMarkers.includes(val._highlight - 1)}\n    )\n\n\n//console.log(data.map(x => x.ID))\n\nAPI.createData('selectedData', selectedData)\n\nAPI.createData('selectedIndex', selectedMarkers)\n"
+                "\nlet marker = API.getData('selectedMarker')\nconsole.log(marker[0]._highlight[0])\n\n\nlet data = API.getData('data')\nconsole.log(data[0]._highlight)\n\nlet selectedMarkers = marker.map( r => r._highlight[0] )\n\nlet selectedData = data.filter( (val, ind, arr) => \n    {return selectedMarkers.includes(val._highlight - 1)}\n    )\n\n\nAPI.createData('selectedData', selectedData)\n\nAPI.createData('selectedIndex', selectedMarkers)\n\nlet currentID = API.getData('currentID')\nlet score = API.getData('score')\n\nlet a = 2\nlet currentChart = ({\"title\": \"score plot\",\n    \"data\": [{\n        \"type\": \"scatter\",\n        \"info\":[],\n        \"x\":[score.data[0].x[1]],\n        \"y\":[score.data[0].y[1]],\n        \"styles\": {\n            \"unselected\": [\n                {\"fill\": \"red\",\n                \"shape\": \"circle\",\n                \"cx\": 0,\n                \"cy\": 0,\n                \"r\": 8,\n                \"height\": \"5px\",\n                \"width\": \"5px\",\n                \"stroke\": \"transparent\"}]\n            }\n        }]\n})\n\nAPI.createData('currentChart', currentChart)\nAPI.createData('score', score)"
               ]
             }
           ],
@@ -77,11 +77,15 @@
           "name": "Default layer"
         }
       },
-      "id": 1,
+      "id": 7,
       "vars_in": [
         {
           "rel": "inputValue",
           "name": "selectedMarker"
+        },
+        {
+          "rel": "inputValue",
+          "name": "currentData"
         }
       ],
       "actions_in": [
@@ -303,7 +307,7 @@
           "name": "Default layer"
         }
       },
-      "id": 2,
+      "id": 8,
       "vars_in": [
         {
           "rel": "list",
@@ -311,10 +315,7 @@
         }
       ],
       "actions_in": [
-        {
-          "rel": "selectRows",
-          "name": "test"
-        }
+        {}
       ],
       "actions_out": [
         {
@@ -329,6 +330,12 @@
             "ID"
           ],
           "name": "currentID"
+        },
+        {
+          "event": "onSelect",
+          "rel": "row",
+          "jpath": [],
+          "name": "currentData"
         }
       ],
       "toolbar": {
@@ -396,7 +403,7 @@
                       "none"
                     ],
                     "legend": [
-                      null
+                      "top"
                     ],
                     "legendOptions": [
                       [
@@ -536,6 +543,27 @@
                       "normalize": "none",
                       "optimizeSlots": [],
                       "tracking": []
+                    },
+                    {
+                      "variable": "currentChart",
+                      "axis": "0",
+                      "adaptTo": "none",
+                      "plotcolor": [
+                        1,
+                        1,
+                        255,
+                        1
+                      ],
+                      "strokewidth": "1",
+                      "strokestyle": "1",
+                      "plotcontinuous": "continuous",
+                      "peakpicking": [],
+                      "markers": [],
+                      "markerShape": "1",
+                      "markerSize": 2,
+                      "normalize": "none",
+                      "optimizeSlots": [],
+                      "tracking": []
                     }
                   ]
                 ]
@@ -583,11 +611,15 @@
           "name": "Default layer"
         }
       },
-      "id": 3,
+      "id": 9,
       "vars_in": [
         {
           "rel": "chart",
           "name": "score"
+        },
+        {
+          "rel": "chart",
+          "name": "currentChart"
         }
       ],
       "actions_in": [
@@ -709,11 +741,11 @@
           "name": "Default layer"
         }
       },
-      "id": 4,
+      "id": 10,
       "vars_in": [
         {
           "rel": "value",
-          "name": "selectedIndex"
+          "name": "score"
         }
       ],
       "actions_in": [
@@ -808,8 +840,8 @@
       "layers": {
         "Default layer": {
           "position": {
-            "left": 48,
-            "top": 71
+            "left": 133,
+            "top": 4
           },
           "size": {
             "width": 37,
@@ -829,11 +861,11 @@
           "name": "Default layer"
         }
       },
-      "id": 5,
+      "id": 11,
       "vars_in": [
         {
           "rel": "value",
-          "name": "selectedData"
+          "name": "currentChart"
         }
       ],
       "actions_in": [
@@ -968,7 +1000,7 @@
           "name": "Default layer"
         }
       },
-      "id": 6,
+      "id": 12,
       "vars_in": [
         {}
       ],
