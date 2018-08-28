@@ -8,7 +8,7 @@
 #' @examples
 #'
 #' v<- new("visualization")
-#' visualize(v)
+#' #visualize(v)
 #'
 #' @export
 

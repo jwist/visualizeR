@@ -19,6 +19,6 @@ function will trigger a local instance of \pkg{servr} server.
 \examples{
 
 v<- new("visualization")
-visualize(v)
+#visualize(v)
 
 }
