@@ -1,7 +1,7 @@
 Package: visualizeR
 Type: Package
 Title: visualize metabolomics data interactively
-Version: 0.1.0
+Version: 0.1.1
 Author: person("Julien", "Wist", email = "julien.wist@correounivalle.edu.co", role = c("aut", "cre"))
 Maintainer: Julien Wist <julien.wist@correounivalle.edu.co>
 Description: To connect R results to github.com/npellet/visualizer project using my.cheminfo.org.
