@@ -19,6 +19,6 @@ If a server is already running (daemon_list is empty), then nothing happens.
 \examples{
 
 s <- new("server")
-initServer(s)
+#initServer(s)
 
 }

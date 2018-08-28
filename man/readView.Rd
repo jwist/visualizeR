@@ -16,6 +16,6 @@ a list object to be manipulated
 Read json objects from https://github.com/npellet/visualizer.
 }
 \examples{
-path <- file.path( system.file(package = "visualizeR"), "R", "views", "blank.view.json" )
-v <- readView( path )
+#path <- file.path( system.file(package = "visualizeR"), "R", "views", "blank.view.json" )
+#v <- readView( path )
 }

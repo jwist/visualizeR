@@ -4,7 +4,7 @@
 #' @param text a text used to pick the color
 #' @return a rgba color string
 #' @examples
-#' getColor2("colombia")
+#' getColor2("colombia", "hex")
 #' @export
 
 getColor2 <- function(text, colorFormat='rgb') {

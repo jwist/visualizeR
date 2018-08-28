@@ -16,5 +16,5 @@ a color
 GetColorChart based on character
 }
 \examples{
-getColor2("colombia")
+getColor("colombia")
 }

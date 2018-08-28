@@ -3,7 +3,7 @@
 #' @param text a text used to pick the color
 #' @return a color
 #' @examples
-#' getColor2("colombia")
+#' getColor("colombia")
 #' @export
 
 getColor <- function(text) {

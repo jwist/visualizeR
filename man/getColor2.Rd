@@ -16,5 +16,5 @@ a rgba color string
 GetColorChart based on character
 }
 \examples{
-getColor2("colombia")
+getColor2("colombia", "hex")
 }

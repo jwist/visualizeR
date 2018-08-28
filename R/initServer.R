@@ -10,7 +10,7 @@
 #' @examples
 #'
 #' s <- new("server")
-#' initServer(s)
+#' #initServer(s)
 #'
 #' @export
 
