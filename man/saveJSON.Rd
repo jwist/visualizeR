@@ -23,6 +23,7 @@ It also create a time versioned of the file to ensure the data are not overwritt
 }
 \examples{
 
+v <- list()
 saveJSON(v, "~/", "view.json")
 
 }

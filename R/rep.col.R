@@ -5,9 +5,6 @@
 #' @param n number ot time to repeat the vector
 #' @return a matrix
 #' @references the original function was found here: \url{https://www.r-bloggers.com/a-quick-way-to-do-row-repeat-and-col-repeat-rep-row-rep-col/}
-#' @examples
-#'
-#' rep.col(c(1,2,3), 2)
 #' @export
 
 rep.col <- function(c, n){

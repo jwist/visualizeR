@@ -6,9 +6,6 @@
 #' \code{\link{visualizeR}}. Otherwise refer to the vignettes to see
 #' how to format the documentation.
 #'
-#' \section{Introduction}
-#' this package is intended for the ones...
-
 
 "_PACKAGE"
 

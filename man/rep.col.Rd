@@ -17,10 +17,6 @@ a matrix
 \description{
 repeat a column when needed to match other matrix dimension
 }
-\examples{
-
-rep.col(c(1,2,3), 2)
-}
 \references{
 the original function was found here: \url{https://www.r-bloggers.com/a-quick-way-to-do-row-repeat-and-col-repeat-rep-row-rep-col/}
 }

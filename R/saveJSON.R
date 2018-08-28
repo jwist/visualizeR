@@ -11,6 +11,7 @@
 #' @return a json file to be passed to the https://github.com/npellet/visualizer
 #' @examples
 #'
+#' v <- list()
 #' saveJSON(v, "~/", "view.json")
 #'
 #' @seealso \pkg{visualizeR::push()}
