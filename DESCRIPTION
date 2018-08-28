@@ -17,4 +17,6 @@ RoxygenNote: 6.1.0
 Imports:
   jsonlite (>= 1.5),
   servr (>= 0.10)
-Suggests: testthat
+Suggests: 
+    testthat,
+    covr
