@@ -10,7 +10,7 @@
 #' this package is intended for the ones...
 
 
-#"_PACKAGE"
+"_PACKAGE"
 
 
 
