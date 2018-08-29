@@ -17,5 +17,5 @@ test_that('print.visualization.R', {
 
 test_that('initServer.R', {
   s <- new("server")
-  expect_warning(initServer(s), NULL)
+  expect_message(initServer(s), "http://127.0.0.1:5474")
 })
