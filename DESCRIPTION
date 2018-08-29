@@ -10,12 +10,12 @@ Description: To connect R results to github.com/npellet/visualizer project using
     For example it is not possible to display a spectra and zoom in and out. With this package we offer the possibility to
     visualize the data in the browser. Data displayed in different modules can interact with each others, so it is possible
     to construct a tool to identify outliers in a PCA score plot and retreive the corresponding data.
+Depends: R (>= 3.1.0)
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.1.0
 Imports:
-  R (>= 2.10),
   jsonlite (>= 1.5),
   servr (>= 0.10),
   methods
