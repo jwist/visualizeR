@@ -14,3 +14,10 @@ test_that('print.visualization.R', {
   expect_output(str(print(v)), "5474")
   expect_output(str(print(v)), "127.0.0.1")
 })
+
+test_that('visualize.R', {
+  v <- new('visualization')
+  expect_output(str(print(v)), "http")
+  expect_output(str(print(v)), "5474")
+  expect_output(str(print(v)), "127.0.0.1")
+})

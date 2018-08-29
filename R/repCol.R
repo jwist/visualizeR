@@ -1,17 +1,19 @@
 
-#' repeat a row when needed to match other matrix dimension
+#' repeat a column when needed to match other matrix dimension
 #'
-#' @param v a vector to be repeated
+#' @param c a vector to be repeated
 #' @param n number ot time to repeat the vector
 #' @return a matrix
 #' @references the original function was found here: \url{https://www.r-bloggers.com/a-quick-way-to-do-row-repeat-and-col-repeat-rep-row-rep-col/}
 #' @examples
 #'
-#' #rep.row(c(1,2,3), 2)
+#' repCol(c(1,2,3), 2)
 #' @export
 
-rep.row <- function(v, n){
+repCol <- function(c, n){
 
-  matrix( rep(v, each = n), nrow = n )
+  matrix( rep(c, each = n), ncol = n, byrow = TRUE )
 
 }
+
+
