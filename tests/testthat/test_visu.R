@@ -19,3 +19,11 @@ test_that('initServer.R', {
   s <- new("server")
   expect_message(initServer(s), "http://127.0.0.1:5474")
 })
+
+test_that('visualize.visualization', {
+  v<- new("visualization")
+  expect_message(visualize(v), "http://127.0.0.1:5474")
+})
+
+
+
