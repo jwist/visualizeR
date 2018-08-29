@@ -8,6 +8,8 @@
 }
 \arguments{
 \item{x}{visualization object}
+
+\item{...}{parameters of the print generic method}
 }
 \value{
 a string of character, a URL

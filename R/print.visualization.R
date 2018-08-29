@@ -3,6 +3,7 @@
 #' A print method for \emph{visualization} objects
 #'
 #' @param x visualization object
+#'@param ... parameters of the print generic method
 #' @return a string of character, a URL
 #' @examples
 #'

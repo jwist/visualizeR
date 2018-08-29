@@ -6,6 +6,7 @@
 #' If a server is already running (daemon_list is empty), then nothing happens.
 #'
 #' @param server a server object
+#' @param force if true, will force a second server on a new port. Should not be necessary in regular use.
 #' @return void
 #' @examples
 #'

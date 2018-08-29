@@ -8,6 +8,8 @@
 }
 \arguments{
 \item{x}{server object}
+
+\item{...}{parameters of the print generic method}
 }
 \value{
 a string of character, a URL

@@ -4,6 +4,7 @@
 #' A print method for \emph{serverURL} objects
 #'
 #' @param x server object
+#' @param ... parameters of the print generic method
 #' @return a string of character, a URL
 #' @examples
 #'

@@ -10,7 +10,7 @@
 #' https://github.com/cheminfo/babel-proxy-server.git that will serve the files. This last option requires
 #' a working node.js. A final option is to clone and reinstall the full project locally.
 #'
-#' @param baseURL url of the visualizer instance
+#' @param visuURL url of the visualizer instance
 #' @param viewURL url of the view
 #' @param dataURL url of the data
 #' @return void

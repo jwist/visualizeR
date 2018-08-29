@@ -8,6 +8,8 @@ getColor2(text, colorFormat = "rgb")
 }
 \arguments{
 \item{text}{a text used to pick the color}
+
+\item{colorFormat}{the format color should be output. Current options are rgb and hex.}
 }
 \value{
 a rgba color string

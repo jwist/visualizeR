@@ -8,11 +8,11 @@ visu(visuURL = getOption("visuURL"), viewURL = getOption("viewURL"),
   dataURL = getOption("dataURL"))
 }
 \arguments{
+\item{visuURL}{url of the visualizer instance}
+
 \item{viewURL}{url of the view}
 
 \item{dataURL}{url of the data}
-
-\item{baseURL}{url of the visualizer instance}
 }
 \value{
 void

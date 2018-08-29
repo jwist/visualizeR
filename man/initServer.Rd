@@ -8,6 +8,8 @@ initServer(server, force = FALSE)
 }
 \arguments{
 \item{server}{a server object}
+
+\item{force}{if true, will force a second server on a new port. Should not be necessary in regular use.}
 }
 \value{
 void

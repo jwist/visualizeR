@@ -26,8 +26,8 @@ x <- seq(from = 0, to = pi, by = 0.1)
 #simple array
 d <- appendData(variableName = "simpleArray", variable = cos(x), type = "1D Y array")
 d <- appendData(data = d, variableName = "simpleArray2", variable = sin(x), type = "1D Y array")
-visu <- new("visualization")
-push(visu, type="data", d)
+v <- new("visualization")
+push(v, type="data", d)
 
 }
 \seealso{
