@@ -38,15 +38,12 @@ visu <- function( visuURL = getOption("visuURL"),
                   viewURL = getOption("viewURL"),
                   dataURL = getOption("dataURL") ){
 
-  vUrl <- paste( visuURL, "?viewURL=", viewURL, "&dataURL=", dataURL, sep = "" );
-
-  #initServer()
+  vUrl <- paste( visuURL, "?viewURL=",
+                 viewURL, "&dataURL=",
+                 dataURL, sep = "" );
 
   utils::browseURL( vUrl )
 
   warning( vUrl )
 
 }
-
-
-

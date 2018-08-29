@@ -22,7 +22,6 @@ print.visualization <- function(x, ...){
          x@data)
 }
 
-
 # setMethod("print",
 #           signature(x = "visualization"),
 #           function(x, ...){
@@ -34,5 +33,3 @@ print.visualization <- function(x, ...){
 #                    show(x@dataURL),
 #                    x@data)
 #           })
-
-
