@@ -2,6 +2,7 @@
 #' GetColorChart based on character
 #'
 #' @param text a text used to pick the color
+#' @param colorFormat the format color should be output. Current options are rgb and hex.
 #' @return a rgba color string
 #' @examples
 #' getColor2("colombia", "hex")
