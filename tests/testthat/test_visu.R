@@ -15,15 +15,17 @@ test_that('print.visualization.R', {
   expect_output(str(print(v)), "127.0.0.1")
 })
 
-test_that('initServer.R', {
-  s <- new("server")
-  expect_message(initServer(s), "http://127.0.0.1:5474")
-})
-
-test_that('visualize.visualization', {
-  v<- new("visualization")
-  expect_message(visualize(v), "http://127.0.0.1:5474")
-})
+# test_that('initServer.R', {
+#   s <- new("server")
+#   expect_message(initServer(s), "http://127.0.0.1:5474")
+#   servr::daemon_stop()
+# })
+#
+# test_that('visualize.visualization', {
+#   v<- new("visualization")
+#   expect_message(visualize(v), "http://127.0.0.1:5474")
+#   servr::daemon_stop()
+# })
 
 
 
