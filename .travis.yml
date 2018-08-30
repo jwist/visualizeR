@@ -10,9 +10,7 @@ r_github_packages:
 
 after_success:
   - Rscript -e 'covr::coveralls()'
-
-after_success:
+  - Rscript -e 'lintr::lint_package()'
   - Rscript -e 'covr::codecov()'
 
-after_success:
-  - Rscript -e 'lintr::lint_package()'
+
