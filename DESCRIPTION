@@ -19,6 +19,9 @@ Imports:
   jsonlite (>= 1.5),
   servr (>= 0.10),
   methods
-Suggests: 
+Suggests:
     testthat,
-    covr
+    covr,
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr

@@ -1,0 +1,113 @@
+---
+title: "PCA Explorer"
+author: "Julien Wist"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+fig_caption: yes
+css: visualizeR.css
+vignette: >
+  %\VignetteIndexEntry{PCA Explorer}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+
+## Prepare your data
+
+To give an example on how to prepare data, we will use a dataset used in another analysis^[[Comparison of Attenuated Total Reflectance Mid-Infrared, Near Infrared, and 1H-Nuclear Magnetic Resonance Spectroscopies for the Determination of Coffee’s Geographical Origin](https://www.hindawi.com/journals/ijac/2017/7210463/)]. The dataset is provided with the package `visualizeR` and can be called with the `data()` function. 
+
+Since the data have been prepared for another analysis, the data have to be reshaped to be used in the `visualizeR` pipeline. The following elements must be present:
+
+* a vector `ID` of **unique** IDs that is used to identify each entry or sample
+* a vector `group` that describes to which class each sample belong
+* a table `metadata` of information that belong to each sample and that will be displayed 
+* a matrix `x` that contains the data. Each row represents a sample, each columns a variable
+* a vector `x_axis` that contains the names or values of each variable
+
+```{r, fig.show='hold'}
+library(visualizeR)
+
+data("coffeeNMRSpectra")
+
+ID <- coffeeNMRSpectra$param$catalogID
+group <- coffeeNMRSpectra$param$country1
+metadata <- data.frame( sapply(coffeeNMRSpectra$param, function(x) x) )
+x <- matrix(sapply(I(as.matrix(coffeeNMRSpectra$nmr)), function(x) x), 34, 1610)
+x_axis <- as.numeric( colnames(coffeeNMRSpectra$nmr) )
+
+color = sapply(group, function(x) getColor2(as.character(x),'hex'))
+```
+
+You can verify that the data includes 34 NMR spectra of Arabica coffee from Brazil, Colombia and Peru. The original data of lenght `r 128*1024` have been binned or bucketed down to 1610 variables.
+
+The `visualizeR` pipeline needs JSON files^[[see](http://www.json.org/)] that look like:
+
+  {'a': 1}
+  
+where the object contains a key `a` that has a value `1`. JSON are object natively supported in JavaScript, but not very handy in R. In R the best way to represent a JSON is using a `list()`. So each object that must be passed to the `visualizeR` has to be added to a list using the `appendData()` function. Let's create the data object with the following block of commands. 
+
+```{r, fig.show='hold'}
+d = list()
+c <- data.frame(ID = ID,
+                group = group,
+                color = color, # can be made faster using levels
+                "_highlight" = seq_along(group) - 1,
+                data = I(matrix( c(rbind(repRow(x_axis, nrow(x)), x)), nrow(x), ncol(x)*2)),
+                I(metadata),
+                check.names = FALSE
+)
+d <- appendData(data = d, variableName = "data", variable = c, type = "table")
+```
+
+Note that a vector `_highlight` has been added for internal use. It consist of a unique index and is used to provide highlight of object when hoovered by the mouse in the `visualizer`. Here a simple sequence is used, but in principle any vector of unique IDs could be used. 
+
+Now your data are ready to be pushed to the `visualizer`. 
+
+## Vignette Info
+
+Note the various macros within the `vignette` section of the metadata block above. These are required in order to instruct R how to build the vignette. Note that you should change the `title` field and the `\VignetteIndexEntry` to match the title of your vignette.
+
+## Styles
+
+The `html_vignette` template includes a basic CSS theme. To override this theme you can specify your own CSS in the document metadata as follows:
+
+    output: 
+      rmarkdown::html_vignette:
+        css: mystyles.css
+
+## Figures
+
+The figure sizes have been customised so that you can easily put two images side-by-side. 
+
+```{r, fig.show='hold'}
+plot(1:10)
+plot(10:1)
+```
+
+You can enable figure captions by `fig_caption: yes` in YAML:
+
+    output:
+      rmarkdown::html_vignette:
+        fig_caption: yes
+
+Then you can use the chunk option `fig.cap = "Your figure caption."` in **knitr**.
+
+## More Examples
+
+You can write math expressions, e.g. $Y = X\beta + \epsilon$, footnotes^[A footnote here.], and tables, e.g. using `knitr::kable()`.
+
+```{r, echo=FALSE, results='asis'}
+knitr::kable(head(mtcars, 10))
+```
+
+Also a quote using `>`:
+
+> "He who gives up [code] safety for [code] speed deserves neither."
+([via](https://twitter.com/hadleywickham/status/504368538874703872))
