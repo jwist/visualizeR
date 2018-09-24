@@ -3,8 +3,6 @@ title: "PCA Explorer"
 author: "Julien Wist"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
-fig_caption: yes
-css: visualizeR.css
 vignette: >
   %\VignetteIndexEntry{PCA Explorer}
   %\VignetteEngine{knitr::rmarkdown}
@@ -19,68 +17,143 @@ knitr::opts_chunk$set(
 ```
 
 
-## Prepare your data
+## Understanding multivariate analysis
+### a simple PCA example
 
-To give an example on how to prepare data, we will use a dataset used in another analysis^[[Comparison of Attenuated Total Reflectance Mid-Infrared, Near Infrared, and 1H-Nuclear Magnetic Resonance Spectroscopies for the Determination of Coffee’s Geographical Origin](https://www.hindawi.com/journals/ijac/2017/7210463/)]. The dataset is provided with the package `visualizeR` and can be called with the `data()` function. 
-
-Since the data have been prepared for another analysis, the data have to be reshaped to be used in the `visualizeR` pipeline. The following elements must be present:
-
-* a vector `ID` of **unique** IDs that is used to identify each entry or sample
-* a vector `group` that describes to which class each sample belong
-* a table `metadata` of information that belong to each sample and that will be displayed 
-* a matrix `x` that contains the data. Each row represents a sample, each columns a variable
-* a vector `x_axis` that contains the names or values of each variable
+Let's create a simple dataset. Because PCA is a very general mathematical method, it has been applied to many research area and thereby explained in many different terms. Let's choose a chemical representation of our dataset. Assume that we've prepared 8 solutions of known composition using 3 compounds. The "spectra" of each compound and the compositions are simply represented by one or zeros.
 
 ```{r, fig.show='hold'}
-library(visualizeR)
-
-data("coffeeNMRSpectra")
-
-ID <- coffeeNMRSpectra$param$catalogID
-group <- coffeeNMRSpectra$param$country1
-metadata <- data.frame( sapply(coffeeNMRSpectra$param, function(x) x) )
-x <- matrix(sapply(I(as.matrix(coffeeNMRSpectra$nmr)), function(x) x), 34, 1610)
-x_axis <- as.numeric( colnames(coffeeNMRSpectra$nmr) )
-
-color = sapply(group, function(x) getColor2(as.character(x),'hex'))
+Elements <- t(array(c(1,0,0,0,0,1,0,0,0,0,1,1), dim = c(4,3)))
+noise <- matrix(runif(24) * 0.5, 3, 8)
+Compositions <- t(array(c(1,0,0, 0,1,0, 0,0,1, 1,1,0, 1,0,1, 0,1,1, 1,1,1, 0,0,0), dim = c(3,8)))
+labels <- c("100", "010", "001", "110", "101", "011", "111", "000")
 ```
 
-You can verify that the data includes 34 NMR spectra of Arabica coffee from Brazil, Colombia and Peru. The original data of lenght `r 128*1024` have been binned or bucketed down to 1610 variables.
+The "spectra" of the three compounds look like this:
+```{r, fig.show='hold'}
+barplot(Elements[1,])
+barplot(Elements[2,])
+barplot(Elements[3,])
+```
 
-The `visualizeR` pipeline needs JSON files^[[see](http://www.json.org/)] that look like:
+Each spectra has 4 variables.
 
-  {'a': 1}
-  
-where the object contains a key `a` that has a value `1`. JSON are object natively supported in JavaScript, but not very handy in R. In R the best way to represent a JSON is using a `list()`. So each object that must be passed to the `visualizeR` has to be added to a list using the `appendData()` function. Let's create the data object with the following block of commands. 
+If we assume that the compounds are not interacting and so on, the resulting spectra of each solution is a linear combination these spectra, according to the composition. We can thus create a matrix of data by multiplying both the composition and each element.
 
 ```{r, fig.show='hold'}
-d = list()
-c <- data.frame(ID = ID,
-                group = group,
-                color = color, # can be made faster using levels
-                "_highlight" = seq_along(group) - 1,
-                data = I(matrix( c(rbind(repRow(x_axis, nrow(x)), x)), nrow(x), ncol(x)*2)),
-                I(metadata),
-                check.names = FALSE
-)
-d <- appendData(data = d, variableName = "data", variable = c, type = "table")
+M <- Compositions %*% Elements
 ```
 
-Note that a vector `_highlight` has been added for internal use. It consist of a unique index and is used to provide highlight of object when hoovered by the mouse in the `visualizer`. Here a simple sequence is used, but in principle any vector of unique IDs could be used. 
+This is important because PCA and other methods are factorization method that allows to factor a matrix into the product of two. Thus in this case, we hope that applying the PCA to our matrix of data, we should be able to recover the composition and the individual elements. Let's see if this works.
 
-Now your data are ready to be pushed to the `visualizer`. 
+The first step is to scale the data. Then we can use one of the simplest method to compute a PCA, which is to find the eigenvalues. The most robust form of performing this task is by Singular Value Decomposition (SVD). This decomposition tries to find 3 matrices so that $$M = U \times D \times V^{\dagger}$$ 
 
-## Vignette Info
+```{r, fig.show='hold'}
+SM <- scale(M)
+SVD <- svd(SM)
+# max(abs(SM - t(SVD$v %*% diag(SVD$d) %*% t(SVD$u)))) # difference 
+```
 
-Note the various macros within the `vignette` section of the metadata block above. These are required in order to instruct R how to build the vignette. Note that you should change the `title` field and the `\VignetteIndexEntry` to match the title of your vignette.
+After computing the SVD we can check how good the factorization performed by reconstructing the original matrix and taking the difference that is in this case `r max(abs(SM - t(SVD$v %*% diag(SVD$d) %*% t(SVD$u))))`.
 
-## Styles
+The idea behind PCA is to reduce the dimension of the problem. Do we need 4 variables to describe correctly the data or is it possible to reduce this.
 
-The `html_vignette` template includes a basic CSS theme. To override this theme you can specify your own CSS in the document metadata as follows:
+```{r, fig.show='hold'}
+Maprox <- t(SVD$v[,1:2] %*% diag(SVD$d[1:2]) %*% t(SVD$u[,1:2]))
+ERR <- max(abs(SM - Maprox))
+```
 
-    output: 
-      rmarkdown::html_vignette:
-        css: mystyles.css
+Here we only use the two first principal components to reconstruct `M` and the error is still small: `r ERR`. This means that a representation of our data can be found that correctly describes the data with only two dimensions.
+
+We can now look at this representation in two dimension that is called score plots. The scores are simple the rotation of the original scaled data, that is the multiplication of the data by the rotation vectors, or loadings.
+
+```{r, fig.show='hold'}
+scores <- SM %*% SVD$v[,1:2]
+plot(scores[,1], scores[,2])
+```
+
+We said that the error was small, but we can do better at quantifying how good we perform. This is called the explained variance in the world of statistics and describes how much of our data are actually described using 1, 2, 3, or more principle components. This is related to the eigenvalues and is readily computed.
+
+```{r, fig.show='hold'}
+EXVAR <- sapply(SVD$d,function(x){100*x/sum(SVD$d)})
+CUMVAR <- cumsum(EXVAR)
+barplot(CUMVAR)
+```
+
+with two principle components we can reproduce almost 80% of our original data, `M`. While using 3 we can explain 100%. This should not surprise us, since all our solutions were indeed prepared using 3 compounds. So mixing 3 components should allow to describe a 3-compounds mixture, or linear combination.
+
+If our factorization is correct, we should recover both the composition and the elements. Let's see the composition
+
+```{r, fig.show='hold'}
+for (i in 1:8) {
+ barplot(SVD$u[i,1:3]) 
+}
+```
+
+Clearly, the first three columns of `U` are our compositions. The matrix `V` contains the elements:
+ 
+```{r, fig.show='hold'}
+for (i in 1:4) {
+ barplot(SVD$v[,i]) 
+}
+```
+At least the first three, since we have only three different compounds. It is thus possible to factorize the original data matrix `M` and recover the original composition and the individual elements. It has to be noted that only 4 points are visible on the score plot, while 8 points (8 compositions) are expected. This is because some compositions are similar.
+
+```{r, fig.show='hold'}
+cbind(labels, scores)
+```
+## Classification
+
+We can apply the same idea to classify solution that are similar.
+
+```{r, fig.show='hold'}
+Elements <- t(array(c(1,0,0,0,0,1,0,0,0,0,1,1), dim = c(4,3)))
+Compositions <- t(array(c(1,2,0.1, 1,2.05,0.1, 1,2.1,0.1, 2,1,0.82, 1.9,1,0.9, 1.99,1,0.8, 1.06,2,0.05, 1,2,0.12, 2,1,1, 2,0.9,0.8), dim = c(3,10)))
+M <- Compositions %*% Elements
+SM <- scale(M)
+SVD <- svd(SM)
+scores <- SM %*% SVD$v[,1:2]
+plot(scores[,1], scores[,2])
+```
+
+Looking at the screeplot, the two first principal components explains almost 95% of the data. 
+```{r, fig.show='hold'}
+EXVAR <- sapply(SVD$d,function(x){100*x/sum(SVD$d)})
+CUMVAR <- cumsum(EXVAR)
+barplot(CUMVAR)
+```
+
+The matrix `V` contains the elements, but in this case the interpretation we make is different. Looking at our composition it is clear that the first and second compounds are forming two classes, the class with almost the double of compound 1 and the class with more of compound 2. Looking at the loadings, we see that the second compound is discriminant (the first loading) while the second loading shows a difference for compound 1. 
+ 
+```{r, fig.show='hold'}
+for (i in 1:4) {
+ barplot(SVD$v[,i]) 
+}
+```
+
+As a conclusion, the two first principal components suffice to classify the data into two categories. In this latter case, the loadings are the individual components that are most important to the classification, i.e., the most important variables.
+
+## Alternative methods and built-in functions
+
+```{r, fig.show='hold'}
+Elements <- t(array(c(1,0,0,0,0,1,0,0,0,0,1,1), dim = c(4,3)))
+Compositions <- t(array(c(1,0,0, 0,1,0, 0,0,1, 1,1,0, 1,0,1, 0,1,1, 1,1,1, 0,0,0), dim = c(3,8)))
+M <- Compositions %*% Elements
+```
+
+```{r, fig.show='hold'}
+C <- cor(M)
+S <- eigen(C)
+scores <- M %*% S$vectors[,1:2]
+plot(scores[,1], scores[,2])
+```
+
+```{r, fig.show='hold'}
+pca <- prcomp(M, scale = TRUE)
+pca
+score(pca)
+```
+
 
 ## Figures
 

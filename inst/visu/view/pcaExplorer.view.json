@@ -81,16 +81,16 @@
         },
         "admin": {
           "position": {
-            "left": 55,
-            "top": 66
+            "left": 0,
+            "top": 0
           },
           "size": {
             "width": 61,
-            "height": 43
+            "height": 21
           },
           "zIndex": 0,
           "display": true,
-          "title": "",
+          "title": "exec create data and spectra selected from score plot",
           "bgColor": [
             255,
             255,
@@ -159,7 +159,7 @@
           ]
         }
       ],
-      "title": ""
+      "title": "exec create data and spectra selected from score plot"
     },
     {
       "url": "modules/types/edition/slick_grid/",
@@ -799,16 +799,16 @@
         },
         "admin": {
           "position": {
-            "left": 4,
-            "top": 130
+            "left": 0,
+            "top": 44
           },
           "size": {
-            "width": 73,
-            "height": 44
+            "width": 61,
+            "height": 18
           },
           "zIndex": 0,
           "display": true,
-          "title": "",
+          "title": "exec highlight score hoovered in the table",
           "bgColor": [
             255,
             255,
@@ -820,7 +820,7 @@
           "name": "Default layer"
         }
       },
-      "id": 6,
+      "id": 4,
       "vars_in": [
         {
           "rel": "inputValue",
@@ -877,7 +877,7 @@
           ]
         }
       ],
-      "title": ""
+      "title": "exec highlight score hoovered in the table"
     },
     {
       "url": "modules/types/science/spectra/spectra_displayer/",
@@ -1109,7 +1109,7 @@
           "name": "Default layer"
         }
       },
-      "id": 7,
+      "id": 5,
       "vars_in": [
         {
           "rel": "chart",
@@ -1236,12 +1236,167 @@
         },
         "admin": {
           "position": {
-            "left": 4,
-            "top": 96
+            "left": 0,
+            "top": 22
           },
           "size": {
-            "width": 70,
-            "height": 33
+            "width": 61,
+            "height": 21
+          },
+          "zIndex": 0,
+          "display": true,
+          "title": "exec highlight spectra hooverd in the table",
+          "bgColor": [
+            255,
+            255,
+            255,
+            0
+          ],
+          "wrapper": true,
+          "created": true,
+          "name": "Default layer"
+        }
+      },
+      "id": 6,
+      "vars_in": [
+        {
+          "rel": "inputValue",
+          "name": "currentID"
+        }
+      ],
+      "actions_in": [
+        {}
+      ],
+      "vars_out": [
+        {
+          "jpath": []
+        }
+      ],
+      "actions_out": [
+        {
+          "jpath": []
+        }
+      ],
+      "toolbar": {
+        "custom": [
+          [
+            {
+              "title": "",
+              "icon": "",
+              "action": "",
+              "position": "begin",
+              "color": [
+                100,
+                100,
+                100,
+                1
+              ]
+            }
+          ]
+        ],
+        "common": [
+          {
+            "toolbar": [
+              [
+                "Open Preferences"
+              ]
+            ]
+          }
+        ]
+      },
+      "css": [
+        {
+          "fontSize": [
+            ""
+          ],
+          "fontFamily": [
+            ""
+          ]
+        }
+      ],
+      "title": "exec highlight spectra hooverd in the table"
+    },
+    {
+      "url": "modules/types/client_interaction/code_executor/",
+      "configuration": {
+        "sections": {},
+        "groups": {
+          "group": [
+            {
+              "display": [
+                [
+                  "editor",
+                  "buttons"
+                ]
+              ],
+              "execOnLoad": [
+                []
+              ],
+              "asyncAwait": [
+                [
+                  "top"
+                ]
+              ],
+              "script": [
+                "console.log(GD)\nvar options = ({\n    dataClass: true,\n    binaryDataClassMatrix: true,\n    seed: 22,\n    classes: [\n        {\n            nbSample: 500,\n            elements: [\n                {\n                    index: 0,\n                    distribution: {\n                        name: 'normal',\n                        parameters: {\n                            mean: 9.4,\n                            standardDeviation: 0.1\n                        }\n                    }\n                },\n                {\n                    index: 1,\n                    distribution: {\n                        name: 'normal',\n                        parameters: {\n                            mean: 9.4,\n                            standardDeviation: 0.1\n                        }\n                    }\n                },\n                {\n                    index: 2,\n                    distribution: {\n                        name: 'normal',\n                        parameters: {\n                            mean: 9.4,\n                            standardDeviation: 0.1\n                        }\n                    }\n                }\n            ]\n        },\n        {\n            nbSample: 500,\n            elements: [\n                {\n                    index: 0,\n                    distribution: {\n                        name: 'normal',\n                        parameters: {\n                            mean: 9.4,\n                            standardDeviation: 0.1\n                        }\n                    }\n                },\n                {\n                    index: 1,\n                    distribution: {\n                        name: 'normal',\n                        parameters: {\n                            mean: 10.3,\n                            standardDeviation: 0.15\n                        }\n                    }\n                },\n                {\n                    index: 2,\n                    distribution: {\n                        name: 'normal',\n                        parameters: {\n                            mean: 9.4,\n                            standardDeviation: 0.1\n                        }\n                    }\n                }\n            ]\n        }\n    ]\n});\nvar pureElements = ([\n    [0, 0, 0, 1, 0, 0, 0],\n    [0, 0, 0, 0, 0, 1, 0],\n    [0, 1, 0, 0, 0, 0, 0]\n]);\n\nvar dataset = GD(pureElements, options);\nconsole.log(dataset);"
+              ]
+            }
+          ],
+          "libs": [
+            [
+              {
+                "lib": "ML",
+                "alias": "ML"
+              },
+              {
+                "lib": "http://127.0.0.1:5474/gd.js",
+                "alias": "GD"
+              }
+            ]
+          ],
+          "buttons": [
+            [
+              {
+                "name": "button1",
+                "label": "Execute",
+                "hide": [],
+                "disable": []
+              }
+            ]
+          ]
+        }
+      },
+      "layers": {
+        "Default layer": {
+          "position": {
+            "left": 0,
+            "top": 0
+          },
+          "size": {
+            "width": 20,
+            "height": 20
+          },
+          "zIndex": 0,
+          "display": false,
+          "title": "",
+          "bgColor": [
+            255,
+            255,
+            255,
+            0
+          ],
+          "wrapper": true,
+          "created": true,
+          "name": "Default layer"
+        },
+        "admin": {
+          "position": {
+            "left": 64,
+            "top": 10
+          },
+          "size": {
+            "width": 59,
+            "height": 52
           },
           "zIndex": 0,
           "display": true,
@@ -1254,15 +1409,12 @@
           ],
           "wrapper": true,
           "created": true,
-          "name": "Default layer"
+          "name": "admin"
         }
       },
-      "id": 8,
+      "id": 7,
       "vars_in": [
-        {
-          "rel": "inputValue",
-          "name": "currentID"
-        }
+        {}
       ],
       "actions_in": [
         {}
@@ -1332,7 +1484,10 @@
     }
   ],
   "aliases": [
-    {}
+    {
+      "path": "https://www.lactame.com/lib/ml/HEAD/ml",
+      "alias": "ML"
+    }
   ],
   "configuration": {
     "title": "visualizeR pcaExplorer "
