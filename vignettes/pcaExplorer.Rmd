@@ -40,8 +40,16 @@ Each spectra has 4 variables.
 
 If we assume that the compounds are not interacting and so on, the resulting spectra of each solution is a linear combination these spectra, according to the composition. We can thus create a matrix of data by multiplying both the composition and each element.
 
+Les's look at the compositions:
+```{r, echo=FALSE, results='asis'}
+knitr::kable(Compositions)
+```
+
+and the resulting data matrix `M`:
+
 ```{r, fig.show='hold'}
 M <- Compositions %*% Elements
+knitr::kable(M)
 ```
 
 This is important because PCA and other methods are factorization method that allows to factor a matrix into the product of two. Thus in this case, we hope that applying the PCA to our matrix of data, we should be able to recover the composition and the individual elements. Let's see if this works.
@@ -135,12 +143,16 @@ As a conclusion, the two first principal components suffice to classify the data
 
 ## Alternative methods and built-in functions
 
+Althouth it goes behond the scope of this topic to explain how to compute PCA from a numerical point of view, it is important to understand that it require the decomposition of the matrix into eigenvalues and eigenvectors. There are two main techniques to achieve this, the most reliable is using SVD, while the same results may be often obtained using a correlation matrix. Here a few lines of code to show that result is the same for our simple example.
+
+The data:
 ```{r, fig.show='hold'}
 Elements <- t(array(c(1,0,0,0,0,1,0,0,0,0,1,1), dim = c(4,3)))
 Compositions <- t(array(c(1,0,0, 0,1,0, 0,0,1, 1,1,0, 1,0,1, 0,1,1, 1,1,1, 0,0,0), dim = c(3,8)))
 M <- Compositions %*% Elements
 ```
 
+and the scores:
 ```{r, fig.show='hold'}
 C <- cor(M)
 S <- eigen(C)
@@ -148,39 +160,19 @@ scores <- M %*% S$vectors[,1:2]
 plot(scores[,1], scores[,2])
 ```
 
+While it is important to understand the underlying concepts of PCA, most software for statistics have built-in functions. Here is an example of such, that relies on SVD.
+
 ```{r, fig.show='hold'}
 pca <- prcomp(M, scale = TRUE)
 pca
-score(pca)
+pc <- c(1,2)
+ev <- c(round(pca$sdev[pc[1]]/sum(pca$sdev)*100,0),
+        round(pca$sdev[pc[2]]/sum(pca$sdev)*100,0),
+        round(pca$sdev[pc[3]]/sum(pca$sdev)*100,0))
+plot(pca$x[,pc[1]], pca$x[,pc[2]], col=labels, cex=0.7,
+     xlab=paste0("PC ", pc[1], " (", ev[pc[1]], "%)"),
+     ylab=paste0("PC ", pc[2], " (", ev[pc[2]], "%)"))
 ```
 
 
-## Figures
-
-The figure sizes have been customised so that you can easily put two images side-by-side. 
-
-```{r, fig.show='hold'}
-plot(1:10)
-plot(10:1)
-```
-
-You can enable figure captions by `fig_caption: yes` in YAML:
-
-    output:
-      rmarkdown::html_vignette:
-        fig_caption: yes
-
-Then you can use the chunk option `fig.cap = "Your figure caption."` in **knitr**.
-
-## More Examples
-
-You can write math expressions, e.g. $Y = X\beta + \epsilon$, footnotes^[A footnote here.], and tables, e.g. using `knitr::kable()`.
-
-```{r, echo=FALSE, results='asis'}
-knitr::kable(head(mtcars, 10))
-```
-
-Also a quote using `>`:
-
-> "He who gives up [code] safety for [code] speed deserves neither."
-([via](https://twitter.com/hadleywickham/status/504368538874703872))
+> "There are three kind of lies: lies, damn lies and statistics"
