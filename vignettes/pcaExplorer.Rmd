@@ -30,7 +30,8 @@ labels <- c("100", "010", "001", "110", "101", "011", "111", "000")
 ```
 
 The "spectra" of the three compounds look like this:
-```{r, fig.show='hold'}
+```{r, fig.show='hold', fig.width = 2.2, fig.height=1}
+par(mar=c(0,2,0,0))
 barplot(Elements[1,])
 barplot(Elements[2,])
 barplot(Elements[3,])
@@ -77,6 +78,7 @@ We can now look at this representation in two dimension that is called score plo
 
 ```{r, fig.show='hold'}
 scores <- SM %*% SVD$v[,1:2]
+par(mar=c(4,4,1,1))
 plot(scores[,1], scores[,2])
 ```
 
@@ -85,23 +87,26 @@ We said that the error was small, but we can do better at quantifying how good w
 ```{r, fig.show='hold'}
 EXVAR <- sapply(SVD$d,function(x){100*x/sum(SVD$d)})
 CUMVAR <- cumsum(EXVAR)
-barplot(CUMVAR)
+par(mar=c(4,4,1,0))
+barplot(CUMVAR, ylab = "cum.variance %", xlab = "# of comp.")
 ```
 
 with two principle components we can reproduce almost 80% of our original data, `M`. While using 3 we can explain 100%. This should not surprise us, since all our solutions were indeed prepared using 3 compounds. So mixing 3 components should allow to describe a 3-compounds mixture, or linear combination.
 
 If our factorization is correct, we should recover both the composition and the elements. Let's see the composition
 
-```{r, fig.show='hold'}
+```{r, fig.show='hold', fig.width=1.6, fig.height=1}
 for (i in 1:8) {
+  par(mar=c(1,0,1,0))
  barplot(SVD$u[i,1:3]) 
 }
 ```
 
 Clearly, the first three columns of `U` are our compositions. The matrix `V` contains the elements:
  
-```{r, fig.show='hold'}
+```{r, fig.show='hold', fig.width=1.6, fig.height=1}
 for (i in 1:4) {
+ par(mar=c(1,0,1,0))
  barplot(SVD$v[,i]) 
 }
 ```
@@ -121,6 +126,7 @@ M <- Compositions %*% Elements
 SM <- scale(M)
 SVD <- svd(SM)
 scores <- SM %*% SVD$v[,1:2]
+par(mar=c(4,4,1,1))
 plot(scores[,1], scores[,2])
 ```
 
@@ -128,13 +134,15 @@ Looking at the screeplot, the two first principal components explains almost 95%
 ```{r, fig.show='hold'}
 EXVAR <- sapply(SVD$d,function(x){100*x/sum(SVD$d)})
 CUMVAR <- cumsum(EXVAR)
-barplot(CUMVAR)
+par(mar=c(4,4,1,0))
+barplot(CUMVAR, ylab = "cum.variance %", xlab = "# of comp.")
 ```
 
 The matrix `V` contains the elements, but in this case the interpretation we make is different. Looking at our composition it is clear that the first and second compounds are forming two classes, the class with almost the double of compound 1 and the class with more of compound 2. Looking at the loadings, we see that the second compound is discriminant (the first loading) while the second loading shows a difference for compound 1. 
  
-```{r, fig.show='hold'}
+```{r, fig.show='hold', fig.width=1.6, fig.height=1}
 for (i in 1:4) {
+  par(mar=c(1,0,1,0))
  barplot(SVD$v[,i]) 
 }
 ```
@@ -157,6 +165,7 @@ and the scores:
 C <- cor(M)
 S <- eigen(C)
 scores <- M %*% S$vectors[,1:2]
+par(mar=c(4,4,1,1))
 plot(scores[,1], scores[,2])
 ```
 
@@ -169,10 +178,123 @@ pc <- c(1,2)
 ev <- c(round(pca$sdev[pc[1]]/sum(pca$sdev)*100,0),
         round(pca$sdev[pc[2]]/sum(pca$sdev)*100,0),
         round(pca$sdev[pc[3]]/sum(pca$sdev)*100,0))
+par(mar=c(4,4,1,1))
 plot(pca$x[,pc[1]], pca$x[,pc[2]], col=labels, cex=0.7,
      xlab=paste0("PC ", pc[1], " (", ev[pc[1]], "%)"),
      ylab=paste0("PC ", pc[2], " (", ev[pc[2]], "%)"))
 ```
 
+## Artificial spectra of 3 component mixtures
+
+### Perfect case
+
+In order to better illustrate untargetted analysis, artificial spectra of different compositions using 3 compounds are created. One of the 3 compound is set to be a biomarker and thus its distribution will be distinct among the two population A and B. 500 individuals are created for each population resulting in a 1000 times 768 matrix, where 768 are the number of variables of our artificial spectra.
+
+```{r, include=FALSE}
+pureElements <- read.csv2('/home/jul/git/visualizeR_root/visualizerExamples/datasets/pureElements.csv', sep = ',', dec = '.', header = FALSE)
+classMatrix <- read.csv2('/home/jul/git/visualizeR_root/visualizerExamples/datasets/classMatrix.csv', sep = ',', dec = '.', header = FALSE)
+classVector <- factor(read.csv2('/home/jul/git/visualizeR_root/visualizerExamples/datasets/classVector.csv', sep = ',', dec = ',', header = FALSE))
+```                  
+
+We can look at each individual spectra and a mixture of them:
+
+```{r, fig.show='hold', fig.width=6.8, fig.height=2}
+par(mar=c(2,2,1,1))
+
+for (i in 1:3) {
+  plot(as.numeric(pureElements[i,]), type='l', col = 1, main = paste("compound", i), xlab = "ppm", ylab = "relative intensity")
+}
+
+par(mar=c(2,2,1,1))
+plot(as.numeric(pureElements[1,]), type='l', col = 1, main = "mixture", xlab = "ppm", ylab = "relative intensity")
+lines(as.numeric(pureElements[2,]), col = 2)
+lines(as.numeric(pureElements[3,]), col = 3)
+```
+
+Artificial compositions should reflects the conditions stated above. A boxplot analysis should illustrate the distribution for each population of all biomarkers. Here are the first row of the composition matrix.
+
+```{r, fig.show='hold'}                                  
+compositionMatrix <- read.csv2('/home/jul/git/visualizeR_root/visualizerExamples/datasets9/compositionMatrix.csv', sep = ',', dec = '.', header = FALSE)
+knitr::kable(head(compositionMatrix[,1:3]))
+```
+
+And here are the boxplots
+
+```{r, fig.show='hold', fig.width=2.2, fig.height=2}
+par(mar=c(2,2,1,1))
+for (i in 1:3) {
+  boxplot(compositionMatrix[,i] ~ classVector)
+}
+```
+
+The second compound show a deviation in the mean from 9.4 to 9.5, while the standard deviation is similar. A density plot shows the same inforation differently. It is helpful to plot densities if we think about t-test and univariate analysis. Both boxplots and density plots give a hint about the effect size of the phenomenon that is being observed. The larger the mean deviation the larger the effect size and the **easier** it is to observe it.
+
+```{r, fig.show='hold', fig.width=2.2, fig.height=2}
+par(mar=c(2,2,1,1))
+F <- as.logical(as.numeric(classVector)-1)
+for (i in 1:3) {
+  plot(density(compositionMatrix[F,i]), main = "")
+  lines(density(compositionMatrix[-F,i]), col=2)
+}
+```
+
+Using the pure elements and the composition matrix it is possible to produce a data matrix (pretty much as we did with `M`)
+
+```{r, fig.show='hold'}  
+dataset <- read.csv2('/home/jul/git/visualizeR_root/visualizerExamples/datasets9/dataset.csv', sep = ',', dec = '.', header = FALSE)
+```
+
+A PCA is performed as described earlier.
+
+```{r, fig.show='hold', fig.width=3.4, fig.height=3.4}
+pc <- c(1,2)
+COLOR <- classVector
+pca <- prcomp(dataset)
+par(mar=c(4,4,1,1))
+plot(pca$x[,pc[1]], pca$x[,pc[2]], col=COLOR, cex=0.7,
+     xlab=paste0("PC ", pc[1], " (", ev[pc[1]], "%)"),
+     ylab=paste0("PC ", pc[2], " (", ev[pc[2]], "%)"))
+```
+
+```{r, fig.show='hold', fig.width=6.8, fig.height=2}
+op <- par(mar=c(2,2,1,1))
+plot(pca$rotation[,1], type='l', ylim=range(pca$rotation[,1:3]))
+plot(pca$rotation[,2], type='l', col=2)
+plot(pca$rotation[,3], type='l', col=3)
+par(op)
+```
+
+### Add some noise...
+
+```{r, fig.show='hold', fig.width=3.4, fig.height=3.4}
+noise <- matrix(runif(768 * 6), 6, 768)
+pureElements <- pureElements + noise * 1e8
+M <- as.matrix(compositionMatrix) %*% as.matrix(pureElements)
+```
+
+```{r, fig.show='hold', fig.width=6.8, fig.height=2}
+par(mar=c(2,2,1,1))
+
+for (i in 1:3) {
+  plot(as.numeric(pureElements[i,]), type='l', col = 1, main = paste("compound", i), xlab = "ppm", ylab = "relative intensity")
+}
+```
+
+```{r, fig.show='hold', fig.width=3.4, fig.height=3.4}
+pc <- c(1,2)
+COLOR <- classVector
+pca <- prcomp(M, scale. = TRUE)
+plot(pca$x[,pc[1]], pca$x[,pc[2]], col=COLOR, cex=0.7,
+     xlab=paste0("PC ", pc[1], " (", ev[pc[1]], "%)"),
+     ylab=paste0("PC ", pc[2], " (", ev[pc[2]], "%)"))
+```
+
+```{r, fig.show='hold', fig.width=6.8, fig.height=2}
+op <- par(mar = c(4,4,1,1))
+plot(pca$rotation[,1] * pca$scale, type='l', ylim=range(pca$rotation[,1:3]*max(abs(pca$scale))))
+plot(pca$rotation[,2] * pca$scale, type='l', col=2)
+plot(pca$rotation[,3] * pca$scale, type='l', col=3)
+par(op)
+```
 
 > "There are three kind of lies: lies, damn lies and statistics"
