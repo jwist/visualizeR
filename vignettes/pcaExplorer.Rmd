@@ -76,10 +76,12 @@ Here we only use the two first principal components to reconstruct `M` and the e
 
 We can now look at this representation in two dimension that is called score plots. The scores are simple the rotation of the original scaled data, that is the multiplication of the data by the rotation vectors, or loadings.
 
-```{r, fig.show='hold'}
-scores <- SM %*% SVD$v[,1:2]
+```{r, fig.show='hold', fig.width = 2.2}
+scores <- SM %*% SVD$v[,1:3]
 par(mar=c(4,4,1,1))
 plot(scores[,1], scores[,2])
+plot(scores[,1], scores[,3])
+plot(scores[,2], scores[,3])
 ```
 
 We said that the error was small, but we can do better at quantifying how good we perform. This is called the explained variance in the world of statistics and describes how much of our data are actually described using 1, 2, 3, or more principle components. This is related to the eigenvalues and is readily computed.
@@ -110,10 +112,11 @@ for (i in 1:4) {
  barplot(SVD$v[,i]) 
 }
 ```
-At least the first three, since we have only three different compounds. It is thus possible to factorize the original data matrix `M` and recover the original composition and the individual elements. It has to be noted that only 4 points are visible on the score plot, while 8 points (8 compositions) are expected. This is because some compositions are similar.
+At least the first three, since we have only three different compounds. It is thus possible to factorize the original data matrix `M` and recover the original composition and the individual elements. It has to be noted that only 4 points are visible on the score plot, while 8 points (8 compositions) are expected. This is because we need a third dimension to completely describe the data. We used three columns of the PC matrix, that is 3 principal components. Because we mixed 3 compounds this is the least we can do without loosing information.
 
 ```{r, fig.show='hold'}
 cbind(labels, scores)
+SVD$d
 ```
 ## Classification
 
@@ -128,6 +131,11 @@ SVD <- svd(SM)
 scores <- SM %*% SVD$v[,1:2]
 par(mar=c(4,4,1,1))
 plot(scores[,1], scores[,2])
+```
+
+Les's look at the compositions:
+```{r, echo=FALSE, results='asis'}
+knitr::kable(Compositions)
 ```
 
 Looking at the screeplot, the two first principal components explains almost 95% of the data. 
@@ -318,5 +326,67 @@ abline(v = 648)
 abline(v = 672)
 abline(v = 681)
 ```
+
+### Sample down
+
+For time, cost and etical reasons it is generally not possible to sample large populations. To illustrate the effect of down sampling we can select only a few samples, 25, from our large study (1000). This is achieved readily using the `sample()` command built in R.
+
+```{r, fig.show='hold', fig.width=3.4, fig.height=3.4}
+FF <- sample(1:1000,25)
+M <-M[FF,]
+classVector <- classVector[FF]
+```
+
+The sampling still contains the variance of the original population and we can observe the spread of the point in the same space as before. Note, however how the distributionis skewed in the -x direction.
+
+```{r, echo = FALSE, fig.show='hold', fig.width=3.4, fig.height=3.4}
+pc <- c(1,2)
+COLOR <- classVector
+pca <- prcomp(M, scale. = TRUE)
+par(mar=c(2,2,1,1))
+plot(pca$x[,pc[1]], pca$x[,pc[2]], col=COLOR, cex=0.7,
+     xlab=paste0("PC ", pc[1], " (", ev[pc[1]], "%)"),
+     ylab=paste0("PC ", pc[2], " (", ev[pc[2]], "%)"))
+```
+
+The resulting loadings:
+
+```{r, echo = FALSE, fig.show='hold', fig.width=6.8, fig.height=2}
+op <- par(mar = c(2,2,1,1)) ## we might want to multiply the loadings by the sqrt of eign (which are pca$sdev)
+plot(pca$rotation[,1] * pca$scale, type='l', ylim=range(pca$rotation[,1:3]*max(abs(pca$scale))))
+lines(as.numeric(pureElements[2,])/100 - 2e7, col = 'gray')
+plot(pca$rotation[,2] * pca$scale, type='l', col=2)
+lines(as.numeric(pureElements[2,])/100 - 2e7, col = 'gray')
+plot(pca$rotation[,3] * pca$scale, type='l', col=3)
+lines(as.numeric(pureElements[2,])/100 - 2e7, col = 'gray')
+par(op)
+```
+
+First vs second loading:
+
+```{r, echo = FALSE, fig.show='hold', fig.width=6.8, fig.height=4}
+par(mar=c(2,2,1,1))
+plot(pca$rotation[,1] * pca$scale, pca$rotation[,2] * pca$scale, col = 'gray')
+text(pca$rotation[,1] * pca$scale, pca$rotation[,2] * pca$scale, seq_along(pca$scale), cex = 0.6)
+```
+
+Pure element 2 with putative important variables highlighted in black:
+
+```{r, echo = FALSE, fig.show='hold', fig.width=6.8, fig.height=2}
+par(mar=c(2,2,1,1))
+plot(as.numeric(pureElements[2,])/100 - 2e7, col = 'gray', type = 'l')
+abline(v = 115, col = 'green')
+abline(v = 265)
+abline(v = 272)
+abline(v = 648)
+abline(v = 672)
+abline(v = 681)
+```
+
+These results show that downsampling is not a problem if all the degree of variance are taken into account and if the original populations are well samples, i.e., the small sample has the same variance as the large sample.
+
+### Concluding remarks
+
+There are a lot more effects to be studied. For example the effect of missalignment. With this regard, please have a look to a recent and very promissing study^[https://www.nature.com/articles/s41467-017-01587-0]. As it often happen, what is noise a day becomes information the next day, when mathematical models exists to describe what is to be observed.
 
 > "There are three kind of lies: lies, damn lies and statistics"
