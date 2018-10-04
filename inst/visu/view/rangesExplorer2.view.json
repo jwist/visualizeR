@@ -100,7 +100,7 @@
       "vars_in": [
         {
           "rel": "value",
-          "name": "selectedIndicators"
+          "name": "pcaPlot"
         }
       ],
       "actions_in": [
@@ -288,8 +288,8 @@
             "top": 23
           },
           "size": {
-            "width": 26,
-            "height": 17
+            "width": 17,
+            "height": 27
           },
           "zIndex": 0,
           "display": true,
@@ -529,12 +529,12 @@
       "layers": {
         "Default layer": {
           "position": {
-            "left": 51,
+            "left": 42,
             "top": 23
           },
           "size": {
-            "width": 24,
-            "height": 17
+            "width": 14,
+            "height": 27
           },
           "zIndex": 0,
           "display": true,
@@ -1615,11 +1615,11 @@
         "Default layer": {
           "position": {
             "left": 24,
-            "top": 41
+            "top": 51
           },
           "size": {
             "width": 121,
-            "height": 49
+            "height": 39
           },
           "zIndex": 0,
           "display": true,
@@ -2777,7 +2777,8 @@
                 ]
               ],
               "script": [
-              "var {Matrix, MatrixStat: Stat, ArrayStat} = ML;\nconst computeMean = ArrayStat.mean;\nconst computeVariance = ArrayStat.variance;\nconst mean = Stat.mean;\nconst stdev = Stat.standardDeviation;\nvar spectraDataSet = [];\nvar matrixYData = [];\n\nvar actionName, actionValue\n\nswitch(this.variable) {\n    case 'csvParameters':\n        actionName = 'csvParameters';\n        break;\n    case 'inf2':\n        actionName = 'createDataClass';\n        break;\n    case 'droppedData':\n        actionName = 'droppedData';\n        actionValue = API.getData('droppedData')\n        break\n    default:\n        actionName = this.action.name;\n        actionValue = this.action.value;\n}\n\nswitch (actionName) {\n    case \"createDataClass\":\n        var fileNameList = API.getData('fileNameList');\n        var list = API.getData(\"list2\")\n        var inf = API.getData(\"inf2\");\n        list = list.filter((e) => {\n            let filename = String(e[0].value);\n            return fileNameList.some((ee) => {\n                return ee === filename;\n            })\n        });\n        var str = new Array(); var store = new Array();\n        var st = new Array(); var s = new Array();\n        \n        for (let i=0; i < inf.length; i++) {\n            let t = inf[i].name;\n            for (let j=0; j<list[0].length; j++) {\n                let w = String(list[0][j].name);// Check?\n                if (t === w) {\n                    for (let k=0; k<list.length; k++) {\n                        let n = list[k][0].value;\n                        let q = list[k][j].value;\n                        if (!str.some((e) => e.parametro===q)) {\n                            for (let l=0; l<list.length; l++) {\n                                let h = list[l][0].value;\n                                if (list[l][j].value === q) {\n                                    s.push({sample:h, vectorClass:l})\n                                }\n                            }\n                            str.push({parametro:q, sample:s}); s = [];\n                        }\n                    }\n                    store.push({name:w, value:str}); str = [];\n                }\n            }\n        }\n    \n        var dataClass = [];\n        store[0].value.map((e, i) => {\n            let result = [];\n            let vectorClass = new Array(store[0].value.length).fill(0);\n            vectorClass[i] = 1;\n            e.sample.forEach((ee) => {\n                result.push({sample: ee.sample, vector: vectorClass})\n            })\n            dataClass = dataClass.concat(result)\n        })\n        \n        dataClass = fileNameList.map((e) => {\n            e = e.toLowerCase();\n            let result\n            dataClass.some((ee, i) => {\n                let sample = ee.sample.toLowerCase();\n                if (sample === e) {\n                    result = ee.vector\n                    return true\n                }\n            })\n            if (!result) UI.showNotification('sanotheusa', 'warning');\n            return result;\n        });\n        var dataToPlot = API.getData('dataToPlot');\n        if (dataToPlot) API.doAction('plotResult', Object.assign({},dataToPlot, {dataClass}));\n        break\n    case \"PCA\":\n        matrixYData = API.getData(\"matrixYData\");\n        if (matrixYData.length < 2) return;\n        let pcaPlot = API.getData(\"pcaPlot\").resurrect();\n        \n        let pca = PCA(matrixYData, {\n            nComponents: pcaPlot.numberOfEigenVectors,\n            threshold: pcaPlot.threshold,\n            maxIterations: pcaPlot.maxIterations,\n            scale: true,\n            center: true\n        });\n        plotResult(pca.T, pcaPlot, 'pcaResult');\n        break;\n    case \"droppedData\":\n        console.time('start');\n        API.createData('spectraDataSet', null);\n        var zipFile = actionValue;\n        let options = API.getData('options');\n        var jsZip = new JSZip();\n        let zip = await jsZip.loadAsync(actionValue.content);\n        let filesToProcess = Object.keys(zip.files).filter(filename => filename.match(/jdx$/));\n        for (const filename of filesToProcess) {\n            let jcamp = await zip.files[filename].async('string');\n            let sd = SD.NMR.fromJcamp(jcamp, {});\n            sd.sd.info = {};\n            sd.sd.filename = filename.replace(/.jdx$/,'');\n            sd.sd.spectra.splice(1);\n            if(options.ord.useIt.get()) {\n                sd.reduceData(options.ord.from.get(), options.ord.to.get(), {nbPoints: options.ord.nbPoints.get()});\n            }\n            if (options.suppressSignals.get()) {\n                let j = options.signals.length;\n                while (j--) {\n                    if (options.signals[j].suppressIt) {\n                        sd.suppressZone(options.signals[j].from, options.signals[j].to);\n                    }\n                }\n            }\n            let y = sd.sd.spectra[0].data[0].y;\n            let sum = y.reduce((acc, val) => val + acc, 0);\n            sd.sd.spectra[0].data[0].y = y.map(a => a / sum * 100);\n            spectraDataSet.push(JSON.parse(JSON.stringify(sd)));\n        }\n        \n        \n        API.createData('spectraDataSet', spectraDataSet);\n        console.log('the data has loaded in:');\n        console.timeEnd('start');\n        break;\n    case 'plotResult':\n        var {x, y} = actionValue.data;\n        var indexs = actionValue.indexs;\n        var dataClass = actionValue.dataClass;\n        if (!dataClass) {\n            dataClass = new Array(x.length).fill([1]);\n        }\n        var l = x.length;\n        let nbClasses = dataClass[0].length;\n        var result = {\n            title: 'main data',\n            data: [\n                {\n                    x: x,\n                    y: y,\n                    type: 'scatter',\n                    // info: new Array(x.length),\n                    styles: {\n                        unselected: new Array(x.length),\n                        selected: new Array(x.length)\n                    }\n                }\n            ]\n        };\n        var selectedScale = chroma.scale(['green', 'black']).domain([0, nbClasses - 1]).mode('hsl');\n        var unselectedScale = chroma.scale(['red', 'blue']).domain([0, nbClasses - 1]).mode('hsl');\n        \n        let unselected = result.data[0].styles.unselected;\n        let selected = result.data[0].styles.selected;\n        // info = result.data[0].info;\n        for (let i = 0; i < l; i++) {\n            for (let j = 0; j < nbClasses; j++) {\n                if(dataClass[i][j] === 1) {\n                    unselected[i] = {\n                        fill: unselectedScale(j).toString(),\n                        shape: \"circle\",\n                        cx: 0,\n                        cy: 0,\n                        r: 3,\n                        height: \"5px\",\n                        width: \"5px\",\n                        stroke: \"transparent\"\n                    };\n                    selected[i] = {\n                        fill: selectedScale(j).toString(),\n                        shape: \"circle\",\n                        cx: 0,\n                        cy: 0,\n                        r: 3,\n                        height: \"5px\",\n                        width: \"5px\",\n                        stroke: \"transparent\"\n                    };\n                    j = nbClasses;\n                };\n                // info[i] = {index: indexs[i]};\n            }\n        }\n        API.createData(actionValue.varName, result);\n        API.createData(actionValue.varName + 'ellipse', predictEllipse(x, y, 5, 0.95, 1024))\n        break;\n    case 'csvParameters':\n        var data = API.getData('csvParameters').resurrect();\n        var list = Papa.parse(data.content,\n            {\n                delimiter:\",\",\n                header:true\n            }\n        ).data;\n        debugger\n\n        var table = new Array(); var tabla = new Array(); var r = new Array();\n        \n        for (let i=0; i<list.length; i++) {\n            let obj = Object.entries(list[i]);\n            //console.log(obj)\n            for (let j=0; j<Object.keys(list[0]).length; j++) {\n                r.push({name:obj[j][0], value:obj[j][1]});\n            }\n            tabla.push(r); r = [];\n        }\n        var a = new Array(); var b = new Array(); var c = new Array();\n        \n        for (let i=0; i<tabla[0].length; i++) {\n            let w = tabla[0][i].name; console.log(w);\n            for (var j=0; j<tabla.length; j++) {\n                let q = tabla[j][i].value\n                if (a.includes(q) == false){\n                    a.push(q)\n                }\n            }\n            b.push({name:w, value:a}); a = [];\n        }\n        table = tabla[0];\n        API.createData(\"table\",table);\n        API.createData(\"list2\",tabla);\n        break;\n}\n\nfunction plotResult(prediction, pcaPlot, varName) {\n    var x = prediction.getColumn(pcaPlot.pcx - 1);\n    var y = prediction.getColumn(pcaPlot.pcy - 1);\n    var dataClass = new Array(x.length).fill([1])\n    API.createData('dataToPlot', {data: {x, y}, varName, dataClass});\n    API.doAction('plotResult', {data: {x, y}, varName, dataClass});\n}\n\nfunction adjustData(dataSet, options) {\n    if (Array.isArray(dataSet[0])) {\n        dataSet = Matrix.checkMatrix(dataSet);\n    } else if (Array.isArray(dataSet)) {\n        dataSet = new Matrix(dataSet.map(a => {\n            return [a];\n        }));\n    } else {\n        throw new Error('Invalid data type for dataSet');\n    }\n    const {\n        means = Stat.mean(dataSet),\n        std = Stat.standardDeviation(dataSet, means, true)\n    } = options;\n\n    return [dataSet, means, std];\n}\n\nfunction normal(x) {\n    if (!Array.isArray(x)) {\n        throw new Error('The input should be an array');\n    } else if (!Array.isArray(x[0])) {\n        return vectorNormalization(x);\n    } else {\n        return matrixNormalization(x);\n    }\n}\n\nfunction vectorNormalization(data) {\n    let mean = computeMean(data);\n    let std = computeVariance(data, true);\n\n    let ans = new Array(data.length);\n    if (std === 0) {\n        for (let i = 0; i < ans.length; i++) {\n            ans[i] = (data[i] - mean);\n        }\n    } else {\n        for (let i = 0; i < ans.length; i++) {\n            ans[i] = (data[i] - mean) / std;\n        }\n    }\n\n    return ans;\n}\n\nfunction matrixNormalization(data) {\n    let means = MatrixStat.mean(data, 1);\n    let std = matrixStandardDeviation(data, means);\n\n    let ans = new Array(data.length);\n    for (let i = 0; i < data.length; i++) {\n        ans[i] = new Array(data[i].length);\n        for (let j = 0; j < data[i].length; j++) {\n            if (std[i] === 0) {\n                ans[i][j] = (data[i][j] - means[i]);\n            } else {\n                ans[i][j] = (data[i][j] - means[i]) / std[i];\n            }\n        }\n    }\n    return ans;\n}\n\nfunction matrixStandardDeviation(data, means) {\n    return data.map(\n        (row, i) => Math.sqrt(row.reduce(\n            (acc, val) => acc + ((val - means[i]) * (val - means[i]))\n            , 0) / (row.length - 1))\n    );\n}\n\nfunction PCA(dataset, options = {}) {\n    var {\n        nComponents = 2,\n        threshold = 1e-9,\n        maxIterations = 100\n    } = options;\n\n    var eMatrix = _adjust(dataset, options);\n    \n    var r = eMatrix.rows;\n    var c = eMatrix.columns;\n\n    var T = Matrix.zeros(r, nComponents);\n        var P = Matrix.zeros(c, nComponents);\n        var eigenvalues = new Array(nComponents);\n        \n        for (let i = 0; i < nComponents; i++) {\n            let tIndex = maxSumColIndex(eMatrix.clone().mulM(eMatrix));\n            let t = eMatrix.getColumnVector(tIndex);\n    \n            let k = 0;\n            let tNew = t.dot(t);\n            for (let tOld = Number.MAX_SAFE_INTEGER; Math.abs(tOld - tNew) > threshold && k  < maxIterations; k++) {\n                var p = getLoading(eMatrix, t);\n                t = eMatrix.mmul(p);\n                tOld = tNew;\n                tNew = t.dot(t);\n                console.log(t.dot(t), tNew,tOld)\n                \n            }\n            eigenvalues[i] = tNew;\n            T.setColumn(i, t);\n            P.setColumn(i, p);\n            eMatrix.sub(t.mmul(p.transpose()));\n        }\n    return {T, P};\n}\n\nfunction getLoading(e, t) {\n    var m = e.columns;\n    var n = e.rows;\n\n    var result = new Matrix(m, 1);\n\n    var Bcolj = new Array(n);\n    for (var i = 0; i < m; i++) {\n        var s = 0;\n        for (let k = 0; k < n; k++) {\n            s += e.get(k, i) * t[k][0];\n        }\n        result.set(i, 0, s);\n    }\n    return result.mul(1 / result.norm());\n}\n\nfunction maxSumColIndex(data) {\n    return data.sum('column').maxIndex()[0];\n}\n\nfunction _adjust(dataset, options) {\n    dataset = new Matrix(dataset);\n    if (options.center) {\n        const means = mean(dataset);\n        const stdevs = stdev(dataset, means, true);\n        // this.means = means;\n        dataset.subRowVector(means);\n        if (options.scale) {\n            for (var i = 0; i < stdevs.length; i++) {\n                if (stdevs[i] === 0) {\n                    throw new RangeError('Cannot scale the dataset (standard deviation is zero at index ' + i);\n                }\n            }\n            // this.stdevs = stdevs;\n            dataset.divRowVector(stdevs);\n        }\n    }\n    return dataset;\n};\n\nfunction predictEllipse(x, y, n, alpha, nbPoints) {\n    let variance = [computeVariance(x), computeVariance(y)];\n    let means = [0,0];\n    let elp = ellipse([0,0], variance, nbPoints)\n    let c = 2 * (n-1)/n * (n+1)/(n-2);\n    let F = Math.sqrt(c * 4.7374);\n    elp = elp.map((point) => {\n        return point.map((p, i) => F * p + means[i])\n    })\n    return elp;\n}\n\nfunction ellipse(center, std, nbPoints) {\n    let vector = new Array(nbPoints);\n    let jump = 2 * Math.PI / (nbPoints - 1);\n    let t = 0;\n    for (let i = 0; i < nbPoints; i++) {\n        vector[i] = [center[0] + Math.sqrt(std[0]) * Math.cos(t), center[1] + Math.sqrt(std[1]) * Math.sin(t)];\n        t += jump;\n    }\n    return vector;\n}"]
+                "var {Matrix, MatrixStat: Stat, ArrayStat} = ML;\nconst computeMean = ArrayStat.mean;\nconst computeVariance = ArrayStat.variance;\nconst mean = Stat.mean;\nconst stdev = Stat.standardDeviation;\nvar spectraDataSet = [];\nvar matrixYData = [];\n\nAPI.createData('pcaPlot', {'pcx': 1, 'pcy': 2, 'numberOfEigenVectors': 3})\n\nvar actionName, actionValue\n\nswitch(this.variable) {\n    case 'csvParameters':\n        actionName = 'csvParameters';\n        break;\n    case 'inf2':\n        actionName = 'createDataClass';\n        break;\n    case 'droppedData':\n        actionName = 'droppedData';\n        actionValue = API.getData('droppedData')\n        break\n    default:\n        actionName = this.action.name;\n        actionValue = this.action.value;\n}\n\nswitch (actionName) {\n    case \"createDataClass\":\n        var fileNameList = API.getData('fileNameList');\n        var list = API.getData(\"list2\")\n        var inf = API.getData(\"inf2\");\n        list = list.filter((e) => {\n            let filename = String(e[0].value);\n            return fileNameList.some((ee) => {\n                return ee === filename;\n            })\n        });\n        var str = new Array(); var store = new Array();\n        var st = new Array(); var s = new Array();\n        \n        for (let i=0; i < inf.length; i++) {\n            let t = inf[i].name;\n            for (let j=0; j<list[0].length; j++) {\n                let w = String(list[0][j].name);// Check?\n                if (t === w) {\n                    for (let k=0; k<list.length; k++) {\n                        let n = list[k][0].value;\n                        let q = list[k][j].value;\n                        if (!str.some((e) => e.parametro===q)) {\n                            for (let l=0; l<list.length; l++) {\n                                let h = list[l][0].value;\n                                if (list[l][j].value === q) {\n                                    s.push({sample:h, vectorClass:l})\n                                }\n                            }\n                            str.push({parametro:q, sample:s}); s = [];\n                        }\n                    }\n                    store.push({name:w, value:str}); str = [];\n                }\n            }\n        }\n    \n        var dataClass = [];\n        store[0].value.map((e, i) => {\n            let result = [];\n            let vectorClass = new Array(store[0].value.length).fill(0);\n            vectorClass[i] = 1;\n            e.sample.forEach((ee) => {\n                result.push({sample: ee.sample, vector: vectorClass})\n            })\n            dataClass = dataClass.concat(result)\n        })\n        \n        dataClass = fileNameList.map((e) => {\n            e = e.toLowerCase();\n            let result\n            dataClass.some((ee, i) => {\n                let sample = ee.sample.toLowerCase();\n                if (sample === e) {\n                    result = ee.vector\n                    return true\n                }\n            })\n            if (!result) UI.showNotification('sanotheusa', 'warning');\n            return result;\n        });\n        var dataToPlot = API.getData('dataToPlot');\n        if (dataToPlot) API.doAction('plotResult', Object.assign({},dataToPlot, {dataClass}));\n        break\n    case \"PCA\":\n        console.log(\"pca started\")\n        API.loading('load','Please wait while we compute basic statistics for the chosen data');\n\n        matrixYData = API.getData(\"selectedIndicators\").map(x=>x.indicator.value);\n        matrixYData = transpose(matrixYData)\n        if (matrixYData.length < 2) return;\n        let pcaPlot = API.getData(\"pcaPlot\").resurrect();\n        \n        let pca = PCA(matrixYData, {\n            nComponents: pcaPlot.numberOfEigenVectors,\n            threshold: pcaPlot.threshold,\n            maxIterations: pcaPlot.maxIterations,\n            scale: true,\n            center: true\n        });\n        plotResult(pca.T, pcaPlot, 'pcaResult');\n        API.stopLoading('load');\n        console.log('pca finished')\n        break;\n    case \"droppedData\":\n        //console.time('start');\n        API.createData('spectraDataSet', null);\n        var zipFile = actionValue;\n        let options = API.getData('options');\n        var jsZip = new JSZip();\n        let zip = await jsZip.loadAsync(actionValue.content);\n        let filesToProcess = Object.keys(zip.files).filter(filename => filename.match(/jdx$/));\n        for (const filename of filesToProcess) {\n            let jcamp = await zip.files[filename].async('string');\n            let sd = SD.NMR.fromJcamp(jcamp, {});\n            sd.sd.info = {};\n            sd.sd.filename = filename.replace(/.jdx$/,'');\n            sd.sd.spectra.splice(1);\n            if(options.ord.useIt.get()) {\n                sd.reduceData(options.ord.from.get(), options.ord.to.get(), {nbPoints: options.ord.nbPoints.get()});\n            }\n            if (options.suppressSignals.get()) {\n                let j = options.signals.length;\n                while (j--) {\n                    if (options.signals[j].suppressIt) {\n                        sd.suppressZone(options.signals[j].from, options.signals[j].to);\n                    }\n                }\n            }\n            let y = sd.sd.spectra[0].data[0].y;\n            let sum = y.reduce((acc, val) => val + acc, 0);\n            sd.sd.spectra[0].data[0].y = y.map(a => a / sum * 100);\n            spectraDataSet.push(JSON.parse(JSON.stringify(sd)));\n        }\n        \n        \n        API.createData('spectraDataSet', spectraDataSet);\n        //console.log('the data has loaded in:');\n        //console.timeEnd('start');\n        break;\n    case 'plotResult':\n        var {x, y} = actionValue.data;\n        var indexs = actionValue.indexs;\n        var dataClass = actionValue.dataClass;\n        if (!dataClass) {\n            dataClass = new Array(x.length).fill([1]);\n        }\n        var l = x.length;\n        let nbClasses = dataClass[0].length;\n        var result = {\n            title: 'main data',\n            data: [\n                {\n                    x: x,\n                    y: y,\n                    type: 'scatter',\n                    // info: new Array(x.length),\n                    styles: {\n                        unselected: new Array(x.length),\n                        selected: new Array(x.length)\n                    }\n                }\n            ]\n        };\n        var selectedScale = chroma.scale(['green', 'black']).domain([0, nbClasses - 1]).mode('hsl');\n        var unselectedScale = chroma.scale(['red', 'blue']).domain([0, nbClasses - 1]).mode('hsl');\n        \n        let unselected = result.data[0].styles.unselected;\n        let selected = result.data[0].styles.selected;\n        // info = result.data[0].info;\n        for (let i = 0; i < l; i++) {\n            for (let j = 0; j < nbClasses; j++) {\n                if(dataClass[i][j] === 1) {\n                    unselected[i] = {\n                        fill: unselectedScale(j).toString(),\n                        shape: \"circle\",\n                        cx: 0,\n                        cy: 0,\n                        r: 3,\n                        height: \"5px\",\n                        width: \"5px\",\n                        stroke: \"transparent\"\n                    };\n                    selected[i] = {\n                        fill: selectedScale(j).toString(),\n                        shape: \"circle\",\n                        cx: 0,\n                        cy: 0,\n                        r: 3,\n                        height: \"5px\",\n                        width: \"5px\",\n                        stroke: \"transparent\"\n                    };\n                    j = nbClasses;\n                };\n                // info[i] = {index: indexs[i]};\n            }\n        }\n        API.createData(actionValue.varName, result);\n        API.createData(actionValue.varName + 'ellipse', predictEllipse(x, y, 5, 0.95, 1024))\n        break;\n    case 'csvParameters':\n        var data = API.getData('csvParameters').resurrect();\n        var list = Papa.parse(data.content,\n            {\n                delimiter:\",\",\n                header:true\n            }\n        ).data;\n        //debugger\n\n        var table = new Array(); var tabla = new Array(); var r = new Array();\n        \n        for (let i=0; i<list.length; i++) {\n            let obj = Object.entries(list[i]);\n            //console.log(obj)\n            for (let j=0; j<Object.keys(list[0]).length; j++) {\n                r.push({name:obj[j][0], value:obj[j][1]});\n            }\n            tabla.push(r); r = [];\n        }\n        var a = new Array(); var b = new Array(); var c = new Array();\n        \n        for (let i=0; i<tabla[0].length; i++) {\n            let w = tabla[0][i].name; console.log(w);\n            for (var j=0; j<tabla.length; j++) {\n                let q = tabla[j][i].value\n                if (a.includes(q) == false){\n                    a.push(q)\n                }\n            }\n            b.push({name:w, value:a}); a = [];\n        }\n        table = tabla[0];\n        API.createData(\"table\",table);\n        API.createData(\"list2\",tabla);\n        break;\n}\n\nfunction plotResult(prediction, pcaPlot, varName) {\n    var x = prediction.getColumn(pcaPlot.pcx - 1);\n    var y = prediction.getColumn(pcaPlot.pcy - 1);\n    var dataClass = new Array(x.length).fill([1])\n    API.createData('dataToPlot', {data: {x, y}, varName, dataClass});\n    API.doAction('plotResult', {data: {x, y}, varName, dataClass});\n}\n\nfunction adjustData(dataSet, options) {\n    if (Array.isArray(dataSet[0])) {\n        dataSet = Matrix.checkMatrix(dataSet);\n    } else if (Array.isArray(dataSet)) {\n        dataSet = new Matrix(dataSet.map(a => {\n            return [a];\n        }));\n    } else {\n        throw new Error('Invalid data type for dataSet');\n    }\n    const {\n        means = Stat.mean(dataSet),\n        std = Stat.standardDeviation(dataSet, means, true)\n    } = options;\n\n    return [dataSet, means, std];\n}\n\nfunction normal(x) {\n    if (!Array.isArray(x)) {\n        throw new Error('The input should be an array');\n    } else if (!Array.isArray(x[0])) {\n        return vectorNormalization(x);\n    } else {\n        return matrixNormalization(x);\n    }\n}\n\nfunction vectorNormalization(data) {\n    let mean = computeMean(data);\n    let std = computeVariance(data, true);\n\n    let ans = new Array(data.length);\n    if (std === 0) {\n        for (let i = 0; i < ans.length; i++) {\n            ans[i] = (data[i] - mean);\n        }\n    } else {\n        for (let i = 0; i < ans.length; i++) {\n            ans[i] = (data[i] - mean) / std;\n        }\n    }\n\n    return ans;\n}\n\nfunction matrixNormalization(data) {\n    let means = MatrixStat.mean(data, 1);\n    let std = matrixStandardDeviation(data, means);\n\n    let ans = new Array(data.length);\n    for (let i = 0; i < data.length; i++) {\n        ans[i] = new Array(data[i].length);\n        for (let j = 0; j < data[i].length; j++) {\n            if (std[i] === 0) {\n                ans[i][j] = (data[i][j] - means[i]);\n            } else {\n                ans[i][j] = (data[i][j] - means[i]) / std[i];\n            }\n        }\n    }\n    return ans;\n}\n\nfunction matrixStandardDeviation(data, means) {\n    return data.map(\n        (row, i) => Math.sqrt(row.reduce(\n            (acc, val) => acc + ((val - means[i]) * (val - means[i]))\n            , 0) / (row.length - 1))\n    );\n}\n\nfunction PCA(dataset, options = {}) {\n    var {\n        nComponents = 2,\n        threshold = 1e-9,\n        maxIterations = 100\n    } = options;\n\n    var eMatrix = _adjust(dataset, options);\n    \n    var r = eMatrix.rows;\n    var c = eMatrix.columns;\n\n    var T = Matrix.zeros(r, nComponents);\n        var P = Matrix.zeros(c, nComponents);\n        var eigenvalues = new Array(nComponents);\n        \n        for (let i = 0; i < nComponents; i++) {\n            let tIndex = maxSumColIndex(eMatrix.clone().mulM(eMatrix));\n            let t = eMatrix.getColumnVector(tIndex);\n    \n            let k = 0;\n            let tNew = t.dot(t);\n            for (let tOld = Number.MAX_SAFE_INTEGER; Math.abs(tOld - tNew) > threshold && k  < maxIterations; k++) {\n                var p = getLoading(eMatrix, t);\n                t = eMatrix.mmul(p);\n                tOld = tNew;\n                tNew = t.dot(t);\n                //console.log(t.dot(t), tNew,tOld)\n                \n            }\n            eigenvalues[i] = tNew;\n            T.setColumn(i, t);\n            P.setColumn(i, p);\n            eMatrix.sub(t.mmul(p.transpose()));\n        }\n    return {T, P};\n}\n\nfunction getLoading(e, t) {\n    var m = e.columns;\n    var n = e.rows;\n\n    var result = new Matrix(m, 1);\n\n    var Bcolj = new Array(n);\n    for (var i = 0; i < m; i++) {\n        var s = 0;\n        for (let k = 0; k < n; k++) {\n            s += e.get(k, i) * t[k][0];\n        }\n        result.set(i, 0, s);\n    }\n    return result.mul(1 / result.norm());\n}\n\nfunction maxSumColIndex(data) {\n    return data.sum('column').maxIndex()[0];\n}\n\nfunction _adjust(dataset, options) {\n    dataset = new Matrix(dataset);\n    if (options.center) {\n        const means = mean(dataset);\n        const stdevs = stdev(dataset, means, true);\n        // this.means = means;\n        dataset.subRowVector(means);\n        if (options.scale) {\n            for (var i = 0; i < stdevs.length; i++) {\n                if (stdevs[i] === 0) {\n                    throw new RangeError('Cannot scale the dataset (standard deviation is zero at index ' + i);\n                }\n            }\n            // this.stdevs = stdevs;\n            dataset.divRowVector(stdevs);\n        }\n    }\n    return dataset;\n};\n\nfunction predictEllipse(x, y, n, alpha, nbPoints) {\n    let variance = [computeVariance(x), computeVariance(y)];\n    let means = [0,0];\n    let elp = ellipse([0,0], variance, nbPoints)\n    let c = 2 * (n-1)/n * (n+1)/(n-2);\n    let F = Math.sqrt(c * 4.7374);\n    elp = elp.map((point) => {\n        return point.map((p, i) => F * p + means[i])\n    })\n    return elp;\n}\n\nfunction ellipse(center, std, nbPoints) {\n    let vector = new Array(nbPoints);\n    let jump = 2 * Math.PI / (nbPoints - 1);\n    let t = 0;\n    for (let i = 0; i < nbPoints; i++) {\n        vector[i] = [center[0] + Math.sqrt(std[0]) * Math.cos(t), center[1] + Math.sqrt(std[1]) * Math.sin(t)];\n        t += jump;\n    }\n    return vector;\n}\n\nfunction transpose(matrix) {\n  return matrix[0].map((col, i) => matrix.map(row => row[i]));\n}\n"
+              ]
             }
           ],
           "libs": [
@@ -2805,7 +2806,7 @@
               {
                 "lib": "chroma",
                 "alias": "chroma"
-              } 
+              }
             ]
           ],
           "buttons": [
@@ -2871,6 +2872,336 @@
         {}
       ],
       "actions_in": [
+        {
+          "rel": "execute",
+          "name": "PCA"
+        },
+        {
+          "rel": "execute",
+          "name": "plotResult"
+        }
+      ],
+      "vars_out": [
+        {
+          "jpath": []
+        }
+      ],
+      "actions_out": [
+        {
+          "jpath": []
+        }
+      ],
+      "toolbar": {
+        "custom": [
+          [
+            {
+              "title": "",
+              "icon": "",
+              "action": "",
+              "position": "begin",
+              "color": [
+                100,
+                100,
+                100,
+                1
+              ]
+            }
+          ]
+        ],
+        "common": [
+          {
+            "toolbar": [
+              [
+                "Open Preferences"
+              ]
+            ]
+          }
+        ]
+      },
+      "css": [
+        {
+          "fontSize": [
+            ""
+          ],
+          "fontFamily": [
+            ""
+          ]
+        }
+      ],
+      "title": ""
+    },
+    {
+      "url": "modules/types/client_interaction/button_action/",
+      "configuration": {
+        "sections": {},
+        "groups": {
+          "group": [
+            {
+              "toggle": [
+                "click"
+              ],
+              "label": [
+                "PCA"
+              ],
+              "onLabel": [
+                "Toggle action off"
+              ],
+              "offLabel": [
+                "Toggle action on"
+              ],
+              "title": [
+                ""
+              ],
+              "onColor": [
+                [
+                  0,
+                  0,
+                  0,
+                  1
+                ]
+              ],
+              "offColor": [
+                [
+                  0,
+                  0,
+                  0,
+                  1
+                ]
+              ],
+              "startState": [
+                "off"
+              ],
+              "text": [
+                null
+              ],
+              "askConfirm": [
+                []
+              ],
+              "confirmText": [
+                "Are you sure?"
+              ],
+              "okLabel": [
+                "Ok"
+              ],
+              "cancelLabel": [
+                "Cancel"
+              ],
+              "content": [
+                ""
+              ],
+              "contentType": [
+                "content"
+              ],
+              "maskOpacity": [
+                0.6
+              ]
+            }
+          ]
+        }
+      },
+      "layers": {
+        "Default layer": {
+          "position": {
+            "left": 130,
+            "top": 29
+          },
+          "size": {
+            "width": 8,
+            "height": 7
+          },
+          "zIndex": 0,
+          "display": true,
+          "title": "",
+          "bgColor": [
+            255,
+            255,
+            255,
+            0
+          ],
+          "wrapper": false,
+          "created": true,
+          "name": "Default layer"
+        },
+        "admin": {
+          "position": {
+            "left": 128,
+            "top": 16
+          },
+          "size": {
+            "width": 17,
+            "height": 7
+          },
+          "zIndex": 0,
+          "display": true,
+          "title": "",
+          "bgColor": [
+            255,
+            255,
+            255,
+            0
+          ],
+          "wrapper": true,
+          "created": true,
+          "name": "admin"
+        }
+      },
+      "id": 17,
+      "vars_in": [],
+      "actions_in": [
+        {}
+      ],
+      "actions_out": [
+        {
+          "event": "onClick",
+          "rel": "actionText",
+          "jpath": [],
+          "name": "PCA"
+        }
+      ],
+      "vars_out": [],
+      "toolbar": {
+        "custom": [
+          [
+            {
+              "title": "",
+              "icon": "",
+              "action": "",
+              "position": "begin",
+              "color": [
+                100,
+                100,
+                100,
+                1
+              ]
+            }
+          ]
+        ],
+        "common": [
+          {
+            "toolbar": [
+              [
+                "Open Preferences"
+              ]
+            ]
+          }
+        ]
+      },
+      "css": [
+        {
+          "fontSize": [
+            ""
+          ],
+          "fontFamily": [
+            ""
+          ]
+        }
+      ],
+      "title": ""
+    },
+    {
+      "url": "modules/types/edition/onde/",
+      "configuration": {
+        "sections": {},
+        "groups": {
+          "group": [
+            {
+              "hasButton": [
+                [
+                  "show"
+                ]
+              ],
+              "button_text": [
+                "Export"
+              ],
+              "debouncing": [
+                0
+              ],
+              "output": [
+                "modified"
+              ],
+              "mode": [
+                "schema"
+              ],
+              "schemaSource": [
+                "config"
+              ],
+              "schema": [
+                "{\n    \"type\":\"object\",\n    \"properties\":{\n        \"pcx\":{\n            \"label\":\"PCX\",\n            \"type\":\"number\",\n            \"title\":\"Principal component in X axis\",\n            \"default\": \"1\"\n        },\n        \"pcy\":{\n            \"label\":\"PCY\",\n            \"type\":\"number\",\n            \"title\":\"Principal component in Y axis\",\n            \"default\": \"2\"\n        },\n        \"numberOfEigenVectors\": {\n            \"label\":\"EigenVectors\",\n            \"type\":\"number\",\n            \"title\":\"number of principal components to use\",\n            \"default\": \"3\"\n        }\n    }\n}"
+              ],
+              "onchangeFilter": [
+                null
+              ]
+            }
+          ],
+          "data": [
+            {
+              "saveInView": [
+                []
+              ],
+              "varname": [
+                ""
+              ],
+              "data": [
+                "{}"
+              ]
+            }
+          ]
+        }
+      },
+      "layers": {
+        "Default layer": {
+          "position": {
+            "left": 87,
+            "top": 23
+          },
+          "size": {
+            "width": 20,
+            "height": 27
+          },
+          "zIndex": 0,
+          "display": true,
+          "title": "",
+          "bgColor": [
+            255,
+            255,
+            255,
+            0
+          ],
+          "wrapper": true,
+          "created": true,
+          "name": "Default layer"
+        },
+        "admin": {
+          "position": {
+            "left": 83,
+            "top": 12
+          },
+          "size": {
+            "width": 32,
+            "height": 19
+          },
+          "zIndex": 0,
+          "display": true,
+          "title": "",
+          "bgColor": [
+            255,
+            255,
+            255,
+            0
+          ],
+          "wrapper": true,
+          "created": true,
+          "name": "admin"
+        }
+      },
+      "id": 18,
+      "vars_in": [
+        {
+          "rel": "inputValue",
+          "name": "pcaPlot"
+        }
+      ],
+      "actions_in": [
         {}
       ],
       "vars_out": [
@@ -2921,6 +3252,298 @@
         }
       ],
       "title": ""
+    },
+    {
+      "url": "modules/types/science/spectra/spectra_displayer/",
+      "configuration": {
+        "sections": {
+          "graph": [
+            {
+              "sections": {},
+              "groups": {
+                "graph": [
+                  {
+                    "url": [
+                      ""
+                    ],
+                    "zoom": [
+                      "xy"
+                    ],
+                    "wheelAction": [
+                      "none"
+                    ],
+                    "wheelbaseline": [
+                      0
+                    ],
+                    "fullOut": [
+                      "both"
+                    ],
+                    "legend": [
+                      null
+                    ],
+                    "legendOptions": [
+                      [
+                        "isSerieHideable",
+                        "isSerieSelectable"
+                      ]
+                    ],
+                    "mouseTracking": [
+                      []
+                    ],
+                    "selectScatter": [
+                      [
+                        "yes"
+                      ]
+                    ],
+                    "independantYZoom": [
+                      []
+                    ]
+                  }
+                ]
+              }
+            }
+          ],
+          "axis": [
+            {
+              "sections": {},
+              "groups": {
+                "xAxis": [
+                  {
+                    "checkboxes": [
+                      [
+                        "display"
+                      ]
+                    ],
+                    "label": [
+                      ""
+                    ],
+                    "beforeSpacing": [
+                      "0"
+                    ],
+                    "afterSpacing": [
+                      0
+                    ],
+                    "min": [
+                      ""
+                    ],
+                    "max": [
+                      ""
+                    ],
+                    "nbTicksPrimary": [
+                      5
+                    ],
+                    "axismodification": [
+                      "none"
+                    ]
+                  }
+                ],
+                "yAxis": [
+                  {
+                    "checkboxes": [
+                      [
+                        "display"
+                      ]
+                    ],
+                    "label": [
+                      ""
+                    ],
+                    "beforeSpacing": [
+                      "0"
+                    ],
+                    "afterSpacing": [
+                      0
+                    ],
+                    "min": [
+                      ""
+                    ],
+                    "max": [
+                      ""
+                    ],
+                    "nbTicksPrimary": [
+                      5
+                    ],
+                    "fitToAxisOnFromTo": [
+                      []
+                    ]
+                  }
+                ]
+              }
+            }
+          ],
+          "series": [
+            {
+              "sections": {},
+              "groups": {
+                "series": [
+                  {
+                    "overflow": [
+                      []
+                    ],
+                    "stackVerticalSpacing": [
+                      0
+                    ]
+                  }
+                ]
+              }
+            }
+          ],
+          "variables": [
+            {
+              "sections": {},
+              "groups": {
+                "variables": [
+                  [
+                    {
+                      "variable": "",
+                      "axis": "0",
+                      "adaptTo": "none",
+                      "plotcolor": [
+                        1,
+                        1,
+                        255,
+                        1
+                      ],
+                      "strokewidth": "1",
+                      "strokestyle": "1",
+                      "plotcontinuous": "continuous",
+                      "peakpicking": [],
+                      "markers": [],
+                      "markerShape": "1",
+                      "markerSize": 2,
+                      "normalize": "none",
+                      "optimizeSlots": [],
+                      "tracking": []
+                    }
+                  ]
+                ]
+              }
+            }
+          ],
+          "misc": [
+            {
+              "sections": {},
+              "groups": {
+                "misc": [
+                  {
+                    "highlightOptions": [
+                      "{}"
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "groups": {}
+      },
+      "layers": {
+        "Default layer": {
+          "position": {
+            "left": 57,
+            "top": 23
+          },
+          "size": {
+            "width": 29,
+            "height": 27
+          },
+          "zIndex": 0,
+          "display": true,
+          "title": "Scores",
+          "bgColor": [
+            255,
+            255,
+            255,
+            0
+          ],
+          "wrapper": true,
+          "created": true,
+          "name": "Default layer"
+        },
+        "admin": {
+          "position": {
+            "left": 117,
+            "top": 26
+          },
+          "size": {
+            "width": 29,
+            "height": 24
+          },
+          "zIndex": 0,
+          "display": true,
+          "title": "",
+          "bgColor": [
+            255,
+            255,
+            255,
+            0
+          ],
+          "wrapper": true,
+          "created": true,
+          "name": "admin"
+        }
+      },
+      "id": 19,
+      "vars_in": [
+        {
+          "rel": "chart",
+          "name": "pcaResult"
+        },
+        {
+          "rel": "chart",
+          "name": "pcaResultellipse"
+        }
+      ],
+      "actions_in": [
+        {}
+      ],
+      "vars_out": [
+        {
+          "jpath": []
+        }
+      ],
+      "actions_out": [
+        {
+          "jpath": []
+        }
+      ],
+      "toolbar": {
+        "custom": [
+          [
+            {
+              "title": "",
+              "icon": "",
+              "action": "",
+              "position": "begin",
+              "color": [
+                100,
+                100,
+                100,
+                1
+              ]
+            }
+          ]
+        ],
+        "common": [
+          {
+            "toolbar": [
+              [
+                "Open Preferences"
+              ]
+            ]
+          }
+        ]
+      },
+      "css": [
+        {
+          "fontSize": [
+            ""
+          ],
+          "fontFamily": [
+            ""
+          ]
+        }
+      ],
+      "title": "Scores"
     }
   ],
   "variables": [
@@ -3069,3 +3692,4 @@
     }
   ]
 }
+
