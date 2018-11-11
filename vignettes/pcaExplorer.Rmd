@@ -199,9 +199,13 @@ plot(pca$x[,pc[1]], pca$x[,pc[2]], col=labels, cex=0.7,
 In order to better illustrate untargetted analysis, artificial spectra of different compositions using 3 compounds are created. One of the 3 compound is set to be a biomarker and thus its distribution will be distinct among the two population A and B. 500 individuals are created for each population resulting in a 1000 times 768 matrix, where 768 are the number of variables of our artificial spectra.
 
 ```{r, include=FALSE}
-pureElements <- read.csv2('/home/jul/git/visualizeR_root/visualizerExamples/datasets/pureElements.csv', sep = ',', dec = '.', header = FALSE)
-classMatrix <- read.csv2('/home/jul/git/visualizeR_root/visualizerExamples/datasets/classMatrix.csv', sep = ',', dec = '.', header = FALSE)
-classVector <- factor(read.csv2('/home/jul/git/visualizeR_root/visualizerExamples/datasets/classVector.csv', sep = ',', dec = ',', header = FALSE))
+#gist_create("/home/jul/git/visualizeR_root/visualizerExamples/datasets/pureElements.csv", description='pureElements testset for visualizeR/spectraExplorer', browse = FALSE)
+#gist_create("/home/jul/git/visualizeR_root/visualizerExamples/datasets/classMatrix.csv", description='classMatrix testset for visualizeR/spectraExplorer', browse = FALSE)
+#gist_create("/home/jul/git/visualizeR_root/visualizerExamples/datasets/classVector.csv", description='classVector testset for visualizeR/spectraExplorer', browse = FALSE)
+
+pureElements <- read.csv2('https://gist.githubusercontent.com/jwist/f65ee06ad11186d28dd52e0b66af135a/raw/ad4a0dcf05a0c6c5d8bf569efe8eb0fa0ab99ba5/pureElements.csv', sep = ',', dec = '.', header = FALSE)
+classMatrix <- read.csv2('https://gist.githubusercontent.com/jwist/208b86aec0d130a979fa2ea0b78b9a10/raw/172b76aec0c67c93e3ef7fae6888425de2183261/classMatrix.csv', sep = ',', dec = '.', header = FALSE)
+classVector <- factor(read.csv2('https://gist.githubusercontent.com/jwist/1908d524b9e60657c9a8c4582457b2e5/raw/1efbd11f08673b75879f768a7db3f34b68e247e3/classVector.csv', sep = ',', dec = ',', header = FALSE))
 ```                  
 
 We can look at each individual spectra and a mixture of them:
