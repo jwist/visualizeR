@@ -6421,7 +6421,7 @@
           "name": "help"
         }
       },
-      "id": 27,
+      "id": 26,
       "vars_in": [
         {
           "rel": "value",
@@ -6635,7 +6635,7 @@
           "name": "help"
         }
       },
-      "id": 28,
+      "id": 27,
       "vars_in": [
         {}
       ],
@@ -6853,7 +6853,7 @@
           "name": "help"
         }
       },
-      "id": 29,
+      "id": 28,
       "vars_in": [
         {
           "rel": "inputValue",
@@ -7113,7 +7113,7 @@
           "name": "help"
         }
       },
-      "id": 30,
+      "id": 29,
       "vars_out": [
         {
           "event": "onRead",
@@ -7341,7 +7341,7 @@
           "name": "help"
         }
       },
-      "id": 31,
+      "id": 30,
       "vars_in": [
         {
           "rel": "inputValue",
@@ -7594,7 +7594,7 @@
           "name": "help"
         }
       },
-      "id": 32,
+      "id": 31,
       "vars_in": [],
       "actions_in": [
         {}
@@ -7806,7 +7806,7 @@
           "name": "Upload"
         }
       },
-      "id": 33,
+      "id": 32,
       "vars_in": [
         {}
       ],
@@ -8022,7 +8022,7 @@
           "name": "Upload"
         }
       },
-      "id": 34,
+      "id": 33,
       "vars_in": [
         {}
       ],
@@ -8238,7 +8238,7 @@
           "name": "Upload"
         }
       },
-      "id": 35,
+      "id": 34,
       "vars_in": [
         {}
       ],
@@ -8477,7 +8477,7 @@
           "name": "help"
         }
       },
-      "id": 36,
+      "id": 35,
       "vars_in": [],
       "actions_in": [
         {}
@@ -8686,7 +8686,7 @@
           "name": "Upload"
         }
       },
-      "id": 37,
+      "id": 36,
       "vars_in": [
         {}
       ],
@@ -8924,7 +8924,7 @@
           "name": "Upload"
         }
       },
-      "id": 38,
+      "id": 37,
       "vars_in": [],
       "actions_in": [
         {}
@@ -9275,7 +9275,7 @@
           "name": "Default layer"
         }
       },
-      "id": 39,
+      "id": 38,
       "vars_in": [
         {
           "rel": "chart",
@@ -9422,7 +9422,7 @@
         "general": [
           {
             "script": [
-              "\nAPI.loading('load','Please wait while we compute basic statistics for the chosen data');\n\n// you need to leave some time to display the message\n// we use setImmediate to achieve this\n\nsetImmediate(loadData);\n\nasync function loadData() {\n    \n        setTimeout(selectDataSets, 100);\n        setTimeout(selectData, 10000);\n        API.stopLoading('load');\n}\n\nAPI.createData('pcaPlot', {'pcx': 1, 'pcy': 2, 'numberOfEigenVectors': 3})\n\nfunction selectDataSets() {\n    let data = API.getData('data');\n    API.createData('selectedMetadata', data[0].metadata);\n    API.createData('selectedDataSets', data[0].data);\n}\n\nfunction selectData() {\n    let data = API.getData('selectedDataSets');\n    API.createData('selectedData', data[0].data);\n}\n\n\n\n\n\n"
+              "\nAPI.loading('load','Please wait while data are being downloaded');\n\n// you need to leave some time to display the message\n// we use setImmediate to achieve this\n\nsetImmediate(loadData);\n\n$.getJSON('http://127.0.0.1:5474/data/rangesExplorer.data.json',function(result) {\n    API.createData('data',result.data);\n    API.createData('spec',result.spec);\n    API.createData('selectedMetadata', result.data[0].metadata);\n    API.createData('selectedDataSets', result.data[0].data);\n    API.createData('selectedData', result.data[0].data[0].data);\n    //setTimeout(selectDataSets, 1000);\n    //setTimeout(selectData, 10000);\n    API.stopLoading('load');\n})\n\nasync function loadData() {\n    API.createData('pcaPlot', {'pcx': 1, 'pcy': 2, 'numberOfEigenVectors': 3})\n\n}\n\n\n\n"
             ]
           }
         ]
