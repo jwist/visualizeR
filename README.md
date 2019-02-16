@@ -11,7 +11,7 @@ The visualizer requires data to be provided as a json file with a specific struc
 
 Either clone the repository and build the package locally, or install it directly from R using the nice *devtools* package by Hadley Wickham and coworkers.
 
-```
+``` r
 install.packages("devtools")
 
 library(devtools)
