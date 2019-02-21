@@ -16,6 +16,8 @@
 #' \item "table"
 #' \item "chart"
 #' \item"multiChart"
+#' \item"score"
+#' \item"color"
 #' }
 #' @return a list object with the data
 #' @examples
@@ -269,6 +271,17 @@ appendData <- function(data, variable, variableName, type) {
                                              )
                                            ))
                                          )
+          },
+          "color" = {
+            data[[variableName]] <- list(
+              title = jsonlite::unbox("color plot"),
+              data = list(list(
+                type = jsonlite::unbox("color"),
+                x = variable$x,
+                y = variable$y,
+                color = variable$color
+              ))
+            )
           })
 
   return(data)

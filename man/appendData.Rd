@@ -21,6 +21,8 @@ using the exposeData.R function.}
 \item "table"
 \item "chart"
 \item"multiChart"
+\item"score"
+\item"color"
 }}
 }
 \value{

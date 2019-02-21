@@ -42,7 +42,7 @@ x_axis <- as.numeric( colnames(coffeeNMRSpectra$nmr) )
 
 You can verify that the data includes 34 NMR spectra of Arabica coffee from Brazil, Colombia and Peru. The original data of lenght `r 128*1024` have been binned or bucketed down to 1610 variables.
 
-The `visualizeR` pipeline needs JSON files^[[see](http://www.json.org/)] that look like:
+The `visualizeR` pipeline needs JSON files^[[see JSON webpage](http://www.json.org/)] that look like:
 
   {'a': 1}
   
@@ -100,7 +100,7 @@ Here we just created a data.json file and we need to tell the webserver its name
 
 ```{r push_data, fig.show='hold'}
 v <- new("visualization")
-v@view <- "spectraExplorer3.view.json"
+v@view <- "spectraExplorer3.1.view.json"
 v@data <- "spectraExplorer3.data.json"
 push(v, type="data", d)
 ```
