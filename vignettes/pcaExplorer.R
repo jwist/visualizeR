@@ -111,9 +111,13 @@ plot(pca$x[,pc[1]], pca$x[,pc[2]], col=labels, cex=0.7,
      ylab=paste0("PC ", pc[2], " (", ev[pc[2]], "%)"))
 
 ## ---- include=FALSE------------------------------------------------------
-pureElements <- read.csv2('/home/jul/git/visualizeR_root/visualizerExamples/datasets/pureElements.csv', sep = ',', dec = '.', header = FALSE)
-classMatrix <- read.csv2('/home/jul/git/visualizeR_root/visualizerExamples/datasets/classMatrix.csv', sep = ',', dec = '.', header = FALSE)
-classVector <- factor(read.csv2('/home/jul/git/visualizeR_root/visualizerExamples/datasets/classVector.csv', sep = ',', dec = ',', header = FALSE))
+#gist_create("/home/jul/git/visualizeR_root/visualizerExamples/datasets/pureElements.csv", description='pureElements testset for visualizeR/spectraExplorer', browse = FALSE)
+#gist_create("/home/jul/git/visualizeR_root/visualizerExamples/datasets/classMatrix.csv", description='classMatrix testset for visualizeR/spectraExplorer', browse = FALSE)
+#gist_create("/home/jul/git/visualizeR_root/visualizerExamples/datasets/classVector.csv", description='classVector testset for visualizeR/spectraExplorer', browse = FALSE)
+
+pureElements <- read.csv2('https://gist.githubusercontent.com/jwist/f65ee06ad11186d28dd52e0b66af135a/raw/ad4a0dcf05a0c6c5d8bf569efe8eb0fa0ab99ba5/pureElements.csv', sep = ',', dec = '.', header = FALSE)
+classMatrix <- read.csv2('https://gist.githubusercontent.com/jwist/208b86aec0d130a979fa2ea0b78b9a10/raw/172b76aec0c67c93e3ef7fae6888425de2183261/classMatrix.csv', sep = ',', dec = '.', header = FALSE)
+classVector <- factor(read.csv2('https://gist.githubusercontent.com/jwist/1908d524b9e60657c9a8c4582457b2e5/raw/1efbd11f08673b75879f768a7db3f34b68e247e3/classVector.csv', sep = ',', dec = ',', header = FALSE))
 
 ## ---- fig.show='hold', fig.width=6.8, fig.height=2-----------------------
 par(mar=c(2,2,1,1))
@@ -128,7 +132,8 @@ lines(as.numeric(pureElements[2,]), col = 2)
 lines(as.numeric(pureElements[3,]), col = 3)
 
 ## ---- fig.show='hold'----------------------------------------------------
-compositionMatrix <- read.csv2('/home/jul/git/visualizeR_root/visualizerExamples/datasets4/compositionMatrix.csv', sep = ',', dec = '.', header = FALSE)
+#gist_create("/home/jul/git/visualizeR_root/visualizerExamples/datasets4/compositionMatrix.csv", description='compositionMatrix testset 4 for visualizeR/spectraExplorer', browse = FALSE)
+compositionMatrix <- read.csv2('https://gist.githubusercontent.com/jwist/f53e5bfde74e59ff1b4fdef7e546807c/raw/222eb1b2985f62137abfb23211f028c6d5cd050d/compositionMatrix.csv', sep = ',', dec = '.', header = FALSE)
 colnames(compositionMatrix) <- c("c1", "c2", "c3")
 knitr::kable(head(compositionMatrix[,1:3]))
 
@@ -147,7 +152,9 @@ for (i in 1:3) {
 }
 
 ## ---- fig.show='hold'----------------------------------------------------
-dataset <- read.csv2('/home/jul/git/visualizeR_root/visualizerExamples/datasets4/dataset.csv', sep = ',', dec = '.', header = FALSE)
+#gist_create("/home/jul/git/visualizeR_root/visualizerExamples/datasets4/dataset.csv", description='dataset4 testset for visualizeR/spectraExplorer', browse = FALSE)
+
+dataset <- read.csv2('https://gist.githubusercontent.com/jwist/c6c3d2c953db5217d5f93543b6f1ff37/raw/22277726f079e2e22af28a0eeccf75288e61439a/dataset.csv', sep = ',', dec = '.', header = FALSE)
 
 ## ---- fig.show='hold', fig.width=3.4, fig.height=3.4---------------------
 pc <- c(1,2)
