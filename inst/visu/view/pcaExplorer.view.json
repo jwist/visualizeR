@@ -681,6 +681,10 @@
         {
           "rel": "chart",
           "name": "ellipse3"
+        },
+        {
+          "rel": "chart",
+          "name": "ellipse4"
         }
       ],
       "actions_in": [
@@ -1532,7 +1536,7 @@
             "height": 46
           },
           "zIndex": 0,
-          "display": true,
+          "display": false,
           "title": "",
           "bgColor": [
             255,
@@ -1554,7 +1558,7 @@
             "height": 20
           },
           "zIndex": 0,
-          "display": false,
+          "display": true,
           "title": "",
           "bgColor": [
             255,
@@ -1653,6 +1657,12 @@
       "varname": "ellipse3",
       "jpath": [
         "ellipse3"
+      ]
+    },
+    {
+      "varname": "ellipse4",
+      "jpath": [
+        "ellipse4"
       ]
     }
   ],
@@ -1762,3 +1772,4 @@
     }
   ]
 }
+

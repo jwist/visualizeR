@@ -44,7 +44,7 @@ names(d)
 
 ## ----push_data, fig.show='hold'------------------------------------------
 v <- new("visualization")
-v@view <- "spectraExplorer3.view.json"
+v@view <- "spectraExplorer3.1.view.json"
 v@data <- "spectraExplorer3.data.json"
 push(v, type="data", d)
 
