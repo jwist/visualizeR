@@ -2609,7 +2609,7 @@
                 "variables": [
                   [
                     {
-                      "variable": "",
+                      "variable": "coloredLoadings",
                       "axis": "0",
                       "adaptTo": "none",
                       "plotcolor": [
@@ -2784,7 +2784,7 @@
                 ]
               ],
               "script": [
-                "let fh = API.cache('helperFunctions');\n(!fh) ? API.doAction('loadFunction') : [];\n\nlet scale = fh.scale;\n\nlet xAxis = API.getData('xAxis');\nlet loadings = fh.transpose(API.getData('loadings').resurrect());\n\nlet varLength = loadings[0].length;\nlet obsLength = loadings.length;\n\nlet selectedLoading = API.getData('selectedLoading');\nlet list = fh.seq_along(loadings);\n(!selectedLoading) ? API.createData('loadingList', list.map(x => [x])) : [];\nconsole.log(selectedLoading);\nlet eigenVectors = new Array(obsLength);\n//let xAxis = fh.seq_along(loadings[0]);\n\nlet loadingsColors = API.getData('loadingsColors');\nconsole.log(loadingsColors)\n    var max = loadingsColors[0].reduce(function(a, b) {\n        return Math.max(a, b);\n    });\n\n    var min = loadingsColors[0].reduce(function(a, b) {\n        return Math.min(a, b);\n    });\n    \nlet unselectedScale = chroma.scale(['red', 'blue']).domain([min, max]).mode('hsl');\n   \nfor (let i = 0; i < obsLength; i++) {\n\n   let colorScale = loadingsColors[i].map((x, j) => unselectedScale(x));\n\n        eigenVectors[i] = { id: [i + 1],\n        data: { 'type': 'color', x: xAxis, y: loadings[i], 'color': colorScale} };\n      }\n      \n\nAPI.createData('coloredLoadings', eigenVectors[selectedLoading - 1].data);\n      \nAPI.createData('loadingTable', eigenVectors);\n"
+                "let fh = API.cache('helperFunctions');\n(!fh) ? API.doAction('loadFunction') : [];\n\nlet scale = fh.scale;\n\nlet xAxis = API.getData('xAxis');\nlet loadings = fh.transpose(API.getData('loadings').resurrect());\n\nlet varLength = loadings[0].length;\nlet obsLength = loadings.length;\n\nlet selectedLoading = API.getData('selectedLoading');\nlet list = fh.seq_along(loadings);\n(!selectedLoading) ? API.createData('loadingList', list.map(x => [x])) : [];\nconsole.log(selectedLoading.resurrect());\nlet eigenVectors = new Array(obsLength);\n//let xAxis = fh.seq_along(loadings[0]);\n\nlet loadingsColors = fh.transpose(API.getData('loadingsColors').resurrect());\nconsole.log(loadingsColors)\n    var max = loadingsColors[selectedLoading - 1].reduce(function(a, b) {\n        return Math.max(a, b);\n    });\n\n    var min = loadingsColors[selectedLoading - 1].reduce(function(a, b) {\n        return Math.min(a, b);\n    });\n\nlet unselectedScale = chroma.scale(['red', 'blue']).domain([min, max]).mode('hsl');\n\n//for (let i = 0; i < obsLength; i++) {\n\nlet colorScale = loadingsColors[selectedLoading - 1].map((x, j) => unselectedScale(x));\n\neigenVectors[selectedLoading - 1] = { id: [selectedLoading + 1],\n        data: { 'type': 'color', x: xAxis, y: loadings[selectedLoading - 1], 'color': colorScale} };\n\nAPI.createData('coloredLoadings', eigenVectors[selectedLoading - 1].data);\nconsole.log(eigenVectors[0].data)\n\nAPI.createData('loadingTable', eigenVectors);\n"
               ]
             }
           ],
@@ -3338,7 +3338,7 @@
     {
       "varname": "ellipse1",
       "jpath": [
-        "ellipse1"
+        "ellipse"
       ]
     },
     {
@@ -3356,7 +3356,7 @@
     {
       "varname": "loadingsColors",
       "jpath": [
-        "loadingsColors"
+        "loadingsColor"
       ]
     }
   ],
