@@ -24,8 +24,8 @@ Let's create a simple dataset. But first, we shall load a few libraries.
 
 ```{r}
 library(visualizeR)
-library(MetaboMate)
-library(car)
+#library(MetaboMate)
+#library(car)
 ```
 
 Data are readily loaded from the dataset provided with this package
@@ -37,8 +37,8 @@ data("bariatricRat")
 A very useful package **kimsche/MetaboMate** available on github.com contains a lot of functions for metabolic profiling. We use it for this example to normalize the data.
 
 ```{r}
-Xn=pqn(X)
-matspec(ppm, Xn, shift=c(7,8))
+Xn <- MetaboMate:::pqn(X)
+MetaboMate:::matspec(ppm, Xn, shift=c(7,8))
 ```
 
 The we prepare the dataset for visualization using **jwist/visualizeR**
@@ -63,17 +63,17 @@ bariatric <- data.frame(ID = ID,
 and start appending data to the list that will then become the data.json file passed to the **npellet/visualizer** package. The latter package will look for a variable named "data".
 
 ```{r}
-d = list()
+d <- list()
 d <- appendData(data = d, variableName = "data", variable = bariatric, type = "table")
 ```
 
 Multivariate analyisis is performed and scores and loadings displayed statically.
 
 ```{r}
-mod=MetaboMate::pca(Xn)
-plotscores(mod, an=list(Class=metadata$Class), title = 'PCA')
-plotload(mod, Xn, ppm, title='PCA loadings PC 1')
-plotload(mod, Xn, ppm, title='PCA loadings PC 2', pc = 2)
+mod <- MetaboMate:::pca(Xn)
+MetaboMate:::plotscores(mod, an=list(Class=metadata$Class), title = 'PCA')
+MetaboMate:::plotload(mod, Xn, ppm, title='PCA loadings PC 1')
+MetaboMate:::plotload(mod, Xn, ppm, title='PCA loadings PC 2', pc = 2)
 ```
 
 Scores are written as chart object and appended to the data as "score12". Any chart object should provide the following elements that **visualizer** will expect to display it correctly. All the above items must have the same length = length(x).
@@ -99,7 +99,7 @@ d[['loadingsColor']] <- cor(mod@t, x)
 PCA is first used to detect outliers. Here we prepare ellipses that will delineate the area where of 80% confidence
 
 ```{r}
-ellipse <- dataEllipse(mod@t[,1], mod@t[,2], levels=0.80)
+ellipse <- car:::dataEllipse(mod@t[,1], mod@t[,2], levels=0.80)
 
 ellipseChart <- data.frame("x" = ellipse[,1],
                            "y" = ellipse[,2],
