@@ -14,6 +14,8 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+library(jsonlite)
+library(visualizeR)
 ```
 
 ## Prepare your data
@@ -29,7 +31,6 @@ Since the data have been prepared for another analysis, the data have to be resh
 * a vector `x_axis` that contains the names or values of each variable
 
 ```{r create_dataset, fig.show='hold'}
-library(visualizeR)
 
 data("coffeeNMRSpectra")
 
@@ -99,16 +100,16 @@ The `http://github.com/npellet/visualizer` needs 3 parts to work:
 Here we just created a data.json file and we need to tell the webserver its name. Therefore we create a new visualization object and tell him where both the data and the view are to be found. The view has been created for this example and thus we just have to indicate the name of the file, while the data are the one we just created. The `visualizer::push()` function allows to serve the data just created under a specified name. 
 
 ```{r push_data, fig.show='hold'}
-v <- new("visualization")
-v@view <- "spectraExplorer3.1.view.json"
-v@data <- "spectraExplorer3.data.json"
-push(v, type="data", d)
+# v <- new("visualization")
+# v@view <- "spectraExplorer3.1.view.json"
+# v@data <- "spectraExplorer3.data.json"
+# push(v, type="data", d)
 ```
 
 `v` is an object that contains the configuration of the webserver. The method `print()` permit to see the final url. The first part of the URL point to the `http://github.com/npellet/visualizer` itself, while the second and thirs points to the data and the view, i.e., how to display the data.
 
 ```{r check_visualization_object, fig.show='hold'}
-print(v)
+# print(v)
 ```
 
 ## Explore your data

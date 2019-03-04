@@ -3,9 +3,10 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+library(jsonlite)
+library(visualizeR)
 
 ## ----create_dataset, fig.show='hold'-------------------------------------
-library(visualizeR)
 
 data("coffeeNMRSpectra")
 
@@ -19,7 +20,7 @@ x_axis <- as.numeric( colnames(coffeeNMRSpectra$nmr) )
 d = list()
 c <- data.frame(ID = ID,
                 group = group,
-                color = sapply(group, function(x) getColor2(as.character(x), 'hex')),
+                color = sapply(group, function(x) getColor2(as.character(x))),
                 "_highlight" = seq_along(group),
                 dataMatrix = I(matrix( c(rbind(repRow(x_axis, nrow(x)), x)), nrow(x), ncol(x)*2)),
                 metadata = I(metadata),
@@ -31,7 +32,7 @@ d <- appendData(data = d, variableName = "data", variable = c, type = "table")
 imag = NULL
 for (i in seq(from=2, to=3220, by=2)) {
   png(tf1 <- tempfile(fileext = ".png"));  boxplot( dataMatrix[,i] ~ group, data = c); dev.off()
-  imag[[i/2]] <- paste0("data:image/png;base64,", base64enc::base64encode(tf1))
+  imag[[i/2]] <- paste0("data:image/png;base64,", base64enc::base64encode(tf1))#base64enc::base64encode(tf1)
 }
 l <- data.frame("_highlight" = seq_along(x_axis),
                 #value = paste0("data:image/png;base64,", base64enc::base64encode(tf1)),
@@ -43,13 +44,13 @@ d <- appendData(data = d, variableName = "img", variable = l, type = "table")
 names(d)
 
 ## ----push_data, fig.show='hold'------------------------------------------
-v <- new("visualization")
-v@view <- "spectraExplorer3.1.view.json"
-v@data <- "spectraExplorer3.data.json"
-push(v, type="data", d)
+# v <- new("visualization")
+# v@view <- "spectraExplorer3.1.view.json"
+# v@data <- "spectraExplorer3.data.json"
+# push(v, type="data", d)
 
 ## ----check_visualization_object, fig.show='hold'-------------------------
-print(v)
+# print(v)
 
 ## ----visualize, fig.show='hold'------------------------------------------
 #visualize(v)
