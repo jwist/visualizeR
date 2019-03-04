@@ -121,5 +121,5 @@ Use the commented function, directly into the console to start the webserver and
 
 ## Troubleshooting
 
-Click the following [link](https://mydb.cheminfo.org/auth/login?continue=https%3A%2F%2Fmy.cheminfo.org%2F%3FviewURL%3Dhttps%3A%2F%2Fgist.githubusercontent.com%2Fjwist%2F643cf9d7e34bed52a58d418e736f1867%2Fraw%2FspectraExplorer3.view.json%26dataURL%3Dhttps%3A%2F%2Fgist.githubusercontent.com%2Fjwist%2Faacb0b820c823f38863b9fd3d065c839%2Fraw%2FspectraExplorer3.data.json) to see a demo version of the result you should obtain.
+Click the following [link](https://my.cheminfo.org/?viewURL=https://gist.githubusercontent.com/jwist/226596ad9ed6b25b790a61870fb76f33/raw/spectraExplorer3.1.view.json&dataURL=https://gist.githubusercontent.com/jwist/aacb0b820c823f38863b9fd3d065c839/raw/spectraExplorer3.data.json) to see a demo version of the result you should obtain.
 
