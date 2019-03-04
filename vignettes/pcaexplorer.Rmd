@@ -23,6 +23,7 @@ knitr::opts_chunk$set(
 Let's create a simple dataset. But first, we shall load a few libraries.
 
 ```{r}
+install.packages("MetaboMate")
 library(visualizeR)
 #library(MetaboMate)
 #library(car)
