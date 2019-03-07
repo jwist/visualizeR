@@ -112,11 +112,11 @@ d <- appendData( data = d, variableName = "ellipse", variable = ellipseChart, ty
 Finally, visualization object is created. The data list is converted to json and push ito the corresponding data.json file. The view is selected and the server triggered. The last line is commented for convenience, to accelerate testing procedure when building the package.
 
 ```{r}
-v <- new("visualization")
-v@data <- "rat_bariatric_pcaExplorer.data.json"
-v@view <- "pcaExplorer2.view.json"
-push(v, type="data", d)
-visualize(v)
+# v <- new("visualization")
+# v@data <- "rat_bariatric_pcaExplorer.data.json"
+# v@view <- "pcaExplorer2.view.json"
+# push(v, type="data", d)
+# visualize(v)
 ```
 
 For further information about the dataset please read \url{https://www.frontiersin.org/articles/10.3389/fmicb.2011.00183}
