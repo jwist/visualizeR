@@ -317,6 +317,16 @@ lines(as.numeric(pureElements[2,])/100 - 2e7, col = 'gray')
 par(op)
 ```
 
+
+```{r}
+op <- par(mar=c(2,2,1,1))
+plot(cov(pca$x, dataset)[,1], type='l', ylim=range(pca$rotation[,1:3]), col=abs(cor(pca$x, dataset)))
+plot(cov(pca$x, dataset)[,2], type='l', col=abs(cor(pca$x, dataset)))
+plot(cov(pca$x, dataset)[,3], type='l', col=abs(cor(pca$x, dataset)))
+par(op)
+```
+
+
 ```{r, fig.show='hold', fig.width=6.8, fig.height=4}
 par(mar=c(2,2,1,1))
 plot(pca$rotation[,1] * pca$scale, pca$rotation[,2] * pca$scale, col = 'gray')
