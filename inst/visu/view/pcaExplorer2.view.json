@@ -35,7 +35,7 @@
                 ]
               ],
               "script": [
-                "let marker = API.getData('selectedMarker')\n\nlet data = API.getData('data')\n\nlet selectedMarkers = marker.map( r => r._highlight[0] )\n\nlet selectedData = data.filter( (val, ind, arr) => \n    {return selectedMarkers.includes(val._highlight)} )\n\nlet x = selectedData[0].dataMatrix.filter((val, idx, Arr) => \n        idx % 2 == 0\n    )\nAPI.createData('xAxis', x);\n//let col = []\n//x.forEach( i => col.push({'_rgb':[0,0,255,1]}) )\n\nlet y = data.map( x => \n    x.dataMatrix.filter((val, idx, Arr) => \n        idx % 2 == 1\n    )\n)\nconsole.log('exec')\n\nlet color = [];\nlet spectra = selectedData.map((e, i) => {\n    let groupColor = e.color.split(\"(\")[1].split(\")\")[0].split(\",\").map(Number)\n    color = []\n    x.forEach( () => color.push({'_rgb': groupColor}) )\n    let s = ({\n        \"type\": 'color', //set to line in new visualizer\n        \"label\": e.ID,\n        \"styles\": {\n            \"unselected\": {\n                \"lineColor\": \"blue\",\n                \"lineWidth\": 3,\n                \"lineStyle\": 4\n            },\n            \"selected\": {\n                \"lineColor\": \"blue\",\n                \"lineWidth\": 5,\n                \"lineStyle\": 4\n            }\n        },\n        \"y\": y[i],\n        \"x\": x,\n        \"color\": color //remove with new visualizer\n        })\n    return s\n    }\n)\n\nAPI.createData('selectedData', selectedData)\nAPI.createData('selectedIndex', selectedMarkers)\nAPI.createData('selectedSpectra', {'data':spectra})\nAPI.createData('modifiedSelectedSpectra', {'data':spectra})\n\n"
+                "// here we just take the selected markers and filter data\n\nlet marker = API.getData('selectedMarker')\n\nlet data = API.getData('data')\n\nlet selectedMarkers = marker.map( r => r._highlight[0] )\n\nlet selectedData = data.filter( (val, ind, arr) => \n    {return selectedMarkers.includes(val._highlight)} )\n    \nAPI.createData('selectedData', selectedData)\n\n// not sure why this is needed??\nAPI.createData('selectedIndex', selectedMarkers)\n"
               ]
             }
           ],
@@ -90,7 +90,7 @@
           },
           "zIndex": 0,
           "display": true,
-          "title": "exec create data and spectra selected from score plot",
+          "title": "filter data with selected markers in score plot ",
           "bgColor": [
             255,
             255,
@@ -159,7 +159,7 @@
           ]
         }
       ],
-      "title": "exec create data and spectra selected from score plot"
+      "title": "filter data with selected markers in score plot "
     },
     {
       "url": "modules/types/edition/slick_grid/",
@@ -337,7 +337,7 @@
             "height": 65
           },
           "zIndex": 0,
-          "display": false,
+          "display": true,
           "title": "",
           "bgColor": [
             255,
@@ -429,7 +429,7 @@
           ]
         }
       ],
-      "title": "Selected Data (select on score plot)"
+      "title": ""
     },
     {
       "url": "modules/types/science/spectra/spectra_displayer/",
@@ -1208,13 +1208,20 @@
                 ]
               ],
               "script": [
-                "let currentID = API.getData('currentID')\n\nif (currentID != null) { \nlet sspectra = JSON.parse(JSON.stringify(API.getData('selectedSpectra')))\n\nlet col = []\nsspectra.data[0].x.forEach( i => col.push( {'_rgb':[0,0,255,1]}) )\n\nsspectra.data.map(e => {\n    return e.label == currentID ? e.color = col : []\n})\n\nAPI.createData('modifiedSelectedSpectra', sspectra)\nAPI.createData('currentID', null)\nconsole.log('executed+')\n}"
+                "let currentID = API.getData('currentID')\n\nconsole.log('test'+currentID)\n\nlet data = API.getData('selectedData')\nconsole.log(data[0]._highlight)\n\nif (currentID != null) {\n  //clone selectedSpectra\n  //let sspectra = JSON.parse(JSON.stringify(API.getData('selectedSpectra')))\n  let selectedData = data.filter( (val, ind, arr) => \n    {return selectedMarkers.includes(val._highlight)} )\n\n  let x = selectedData[0].dataMatrix.filter((val, idx, Arr) => \n    idx % 2 == 0\n  )\n  API.createData('xAxis', x);\n\n  let y = data.map( x => \n    x.dataMatrix.filter((val, idx, Arr) => \n        idx % 2 == 1\n    )\n  )\n  \n  // build a color vector\n  let col = []\n  x.forEach( i => col.push( {'_rgb':[0,0,255,1]}) )\n\n  \n  sspectra.data.map(e => {\n    return e.label == currentID ? e.color = col : []\n})\n\n\n  let color = [];\n  let spectra = selectedData.map((e, i) => {\n    let groupColor = e.color.split(\"(\")[1].split(\")\")[0].split(\",\").map(Number)\n    color = []\n    x.forEach( () => color.push({'_rgb': groupColor}) )\n    let s = ({\n        \"type\": 'color', //set to line in new visualizer\n        \"label\": e.ID,\n        \"styles\": {\n            \"unselected\": {\n                \"lineColor\": \"blue\",\n                \"lineWidth\": 3,\n                \"lineStyle\": 4\n            },\n            \"selected\": {\n                \"lineColor\": \"blue\",\n                \"lineWidth\": 5,\n                \"lineStyle\": 4\n            }\n        },\n        \"y\": y[i],\n        \"x\": x,\n        \"color\": color //remove with new visualizer\n        })\n    return s\n    }\n)\n\n\n\nAPI.createData('modifiedSelectedSpectra', sspectra)\nAPI.createData('currentID', null)\nconsole.log('executed+')\n}\n\nAPI.createData('selectedSpectra', {'data':spectra})\nAPI.createData('modifiedSelectedSpectra', {'data':spectra})\n\n\nlet jcampUrl = 'http://127.0.0.1:5474/data/jcamp/302-1.jdx';\nlet jcamp = (await superagent.get(jcampUrl).withCredentials()).text;\nAPI.createData('jcamp', jcamp);\n"
               ]
             }
           ],
           "libs": [
             [
-              {}
+              {
+                "lib": "superagent",
+                "alias": "superagent"
+              },
+              {
+                "lib": "vh/eln/libs",
+                "alias": "libs"
+              }
             ]
           ],
           "buttons": [
@@ -1254,12 +1261,12 @@
         },
         "admin": {
           "position": {
-            "left": 0,
-            "top": 22
+            "left": 62,
+            "top": 0
           },
           "size": {
             "width": 61,
-            "height": 21
+            "height": 62
           },
           "zIndex": 0,
           "display": true,
@@ -1409,12 +1416,12 @@
         },
         "admin": {
           "position": {
-            "left": 64,
-            "top": 10
+            "left": 62,
+            "top": 63
           },
           "size": {
-            "width": 59,
-            "height": 52
+            "width": 61,
+            "height": 18
           },
           "zIndex": 0,
           "display": true,
@@ -1714,12 +1721,12 @@
         },
         "admin": {
           "position": {
-            "left": 65,
-            "top": 69
+            "left": 62,
+            "top": 82
           },
           "size": {
             "width": 61,
-            "height": 35
+            "height": 19
           },
           "zIndex": 0,
           "display": true,
@@ -1883,11 +1890,11 @@
         },
         "admin": {
           "position": {
-            "left": 1,
+            "left": 0,
             "top": 82
           },
           "size": {
-            "width": 60,
+            "width": 61,
             "height": 23
           },
           "zIndex": 0,
@@ -2439,6 +2446,445 @@
           "rel": "fromToX",
           "jpath": [],
           "name": "zoomSync"
+        }
+      ],
+      "toolbar": {
+        "custom": [
+          [
+            {
+              "title": "",
+              "icon": "",
+              "action": "",
+              "position": "begin",
+              "color": [
+                100,
+                100,
+                100,
+                1
+              ]
+            }
+          ]
+        ],
+        "common": [
+          {
+            "toolbar": [
+              [
+                "Open Preferences"
+              ]
+            ]
+          }
+        ]
+      },
+      "css": [
+        {
+          "fontSize": [
+            ""
+          ],
+          "fontFamily": [
+            ""
+          ]
+        }
+      ],
+      "title": ""
+    },
+    {
+      "url": "modules/types/science/spectra/spectra_displayer/",
+      "configuration": {
+        "sections": {
+          "graph": [
+            {
+              "sections": {},
+              "groups": {
+                "graph": [
+                  {
+                    "url": [
+                      ""
+                    ],
+                    "zoom": [
+                      "x"
+                    ],
+                    "wheelAction": [
+                      "zoomY"
+                    ],
+                    "wheelbaseline": [
+                      0
+                    ],
+                    "fullOut": [
+                      "both"
+                    ],
+                    "legend": [
+                      null
+                    ],
+                    "legendOptions": [
+                      [
+                        "isSerieHideable",
+                        "isSerieSelectable"
+                      ]
+                    ],
+                    "mouseTracking": [
+                      []
+                    ],
+                    "selectScatter": [
+                      []
+                    ],
+                    "independantYZoom": [
+                      []
+                    ]
+                  }
+                ]
+              }
+            }
+          ],
+          "axis": [
+            {
+              "sections": {},
+              "groups": {
+                "xAxis": [
+                  {
+                    "checkboxes": [
+                      [
+                        "display",
+                        "flip"
+                      ]
+                    ],
+                    "label": [
+                      ""
+                    ],
+                    "beforeSpacing": [
+                      "0"
+                    ],
+                    "afterSpacing": [
+                      0
+                    ],
+                    "min": [
+                      ""
+                    ],
+                    "max": [
+                      ""
+                    ],
+                    "nbTicksPrimary": [
+                      5
+                    ],
+                    "axismodification": [
+                      "none"
+                    ]
+                  }
+                ],
+                "yAxis": [
+                  {
+                    "checkboxes": [
+                      [
+                        "display"
+                      ]
+                    ],
+                    "label": [
+                      ""
+                    ],
+                    "beforeSpacing": [
+                      "0"
+                    ],
+                    "afterSpacing": [
+                      0
+                    ],
+                    "min": [
+                      ""
+                    ],
+                    "max": [
+                      ""
+                    ],
+                    "nbTicksPrimary": [
+                      5
+                    ],
+                    "fitToAxisOnFromTo": [
+                      []
+                    ]
+                  }
+                ]
+              }
+            }
+          ],
+          "series": [
+            {
+              "sections": {},
+              "groups": {
+                "series": [
+                  {
+                    "overflow": [
+                      []
+                    ],
+                    "stackVerticalSpacing": [
+                      0
+                    ]
+                  }
+                ]
+              }
+            }
+          ],
+          "variables": [
+            {
+              "sections": {},
+              "groups": {
+                "variables": [
+                  [
+                    {
+                      "variable": "",
+                      "axis": "0",
+                      "adaptTo": "none",
+                      "plotcolor": [
+                        1,
+                        1,
+                        255,
+                        1
+                      ],
+                      "strokewidth": "1",
+                      "strokestyle": "1",
+                      "plotcontinuous": "continuous",
+                      "peakpicking": [],
+                      "markers": [],
+                      "markerShape": "1",
+                      "markerSize": 2,
+                      "normalize": "none",
+                      "optimizeSlots": [],
+                      "tracking": []
+                    }
+                  ]
+                ]
+              }
+            }
+          ],
+          "misc": [
+            {
+              "sections": {},
+              "groups": {
+                "misc": [
+                  {
+                    "highlightOptions": [
+                      "{}"
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "groups": {}
+      },
+      "layers": {
+        "Default layer": {
+          "position": {
+            "left": 146,
+            "top": 31
+          },
+          "size": {
+            "width": 38,
+            "height": 32
+          },
+          "zIndex": 0,
+          "display": true,
+          "title": "",
+          "bgColor": [
+            255,
+            255,
+            255,
+            0
+          ],
+          "wrapper": true,
+          "created": true,
+          "name": "Default layer"
+        },
+        "admin": {
+          "position": {
+            "left": 0,
+            "top": 0
+          },
+          "size": {
+            "width": 20,
+            "height": 20
+          },
+          "zIndex": 0,
+          "display": false,
+          "title": "",
+          "bgColor": [
+            255,
+            255,
+            255,
+            0
+          ],
+          "wrapper": true,
+          "created": true,
+          "name": "admin"
+        }
+      },
+      "id": 13,
+      "vars_in": [
+        {
+          "rel": "jcamp",
+          "name": "jcamp"
+        }
+      ],
+      "actions_in": [
+        {}
+      ],
+      "vars_out": [
+        {
+          "jpath": []
+        }
+      ],
+      "actions_out": [
+        {
+          "jpath": []
+        }
+      ],
+      "toolbar": {
+        "custom": [
+          [
+            {
+              "title": "",
+              "icon": "",
+              "action": "",
+              "position": "begin",
+              "color": [
+                100,
+                100,
+                100,
+                1
+              ]
+            }
+          ]
+        ],
+        "common": [
+          {
+            "toolbar": [
+              [
+                "Open Preferences"
+              ]
+            ]
+          }
+        ]
+      },
+      "css": [
+        {
+          "fontSize": [
+            ""
+          ],
+          "fontFamily": [
+            ""
+          ]
+        }
+      ],
+      "title": ""
+    },
+    {
+      "url": "modules/types/client_interaction/code_executor/",
+      "configuration": {
+        "sections": {},
+        "groups": {
+          "group": [
+            {
+              "display": [
+                [
+                  "editor",
+                  "buttons"
+                ]
+              ],
+              "execOnLoad": [
+                []
+              ],
+              "asyncAwait": [
+                [
+                  "top"
+                ]
+              ],
+              "script": [
+                "let jcampUrl = 'http://127.0.0.1:5474/data/jcamp/302-1.jdx';\nlet jcamp = (await superagent.get(jcampUrl).withCredentials()).text;\nAPI.createData('jcamp', jcamp);\n"
+              ]
+            }
+          ],
+          "libs": [
+            [
+              {
+                "lib": "vh/eln/libs",
+                "alias": "libs"
+              },
+              {
+                "lib": "superagent",
+                "alias": "superagent"
+              }
+            ]
+          ],
+          "buttons": [
+            [
+              {
+                "name": "button1",
+                "label": "Execute",
+                "hide": [],
+                "disable": []
+              }
+            ]
+          ]
+        }
+      },
+      "layers": {
+        "Default layer": {
+          "position": {
+            "left": 79,
+            "top": 13
+          },
+          "size": {
+            "width": 69,
+            "height": 28
+          },
+          "zIndex": 0,
+          "display": true,
+          "title": "",
+          "bgColor": [
+            255,
+            255,
+            255,
+            0
+          ],
+          "wrapper": true,
+          "created": true,
+          "name": "Default layer"
+        },
+        "admin": {
+          "position": {
+            "left": 0,
+            "top": 0
+          },
+          "size": {
+            "width": 20,
+            "height": 20
+          },
+          "zIndex": 0,
+          "display": false,
+          "title": "",
+          "bgColor": [
+            255,
+            255,
+            255,
+            0
+          ],
+          "wrapper": true,
+          "created": true,
+          "name": "admin"
+        }
+      },
+      "id": 14,
+      "vars_in": [
+        {}
+      ],
+      "actions_in": [
+        {}
+      ],
+      "vars_out": [
+        {
+          "jpath": []
+        }
+      ],
+      "actions_out": [
+        {
+          "jpath": []
         }
       ],
       "toolbar": {
