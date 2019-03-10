@@ -35,7 +35,7 @@
                 ]
               ],
               "script": [
-                "// here we just take the selected markers and filter data\n\nlet marker = API.getData('selectedMarker')\n\nlet data = API.getData('data')\n\nlet selectedMarkers = marker.map( r => r._highlight[0] )\n\nlet selectedData = data.filter( (val, ind, arr) => \n    {return selectedMarkers.includes(val._highlight)} )\n    \nAPI.createData('selectedData', selectedData)\n\n// not sure why this is needed??\nAPI.createData('selectedIndex', selectedMarkers)\n"
+                "let data = API.getData('data');\n\n// select all\nlet action = this.button;\n\nif (action === 'selectall') {\n  API.createData('selectedData', data);\n  action = null;\n}\n// here we just take the selected markers and filter data\n\nif (this.variable === 'selectedMarker') {\n  let marker = API.getData('selectedMarker');\n\n  let selectedMarkers = marker.map((r) => r._highlight[0]);\n\n  let selectedData = data.filter((val) =>\n    selectedMarkers.includes(val._highlight));\n\n  API.createData('selectedData', selectedData);\n\n}\n\n// not sure why this is needed??\n// API.createData('selectedIndex', selectedMarkers);\n\n"
               ]
             }
           ],
@@ -47,8 +47,8 @@
           "buttons": [
             [
               {
-                "name": "button1",
-                "label": "Execute",
+                "name": "selectall",
+                "label": "Select All",
                 "hide": [],
                 "disable": []
               }
@@ -59,15 +59,15 @@
       "layers": {
         "Default layer": {
           "position": {
-            "left": 55,
-            "top": 66
+            "left": 36,
+            "top": 2
           },
           "size": {
-            "width": 61,
-            "height": 43
+            "width": 10,
+            "height": 5
           },
           "zIndex": 0,
-          "display": false,
+          "display": true,
           "title": "",
           "bgColor": [
             255,
@@ -75,7 +75,7 @@
             255,
             0
           ],
-          "wrapper": true,
+          "wrapper": false,
           "created": true,
           "name": "Default layer"
         },
@@ -86,7 +86,7 @@
           },
           "size": {
             "width": 61,
-            "height": 21
+            "height": 43
           },
           "zIndex": 0,
           "display": true,
@@ -159,7 +159,8 @@
           ]
         }
       ],
-      "title": "filter data with selected markers in score plot "
+      "title": "",
+      "zindex": 12
     },
     {
       "url": "modules/types/edition/slick_grid/",
@@ -337,7 +338,7 @@
             "height": 65
           },
           "zIndex": 0,
-          "display": true,
+          "display": false,
           "title": "",
           "bgColor": [
             255,
@@ -390,6 +391,14 @@
           "rel": "row",
           "jpath": [],
           "name": "currentData"
+        },
+        {
+          "event": "onSelect",
+          "rel": "row",
+          "jpath": [
+            "ID"
+          ],
+          "name": "selectedID"
         }
       ],
       "toolbar": {
@@ -429,7 +438,8 @@
           ]
         }
       ],
-      "title": "Selected Data (select on score plot)"
+      "title": "Selected Data (select on score plot)",
+      "zindex": 0
     },
     {
       "url": "modules/types/science/spectra/spectra_displayer/",
@@ -743,7 +753,8 @@
           ]
         }
       ],
-      "title": "Scatter plot (use Alt + draw to select points)"
+      "title": "Scatter plot (use Alt + draw to select points)",
+      "zindex": 0
     },
     {
       "url": "modules/types/client_interaction/code_executor/",
@@ -891,7 +902,8 @@
           ]
         }
       ],
-      "title": "exec highlight score hoovered in the table"
+      "title": "exec highlight score hoovered in the table",
+      "zindex": 0
     },
     {
       "url": "modules/types/science/spectra/spectra_displayer/",
@@ -1033,13 +1045,34 @@
                 "variables": [
                   [
                     {
-                      "variable": "",
+                      "variable": "jcamp",
                       "axis": "0",
                       "adaptTo": "none",
                       "plotcolor": [
                         1,
                         1,
                         255,
+                        1
+                      ],
+                      "strokewidth": "1",
+                      "strokestyle": "1",
+                      "plotcontinuous": "continuous",
+                      "peakpicking": [],
+                      "markers": [],
+                      "markerShape": "1",
+                      "markerSize": 2,
+                      "normalize": "none",
+                      "optimizeSlots": [],
+                      "tracking": []
+                    },
+                    {
+                      "variable": "selectedJcamp",
+                      "axis": "0",
+                      "adaptTo": "none",
+                      "plotcolor": [
+                        255,
+                        1,
+                        15,
                         1
                       ],
                       "strokewidth": "1",
@@ -1125,7 +1158,11 @@
       "vars_in": [
         {
           "rel": "jcamp",
-          "name": "modifiedSelectedSpectra"
+          "name": "jcamp"
+        },
+        {
+          "rel": "jcamp",
+          "name": "selectedJcamp"
         }
       ],
       "actions_in": [
@@ -1184,7 +1221,8 @@
           ]
         }
       ],
-      "title": "Selected Spectra (current is blue line, hoovering on the table row)"
+      "title": "Selected Spectra (current is blue line, hoovering on the table row)",
+      "zindex": 0
     },
     {
       "url": "modules/types/client_interaction/code_executor/",
@@ -1208,7 +1246,7 @@
                 ]
               ],
               "script": [
-                "let currentID = API.getData('currentID')\n\nlet data = API.getData('selectedData')\n\nif (currentID != null) {\n  //clone selectedSpectra\n  //let sspectra = JSON.parse(JSON.stringify(API.getData('selectedSpectra')))\n  let selectedData = data.filter( (val, ind, arr) => \n    {return currentID.includes(val.ID)} )\n  console.log(selectedData)\n  \n  let jcampUrl = selectedData[0].metadata.url;\n  let jcamp = (await superagent.get(jcampUrl).withCredentials()).text;\n  API.createData('jcamp', jcamp);\n\n  API.createData('modifiedSelectedSpectra', jcamp)\n  API.createData('currentID', null)\n  console.log('executed+')\n}\n\n//API.createData('selectedSpectra', {'data':spectra})\n//API.createData('modifiedSelectedSpectra', {'data':spectra})\n\n\n"
+                "let currentID = API.getData('currentID');\nlet selectedID = API.getData('selectedID');\n\nlet data = API.getData('selectedData');\n\nif (currentID != null) {\n  let selectedData = data.filter(val => \n    currentID.includes(val.ID));\n  \n  let jcampUrl = selectedData[0].metadata.url;\n  let jcamp = (await superagent.get(jcampUrl).withCredentials()).text;\n  API.createData('jcamp', jcamp);\n\n  API.createData('modifiedSelectedSpectra', jcamp)\n  API.createData('currentID', null);\n  console.log('executed+');\n}\n\nif (selectedID != null) {\n  let selectedData = data.filter(val => \n    selectedID.includes(val.ID));\n  \n  let jcampUrl = selectedData[0].metadata.url;\n  let jcamp = (await superagent.get(jcampUrl).withCredentials()).text;\n  API.createData('selectedJcamp', jcamp);\n\n  API.createData('modifiedSelectedSpectra', jcamp)\n  API.createData('selectedID', null);\n  console.log('executed s+');\n}\n\n\n  //clone selectedSpectra\n  //let sspectra = JSON.parse(JSON.stringify(API.getData('selectedSpectra')))\n"
               ]
             }
           ],
@@ -1287,6 +1325,10 @@
         {
           "rel": "inputValue",
           "name": "currentID"
+        },
+        {
+          "rel": "inputValue",
+          "name": "selectedID"
         }
       ],
       "actions_in": [
@@ -1339,7 +1381,8 @@
           ]
         }
       ],
-      "title": "exec highlight spectra hooverd in the table"
+      "title": "exec highlight spectra hooverd in the table",
+      "zindex": 0
     },
     {
       "url": "modules/types/client_interaction/code_executor/",
@@ -1417,7 +1460,7 @@
         "admin": {
           "position": {
             "left": 62,
-            "top": 63
+            "top": 84
           },
           "size": {
             "width": 61,
@@ -1491,7 +1534,8 @@
           ]
         }
       ],
-      "title": ""
+      "title": "",
+      "zindex": 0
     },
     {
       "url": "modules/types/client_interaction/code_executor/",
@@ -1562,7 +1606,7 @@
         "admin": {
           "position": {
             "left": 0,
-            "top": 63
+            "top": 84
           },
           "size": {
             "width": 61,
@@ -1636,7 +1680,8 @@
           ]
         }
       ],
-      "title": ""
+      "title": "",
+      "zindex": 0
     },
     {
       "url": "modules/types/client_interaction/code_executor/",
@@ -1722,15 +1767,15 @@
         "admin": {
           "position": {
             "left": 62,
-            "top": 82
+            "top": 63
           },
           "size": {
             "width": 61,
-            "height": 19
+            "height": 20
           },
           "zIndex": 0,
           "display": true,
-          "title": "",
+          "title": "create color loadings",
           "bgColor": [
             255,
             255,
@@ -1807,7 +1852,8 @@
           ]
         }
       ],
-      "title": ""
+      "title": "create color loadings",
+      "zindex": 0
     },
     {
       "url": "modules/types/client_interaction/code_executor/",
@@ -1891,11 +1937,11 @@
         "admin": {
           "position": {
             "left": 0,
-            "top": 82
+            "top": 63
           },
           "size": {
             "width": 61,
-            "height": 23
+            "height": 20
           },
           "zIndex": 0,
           "display": true,
@@ -1965,7 +2011,8 @@
           ]
         }
       ],
-      "title": "function helper"
+      "title": "function helper",
+      "zindex": 0
     },
     {
       "url": "modules/types/edition/slick_grid/",
@@ -2195,7 +2242,8 @@
           ]
         }
       ],
-      "title": "Loadings"
+      "title": "Loadings",
+      "zindex": 0
     },
     {
       "url": "modules/types/science/spectra/spectra_displayer/",
@@ -2485,7 +2533,8 @@
           ]
         }
       ],
-      "title": ""
+      "title": "",
+      "zindex": 0
     }
   ],
   "variables": [
