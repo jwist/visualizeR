@@ -60,7 +60,7 @@
         "Default layer": {
           "position": {
             "left": 36,
-            "top": 2
+            "top": 1
           },
           "size": {
             "width": 10,
@@ -159,7 +159,7 @@
           ]
         }
       ],
-      "title": "",
+      "title": "filter data with selected markers in score plot ",
       "zindex": 12
     },
     {
@@ -1246,7 +1246,7 @@
                 ]
               ],
               "script": [
-                "let currentID = API.getData('currentID');\nlet selectedID = API.getData('selectedID');\n\nlet data = API.getData('selectedData');\n\nif (currentID != null) {\n  let selectedData = data.filter(val => \n    currentID.includes(val.ID));\n  \n  let jcampUrl = selectedData[0].metadata.url;\n  let jcamp = (await superagent.get(jcampUrl).withCredentials()).text;\n  API.createData('jcamp', jcamp);\n\n  API.createData('modifiedSelectedSpectra', jcamp)\n  API.createData('currentID', null);\n  console.log('executed+');\n}\n\nif (selectedID != null) {\n  let selectedData = data.filter(val => \n    selectedID.includes(val.ID));\n  \n  let jcampUrl = selectedData[0].metadata.url;\n  let jcamp = (await superagent.get(jcampUrl).withCredentials()).text;\n  API.createData('selectedJcamp', jcamp);\n\n  API.createData('modifiedSelectedSpectra', jcamp)\n  API.createData('selectedID', null);\n  console.log('executed s+');\n}\n\n\n  //clone selectedSpectra\n  //let sspectra = JSON.parse(JSON.stringify(API.getData('selectedSpectra')))\n"
+                "let currentID = API.getData('currentID');\nlet selectedID = API.getData('selectedID');\n\nlet data = API.getData('selectedData');\n\nif (currentID != null) {\n  let selectedData = data.filter(val => \n    currentID.includes(val.ID));\n  \n  let jcampUrl = selectedData[0].metadata.JcampUrl;\n  let jcamp = (await superagent.get(jcampUrl).withCredentials()).text;\n  API.createData('jcamp', jcamp);\n\n  API.createData('modifiedSelectedSpectra', jcamp)\n  API.createData('currentID', null);\n  console.log('executed+');\n}\n\nif (selectedID != null) {\n  let selectedData = data.filter(val => \n    selectedID.includes(val.ID));\n  \n  let jcampUrl = selectedData[0].metadata.JcampUrl;\n  let jcamp = (await superagent.get(jcampUrl).withCredentials()).text;\n  API.createData('selectedJcamp', jcamp);\n\n  API.createData('modifiedSelectedSpectra', jcamp)\n  API.createData('selectedID', null);\n  console.log('executed s+');\n}\n\n\n  //clone selectedSpectra\n  //let sspectra = JSON.parse(JSON.stringify(API.getData('selectedSpectra')))\n"
               ]
             }
           ],
