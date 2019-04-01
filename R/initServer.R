@@ -9,7 +9,7 @@
 #' @param force if true, will force a second server on a new port. Should not be necessary in regular use.
 #' @return void
 #' @examples
-#'
+#' #start new server object
 #' s <- new("server")
 #' #initServer(s)
 #'
