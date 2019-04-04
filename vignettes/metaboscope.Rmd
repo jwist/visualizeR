@@ -29,7 +29,7 @@ library(MetaboMate)
 library(car)
 ```
 
-Data are readily loaded from the dataset provided with this package
+Data are readily loaded from the dataset provided with this package. A complete description of the dataset can be found here: https://www.frontiersin.org/articles/10.3389/fmicb.2011.00183
 
 ```{r}
 data("bariatricRat")
@@ -118,5 +118,5 @@ Finally, visualization object is created. The data list is converted to json and
 # visualize(v)
 ```
 
-For further information about the dataset please read \url{https://www.frontiersin.org/articles/10.3389/fmicb.2011.00183}
+For further information about the dataset please read https://www.frontiersin.org/articles/10.3389/fmicb.2011.00183
 

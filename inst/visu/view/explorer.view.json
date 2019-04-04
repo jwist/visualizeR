@@ -37,7 +37,7 @@
                 ]
               ],
               "script": [
-                "let fh = API.getData('helperFunctions');\nlet data = API.getData('data');\n\nlet action = null;\n\nif (this.button == 'createHeaders'){\n  action = 'createHeaders';\n} else {\n  action = this.variable;\n}\nconsole.log('action:' + action);\n\nswitch(action) {\n  case 'currentHeader':\n    \n  break;\n  \n  case 'createHeaders':\n    \n    if (API.getData('headers') == null){\n      let metadata = data.map(x => x.metadata);\n      API.createData('metadata', metadata);\n\n      let headersList = Object.keys(data[0].metadata);\n      let headers = [];\n      headersList.forEach(i => headers.push({'header': i}));\n      API.createData('headers', headers);\n    }\n    break;\n      \n  case 'selectedHeaders':\n    let selectedHeaders = API.getData('selectedHeaders');\n    //let col = API.getData('colors').resurrect();\n    let col = getColor();\n    \n    let metadata = API.getData('metadata');\n    \n    let newMetadata = [];\n    let t = metadata.map((x, j) => {\n        let newRow = {};\n        newRow['ID'] = data[j].ID;\n        newRow['colors'] = col[j].toString();\n        selectedHeaders.forEach(i => newRow[i.header] = x[i.header]);\n        return newRow;\n    })\n    \n    API.createData('selectedMetadata', t);\n    API.createData('currentID', null);\n    API.createData('selectedID', null);\n  break;\n    \n  case 'selectedID':\n    let selectedID = API.getData('selectedID');\n    \n    if (selectedID != null) {\n      let selectedData = data.filter(val => \n      selectedID.includes(val.ID));\n  \n      let jcampUrl = selectedData[0].metadata.JcampUrl;\n      let jcamp = (await superagent.get(jcampUrl).withCredentials()).text;\n      API.createData('selectedJcamp', jcamp);\n\n      API.createData('selectedID', null);\n      console.log('selected jcamp loaded');\n    }\n  break;\n  \n  case 'currentID':\n    let currentID = API.getData('currentID');\n\n    let selectedData = data.filter(val => \n    currentID.includes(val.ID));\n  \n    let jcampUrl = selectedData[0].metadata.JcampUrl;\n    let jcamp = (await superagent.get(jcampUrl).withCredentials()).text;\n    API.createData('currentJcamp', jcamp);\n    console.log('current jcamp loaded');\n  break;\n  \n  default:\n    break;\n}\n\nfunction getColor() {\n    let currentHeader = API.getData('currentHeader');\n    let m = API.getData('metadata');\n    \n    let factor = [];\n    m.map(x => x[currentHeader])\n    .forEach((i, j) => factor[i] = (factor[i] || 0) + 1);\n\n    let colorScale = chroma.scale(['#fafa6e','#2A4858']).domain([0, (Object.keys(factor).length)]).mode('lch');\n    let colorVect = []; \n    let count = 0;\n    for (let key in factor){\n        colorVect[key] = colorScale(count);\n        count++;\n    }\n    let colors = m.map(x => x[currentHeader]).map((x) => colorVect[x]);\n    //API.createData('colors', colors);\n    return colors;\n}\n"
+                "let fh = API.getData('helperFunctions');\nlet data = API.getData('data');\n\nlet action = null;\nlet value = null;\n\nif(this.action) {\n    action = this.action.name;\n    value = this.action.value;\n} else {\n\nswitch(this.button) {\n  case 'createHeaders': \n    action = 'createHeaders';\n  break;\n  case 'selectColor':\n    action = 'selectColor';\n  break;\n  default:\n  action = this.variable;\n  break;\n}\n}\n\nconsole.log('action:' + action);\n\nswitch(action) {\n  case 'selectColor':\n    let currentHeader = API.getData('currentHeader');\n    if(!currentHeader) {\n        currentHeader = 'ID';\n    }\n    let m = API.getData('metadata');\n    \n    let factor = [];\n    m.map(x => x[currentHeader])\n    .forEach((i, j) => factor[i] = (factor[i] || 0) + 1);\n    console.log(factor);\n    let colorScale = chroma.scale(['#fafa6e','#2A4858']).domain([0, (Object.keys(factor).length)]).mode('lch');\n    let colorVect = []; \n    let count = 0;\n    for (let key in factor){\n        colorVect[key] = colorScale(count);\n        count++;\n    }\n    let colors = m.map(x => x[currentHeader]).map((x) => colorVect[x]);\n    API.createData('colors', colors);\n    API.doAction('selectedHeaders', colors);\n    \n  break;\n  \n  case 'createHeaders':\n    \n    if (API.getData('headers') == null){\n      let metadata = data.map(x => x.metadata);\n      API.createData('metadata', metadata);\n\n      let headersList = Object.keys(data[0].metadata);\n      let headers = [];\n      headersList.forEach(i => headers.push({'header': i}));\n      API.createData('headers', headers);\n      API.createData('currentHeader', 'ID');\n      API.doAction('selectColor');\n      \n    }\n    break;\n      \n  case 'selectedHeaders':\n    let selectedHeaders = API.getData('selectedHeaders');\n   \n    if(!value) {\n        var col = API.getData('colors');\n    } else {\n        var col = value;\n    }\n    \n    let metadata = API.getData('metadata');\n    \n    let newMetadata = [];\n    let t = metadata.map((x, j) => {\n        let newRow = {};\n        newRow['ID'] = data[j].ID;\n        newRow['colors'] = col[j].toString();\n        selectedHeaders.forEach(i => newRow[i.header] = x[i.header]);\n        return newRow;\n    })\n    \n    API.createData('selectedMetadata', t);\n    API.createData('currentID', null);\n    API.createData('selectedID', null);\n  break;\n    \n  case 'selectedID':\n    let selectedID = API.getData('selectedID');\n    \n    if (selectedID != null) {\n      let selectedData = data.filter(val => \n      selectedID.includes(val.ID));\n  \n      let jcampUrl = selectedData[0].metadata.JcampUrl;\n      let jcamp = (await superagent.get(jcampUrl).withCredentials()).text;\n      API.createData('selectedJcamp', jcamp);\n\n      API.createData('selectedID', null);\n      console.log('selected jcamp loaded');\n    }\n  break;\n  \n  case 'currentID':\n    let currentID = API.getData('currentID');\n\n    let selectedData = data.filter(val => \n    currentID.includes(val.ID));\n  \n    let jcampUrl = selectedData[0].metadata.JcampUrl;\n    let jcamp = (await superagent.get(jcampUrl).withCredentials()).text;\n    API.createData('currentJcamp', jcamp);\n    console.log('current jcamp loaded');\n  break;\n  \n  default:\n    break;\n}\n\n\n"
               ]
             }
           ],
@@ -58,6 +58,12 @@
               {
                 "name": "createHeaders",
                 "label": "create headers",
+                "hide": [],
+                "disable": []
+              },
+              {
+                "name": "selectColor",
+                "label": "select color",
                 "hide": [],
                 "disable": []
               }
@@ -115,6 +121,10 @@
       "vars_in": [
         {
           "rel": "inputValue",
+          "name": "selectedHeaders"
+        },
+        {
+          "rel": "inputValue",
           "name": "currentID"
         },
         {
@@ -123,13 +133,17 @@
         },
         {
           "rel": "inputValue",
-          "name": "selectedHeaders"
+          "name": "currentHeader"
         }
       ],
       "actions_in": [
         {
           "rel": "execute",
-          "name": "currentHeader"
+          "name": "selectColor"
+        },
+        {
+          "rel": "execute",
+          "name": "selectedHeaders"
         }
       ],
       "vars_out": [
@@ -444,9 +458,7 @@
                 ]
               ],
               "copyPaste": [
-                [
-                  "active"
-                ]
+                []
               ],
               "copyPasteOptions": [
                 [
@@ -576,7 +588,7 @@
         },
         "admin": {
           "position": {
-            "left": 76,
+            "left": 75,
             "top": 43
           },
           "size": {
@@ -620,7 +632,7 @@
           "name": "selectedHeaders"
         },
         {
-          "event": "onLastSelectedRow",
+          "event": "onSelect",
           "rel": "row",
           "jpath": [
             "header"
@@ -748,7 +760,7 @@
         },
         "admin": {
           "position": {
-            "left": 76,
+            "left": 75,
             "top": 73
           },
           "size": {
@@ -1031,11 +1043,11 @@
         },
         "admin": {
           "position": {
-            "left": 116,
+            "left": 115,
             "top": 43
           },
           "size": {
-            "width": 29,
+            "width": 20,
             "height": 29
           },
           "zIndex": 0,
