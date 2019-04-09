@@ -37,7 +37,7 @@
                 ]
               ],
               "script": [
-                "let fh = API.getData('helperFunctions');\nlet data = API.getData('data');\n\nlet action = null;\nlet value = null;\n\nif(this.action) {\n    action = this.action.name;\n    value = this.action.value;\n} else {\n\nswitch(this.button) {\n  case 'createHeaders': \n    action = 'createHeaders';\n  break;\n  case 'selectColor':\n    action = 'selectColor';\n  break;\n  default:\n  action = this.variable;\n  break;\n}\n}\n\nconsole.log('action:' + action);\n\nswitch(action) {\n  case 'selectColor':\n    let currentHeader = API.getData('currentHeader');\n    if(!currentHeader) {\n        currentHeader = 'ID';\n    }\n    let m = API.getData('metadata');\n    \n    let factor = [];\n    m.map(x => x[currentHeader])\n    .forEach((i, j) => factor[i] = (factor[i] || 0) + 1);\n    console.log(factor);\n    let colorScale = chroma.scale(['#fafa6e','#2A4858']).domain([0, (Object.keys(factor).length)]).mode('lch');\n    let colorVect = []; \n    let count = 0;\n    for (let key in factor){\n        colorVect[key] = colorScale(count);\n        count++;\n    }\n    let colors = m.map(x => x[currentHeader]).map((x) => colorVect[x]);\n    API.createData('colors', colors);\n    API.doAction('selectedHeaders', colors);\n    \n  break;\n  \n  case 'createHeaders':\n    \n    if (API.getData('headers') == null){\n      let metadata = data.map(x => x.metadata);\n      API.createData('metadata', metadata);\n\n      let headersList = Object.keys(data[0].metadata);\n      let headers = [];\n      headersList.forEach(i => headers.push({'header': i}));\n      API.createData('headers', headers);\n      API.createData('currentHeader', 'ID');\n      API.doAction('selectColor');\n      \n    }\n    break;\n      \n  case 'selectedHeaders':\n    let selectedHeaders = API.getData('selectedHeaders');\n   \n    if(!value) {\n        var col = API.getData('colors');\n    } else {\n        var col = value;\n    }\n    \n    let metadata = API.getData('metadata');\n    \n    let newMetadata = [];\n    let t = metadata.map((x, j) => {\n        let newRow = {};\n        newRow['ID'] = data[j].ID;\n        newRow['colors'] = col[j].toString();\n        selectedHeaders.forEach(i => newRow[i.header] = x[i.header]);\n        return newRow;\n    })\n    \n    API.createData('selectedMetadata', t);\n    API.createData('currentID', null);\n    API.createData('selectedID', null);\n  break;\n    \n  case 'selectedID':\n    let selectedID = API.getData('selectedID');\n    \n    if (selectedID != null) {\n      let selectedData = data.filter(val => \n      selectedID.includes(val.ID));\n  \n      let jcampUrl = selectedData[0].metadata.JcampUrl;\n      let jcamp = (await superagent.get(jcampUrl).withCredentials()).text;\n      API.createData('selectedJcamp', jcamp);\n\n      API.createData('selectedID', null);\n      console.log('selected jcamp loaded');\n    }\n  break;\n  \n  case 'currentID':\n    let currentID = API.getData('currentID');\n\n    let selectedData = data.filter(val => \n    currentID.includes(val.ID));\n  \n    let jcampUrl = selectedData[0].metadata.JcampUrl;\n    let jcamp = (await superagent.get(jcampUrl).withCredentials()).text;\n    API.createData('currentJcamp', jcamp);\n    console.log('current jcamp loaded');\n  break;\n  \n  default:\n    break;\n}\n\n\n"
+                "let fh = API.getData('helperFunctions');\nlet data = API.getData('data');\n\nlet action = null;\nlet value = null;\n\nif(this.action) {\n    action = this.action.name;\n    value = this.action.value;\n} else {\n\nswitch(this.button) {\n  case 'createHeaders': \n    action = 'createHeaders';\n  break;\n  case 'selectColor':\n    action = 'selectColor';\n  break;\n  default:\n  action = this.variable;\n  break;\n}\n}\n\nconsole.log('action:' + action);\n\nswitch(action) {\n  case 'selectColor':\n    let currentHeader = API.getData('currentHeader');\n    if(!currentHeader) {\n        currentHeader = 'ID';\n    }\n    let m = API.getData('metadata');\n    \n    let factor = [];\n    m.map(x => x[currentHeader])\n    .forEach((i, j) => factor[i] = (factor[i] || 0) + 1);\n    console.log(factor);\n    let colorScale = chroma.scale(['#fafa6e','#2A4858']).domain([0, (Object.keys(factor).length)]).mode('lch');\n    let colorVect = []; \n    let count = 0;\n    for (let key in factor){\n        colorVect[key] = colorScale(count);\n        count++;\n    }\n    let colors = m.map(x => x[currentHeader]).map((x) => colorVect[x]);\n    API.createData('colors', colors);\n    API.doAction('selectedHeaders', colors);\n    \n  break;\n  \n  case 'createHeaders':\n    \n    if (API.getData('headers') == null){\n      let metadata = data.map(x => x.metadata);\n      API.createData('metadata', metadata);\n\n      let headersList = Object.keys(data[0].metadata);\n      let headers = [];\n      headersList.forEach(i => headers.push({'header': i}));\n      API.createData('headers', headers);\n      API.createData('currentHeader', 'ID');\n      API.doAction('selectColor');\n      \n    }\n    break;\n      \n  case 'selectedHeaders':\n    let selectedHeaders = API.getData('selectedHeaders');\n   \n    if(!value) {\n        var col = API.getData('colors');\n    } else {\n        var col = value;\n    }\n    \n    let metadata = API.getData('metadata');\n    \n    let newMetadata = [];\n    let t = metadata.map((x, j) => {\n        let newRow = {};\n        newRow['ID'] = data[j].ID;\n        newRow['_hightlight'] = data[j].ID;\n        newRow['colors'] = col[j].toString();\n        selectedHeaders.forEach(i => newRow[i.header] = x[i.header]);\n        return newRow;\n    })\n    \n    API.createData('selectedMetadata', t);\n    API.createData('currentID', null);\n    API.createData('selectedID', null);\n  break;\n    \n  case 'selectedID':\n    let selectedID = API.getData('selectedID');\n    \n    if (selectedID != null) {\n      let selectedData = data.filter(val => \n      selectedID.includes(val.ID));\n  \n      let jcampUrl = selectedData[0].metadata.JcampUrl;\n      let jcamp = (await superagent.get(jcampUrl).withCredentials()).text;\n      API.createData('selectedJcamp', jcamp);\n\n      API.createData('selectedID', null);\n      console.log('selected jcamp loaded');\n    }\n  break;\n  \n  case 'currentID':\n    let currentID = API.getData('currentID');\n\n    let selectedData = data.filter(val => \n    currentID.includes(val.ID));\n  \n    let jcampUrl = selectedData[0].metadata.JcampUrl;\n    let jcamp = (await superagent.get(jcampUrl).withCredentials()).text;\n    API.createData('currentJcamp', jcamp);\n    console.log('current jcamp loaded');\n  break;\n  \n  default:\n    break;\n}\n\n\n"
               ]
             }
           ],
@@ -63,7 +63,7 @@
               },
               {
                 "name": "selectColor",
-                "label": "select color",
+                "label": "set color",
                 "hide": [],
                 "disable": []
               }
@@ -74,11 +74,11 @@
       "layers": {
         "Default layer": {
           "position": {
-            "left": 2,
+            "left": 0,
             "top": 0
           },
           "size": {
-            "width": 15,
+            "width": 22,
             "height": 5
           },
           "zIndex": 0,
@@ -193,7 +193,8 @@
           ]
         }
       ],
-      "title": ""
+      "title": "",
+      "zindex": 2
     },
     {
       "url": "modules/types/edition/slick_grid/",
@@ -208,7 +209,10 @@
                   "rowNumbering",
                   "forceFitColumns",
                   "highlightScroll",
-                  "filterColumns"
+                  "filterColumns",
+                  "editable",
+                  "keepSelected",
+                  "forgetLastActive"
                 ]
               ],
               "copyPaste": [
@@ -223,9 +227,7 @@
                 []
               ],
               "toolbar": [
-                [
-                  "showHide"
-                ]
+                []
               ],
               "colorjpath": [
                 [
@@ -242,7 +244,7 @@
                 30
               ],
               "slick.selectionModel": [
-                "cell"
+                "row"
               ],
               "idProperty": [
                 ""
@@ -327,7 +329,7 @@
             "top": 0
           },
           "size": {
-            "width": 160,
+            "width": 145,
             "height": 42
           },
           "zIndex": 0,
@@ -397,6 +399,12 @@
             "ID"
           ],
           "name": "selectedID"
+        },
+        {
+          "event": "onRowsSelect",
+          "rel": "rows",
+          "jpath": [],
+          "name": "selectedIDs"
         }
       ],
       "toolbar": {
@@ -420,7 +428,9 @@
           {
             "toolbar": [
               [
-                "Open Preferences"
+                "Show fullscreen",
+                "Print",
+                "Export Data"
               ]
             ]
           }
@@ -436,7 +446,8 @@
           ]
         }
       ],
-      "title": ""
+      "title": "Metadata Table (click to load original data / double click to superimpose)",
+      "zindex": 2
     },
     {
       "url": "modules/types/edition/slick_grid/",
@@ -677,7 +688,8 @@
           ]
         }
       ],
-      "title": ""
+      "title": "Metadata headers (select to fill the table)",
+      "zindex": 2
     },
     {
       "url": "modules/types/client_interaction/code_executor/",
@@ -835,7 +847,8 @@
           ]
         }
       ],
-      "title": "function helper"
+      "title": "function helper",
+      "zindex": 2
     },
     {
       "url": "modules/types/science/spectra/spectra_displayer/",
@@ -1125,7 +1138,8 @@
           ]
         }
       ],
-      "title": ""
+      "title": "",
+      "zindex": 2
     },
     {
       "url": "modules/types/science/spectra/spectra_displayer/",
@@ -1183,7 +1197,627 @@
                   {
                     "checkboxes": [
                       [
-                        "display"
+                        "display",
+                        "flip"
+                      ]
+                    ],
+                    "label": [
+                      ""
+                    ],
+                    "beforeSpacing": [
+                      "0"
+                    ],
+                    "afterSpacing": [
+                      0
+                    ],
+                    "min": [
+                      ""
+                    ],
+                    "max": [
+                      ""
+                    ],
+                    "nbTicksPrimary": [
+                      5
+                    ],
+                    "axismodification": [
+                      "none"
+                    ]
+                  }
+                ],
+                "yAxis": [
+                  {
+                    "checkboxes": [
+                      []
+                    ],
+                    "label": [
+                      ""
+                    ],
+                    "beforeSpacing": [
+                      "0"
+                    ],
+                    "afterSpacing": [
+                      0
+                    ],
+                    "min": [
+                      ""
+                    ],
+                    "max": [
+                      ""
+                    ],
+                    "nbTicksPrimary": [
+                      5
+                    ],
+                    "fitToAxisOnFromTo": [
+                      []
+                    ]
+                  }
+                ]
+              }
+            }
+          ],
+          "series": [
+            {
+              "sections": {},
+              "groups": {
+                "series": [
+                  {
+                    "overflow": [
+                      []
+                    ],
+                    "stackVerticalSpacing": [
+                      0
+                    ]
+                  }
+                ]
+              }
+            }
+          ],
+          "variables": [
+            {
+              "sections": {},
+              "groups": {
+                "variables": [
+                  [
+                    {
+                      "variable": "currentJcamp",
+                      "axis": "0",
+                      "adaptTo": "none",
+                      "plotcolor": [
+                        255,
+                        1,
+                        98,
+                        1
+                      ],
+                      "strokewidth": "1",
+                      "strokestyle": "1",
+                      "plotcontinuous": "continuous",
+                      "peakpicking": [],
+                      "markers": [],
+                      "markerShape": "1",
+                      "markerSize": 2,
+                      "normalize": "none",
+                      "optimizeSlots": [],
+                      "tracking": []
+                    },
+                    {
+                      "variable": "selectedJcamp",
+                      "axis": "0",
+                      "adaptTo": "none",
+                      "plotcolor": [
+                        232,
+                        62,
+                        69,
+                        1
+                      ],
+                      "strokewidth": "1",
+                      "strokestyle": "1",
+                      "plotcontinuous": "continuous",
+                      "peakpicking": [],
+                      "markers": [],
+                      "markerShape": "1",
+                      "markerSize": 2,
+                      "normalize": "none",
+                      "optimizeSlots": [],
+                      "tracking": []
+                    }
+                  ]
+                ]
+              }
+            }
+          ],
+          "misc": [
+            {
+              "sections": {},
+              "groups": {
+                "misc": [
+                  {
+                    "highlightOptions": [
+                      "{}"
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "groups": {}
+      },
+      "layers": {
+        "Default layer": {
+          "position": {
+            "left": 20,
+            "top": 43
+          },
+          "size": {
+            "width": 145,
+            "height": 21
+          },
+          "zIndex": 0,
+          "display": true,
+          "title": "Original data from URL (shift + cursor to move the spectra / double click to reset zoom)",
+          "bgColor": [
+            255,
+            255,
+            255,
+            0
+          ],
+          "wrapper": false,
+          "created": true,
+          "name": "Default layer"
+        },
+        "admin": {
+          "position": {
+            "left": 0,
+            "top": 0
+          },
+          "size": {
+            "width": 20,
+            "height": 20
+          },
+          "zIndex": 0,
+          "display": false,
+          "title": "",
+          "bgColor": [
+            255,
+            255,
+            255,
+            0
+          ],
+          "wrapper": true,
+          "created": true,
+          "name": "admin"
+        }
+      },
+      "id": 6,
+      "vars_in": [
+        {
+          "rel": "jcamp",
+          "name": "currentJcamp"
+        },
+        {
+          "rel": "chart",
+          "name": "currentSpectraToDisplay"
+        }
+      ],
+      "actions_in": [
+        {
+          "rel": "fromToX",
+          "name": "fromToX"
+        }
+      ],
+      "vars_out": [
+        {
+          "jpath": []
+        }
+      ],
+      "actions_out": [
+        {
+          "event": "onZoomChange",
+          "rel": "fromToX",
+          "jpath": [],
+          "name": "fromToX"
+        }
+      ],
+      "toolbar": {
+        "custom": [
+          [
+            {
+              "title": "",
+              "icon": "",
+              "action": "",
+              "position": "begin",
+              "color": [
+                100,
+                100,
+                100,
+                1
+              ]
+            }
+          ]
+        ],
+        "common": [
+          {
+            "toolbar": [
+              [
+                "Show fullscreen",
+                "Print"
+              ]
+            ]
+          }
+        ]
+      },
+      "css": [
+        {
+          "fontSize": [
+            ""
+          ],
+          "fontFamily": [
+            ""
+          ]
+        }
+      ],
+      "title": "Original data from URL (shift + cursor to move the spectra / double click to reset zoom)",
+      "zindex": 2
+    },
+    {
+      "url": "modules/types/edition/rich_text/",
+      "configuration": {
+        "sections": {},
+        "groups": {
+          "group": [
+            {
+              "editable": [
+                [
+                  "isEditable"
+                ]
+              ],
+              "debouncing": [
+                0
+              ],
+              "modifyInVariable": [
+                []
+              ],
+              "storeInView": [
+                [
+                  "yes"
+                ]
+              ],
+              "autoHeight": [
+                []
+              ],
+              "bgColor": [
+                [
+                  231,
+                  231,
+                  129,
+                  1
+                ]
+              ],
+              "postit": [
+                [
+                  "yes"
+                ]
+              ],
+              "html": [
+                [
+                  "yes"
+                ]
+              ]
+            }
+          ]
+        }
+      },
+      "layers": {
+        "Default layer": {
+          "position": {
+            "left": 167,
+            "top": 3
+          },
+          "size": {
+            "width": 22,
+            "height": 79
+          },
+          "zIndex": 0,
+          "display": true,
+          "title": "",
+          "bgColor": [
+            255,
+            255,
+            255,
+            0
+          ],
+          "wrapper": true,
+          "created": true,
+          "name": "Default layer"
+        },
+        "admin": {
+          "position": {
+            "left": 0,
+            "top": 0
+          },
+          "size": {
+            "width": 20,
+            "height": 20
+          },
+          "zIndex": 0,
+          "display": false,
+          "title": "",
+          "bgColor": [
+            255,
+            255,
+            255,
+            0
+          ],
+          "wrapper": true,
+          "created": true,
+          "name": "admin"
+        }
+      },
+      "id": 7,
+      "vars_in": [
+        {}
+      ],
+      "actions_in": [
+        {}
+      ],
+      "vars_out": [
+        {
+          "jpath": []
+        }
+      ],
+      "actions_out": [
+        {
+          "jpath": []
+        }
+      ],
+      "toolbar": {
+        "custom": [
+          [
+            {
+              "title": "",
+              "icon": "",
+              "action": "",
+              "position": "begin",
+              "color": [
+                100,
+                100,
+                100,
+                1
+              ]
+            }
+          ]
+        ],
+        "common": [
+          {
+            "toolbar": [
+              [
+                "Open Preferences"
+              ]
+            ]
+          }
+        ]
+      },
+      "css": [
+        {
+          "fontSize": [
+            ""
+          ],
+          "fontFamily": [
+            ""
+          ]
+        }
+      ],
+      "richtext": "<p>&nbsp;</p>\n\n<p><span style=\"font-size:14px\">First, click on &quot;create headers&quot; button to read&nbsp;headers from metadata.</span></p>\n\n<p><span style=\"font-size:14px\">Then select a header from the table and use the &quot;set color&quot; button to color the data according to it.</span></p>\n\n<p><span style=\"font-size:14px\">Finally,&nbsp;select the data in the table for which you want to display the spectra.</span></p>\n\n<p>&nbsp;</p>\n\n<p><span style=\"font-size:14px\">Once the color has been set, as many headers as desired can be selected from the table on the left and will appear in the table at the top.</span></p>\n\n<p>&nbsp;</p>\n\n<p><strong><span style=\"font-size:14px\">A double click on the spectra area will reset the zoom (sometimes it is necessary to reset it before seeing the spectra if cache is enabled in the browser)</span></strong></p>\n\n<p>&nbsp;</p>\n\n<p><span style=\"font-size:14px\">The top line show in blue the selected spectra from the dataMatrix object in R, while the red curve shows the original data (url of the jcamp)</span></p>\n\n<p>&nbsp;</p>\n\n<p><span style=\"font-size:14px\">The bottom lines shows the selected spectra. The first selected spectra appears in blue, while the next will take the color of their group.</span></p>\n\n<p>&nbsp;</p>\n\n<p><span style=\"font-size:14px\">Beware that depending on the size of the spectra and the number that are selected coloring may take a few seconds.</span></p>\n",
+      "title": "",
+      "zindex": 2
+    },
+    {
+      "url": "modules/types/client_interaction/code_executor/",
+      "configuration": {
+        "sections": {},
+        "groups": {
+          "group": [
+            {
+              "display": [
+                [
+                  "editor",
+                  "buttons"
+                ]
+              ],
+              "execOnLoad": [
+                []
+              ],
+              "asyncAwait": [
+                [
+                  "top"
+                ]
+              ],
+              "script": [
+                "let selectedIDs = API.getData('selectedIDs')\n    .map(x => x.ID);\n\nlet data = API.getData('data').resurrect();\n\nlet selectedData = data.filter(f =>\n    selectedIDs.includes(f.ID));\n\nlet currentID = API.getData('currentID').resurrect();\ncurrentID = ([currentID]);\nlet currentData = data.filter(f =>\n    currentID.includes(f.ID));\n\nconsole.log(selectedData);\nconsole.log(currentData);\n// let currTrack = API.getData('currtrack')\n// let index = currTrack.minSpectra.indexClosest\n\n// let dataByGroup = API.getData('dataByGroup')\n\nlet x = data[0].dataMatrix.filter(function(value, index, Arr) {\n    return index % 2 == 0\n});\n\nlet y = selectedData.map( x => \n    x.dataMatrix.filter((value, index, Arr) => \n        index % 2 == 1\n    )\n);\n\nfunction hexToRgb(hex) {\n    var result = /^#?([a-f\\d]{2})([a-f\\d]{2})([a-f\\d]{2})$/i.exec(hex);\n    return result ? [\n        parseInt(result[1], 16),\n        parseInt(result[2], 16),\n        parseInt(result[3], 16),\n        1\n    ] : null;\n}\n\n//let colors = API.getData('colors').resurrect();\nlet selectedColors = API.getData('selectedIDs')\n    .map(x => x.colors);\n\nlet color = [];\nlet spectra = selectedData.map((e, i) => {\n    let groupColor = hexToRgb(selectedColors[i]);\n    color =[];\n    x.forEach( () => color.push({'_rgb':groupColor}) )\n    let s = (\n        {'type': 'color',\n            'y': y[i],\n            'x': x,\n            'color': color\n        });\n    return s\n    }\n);\nconsole.log(spectra[0]);\n\nlet col = [];\nx.forEach( i => col.push({'_rgb':[0,0,255,1]}) );\n\nlet currentSpectra = (\n        {'type': 'color',\n            'y': currentData[0].dataMatrix.filter((value, index, Arr) => index % 2 == 1),\n            'x': x,\n            'color': col\n        }\n);\n\nconsole.log(currentSpectra);\n\nAPI.createData('spectraToDisplay', {'data':spectra});\nAPI.createData('currentSpectraToDisplay', {'data':currentSpectra});\n"
+              ]
+            }
+          ],
+          "libs": [
+            [
+              {}
+            ]
+          ],
+          "buttons": [
+            [
+              {
+                "name": "button1",
+                "label": "Execute",
+                "hide": [],
+                "disable": []
+              }
+            ]
+          ]
+        }
+      },
+      "layers": {
+        "Default layer": {
+          "position": {
+            "left": 0,
+            "top": 0
+          },
+          "size": {
+            "width": 20,
+            "height": 20
+          },
+          "zIndex": 0,
+          "display": false,
+          "title": "",
+          "bgColor": [
+            255,
+            255,
+            255,
+            0
+          ],
+          "wrapper": true,
+          "created": true,
+          "name": "Default layer"
+        },
+        "admin": {
+          "position": {
+            "left": 136,
+            "top": 43
+          },
+          "size": {
+            "width": 44,
+            "height": 40
+          },
+          "zIndex": 0,
+          "display": true,
+          "title": "",
+          "bgColor": [
+            255,
+            255,
+            255,
+            0
+          ],
+          "wrapper": true,
+          "created": true,
+          "name": "admin"
+        }
+      },
+      "id": 8,
+      "vars_in": [
+        {
+          "rel": "inputValue",
+          "name": "selectedIDs"
+        }
+      ],
+      "actions_in": [
+        {}
+      ],
+      "vars_out": [
+        {
+          "jpath": []
+        }
+      ],
+      "actions_out": [
+        {
+          "jpath": []
+        }
+      ],
+      "toolbar": {
+        "custom": [
+          [
+            {
+              "title": "",
+              "icon": "",
+              "action": "",
+              "position": "begin",
+              "color": [
+                100,
+                100,
+                100,
+                1
+              ]
+            }
+          ]
+        ],
+        "common": [
+          {
+            "toolbar": [
+              [
+                "Open Preferences"
+              ]
+            ]
+          }
+        ]
+      },
+      "css": [
+        {
+          "fontSize": [
+            ""
+          ],
+          "fontFamily": [
+            ""
+          ]
+        }
+      ],
+      "title": "",
+      "zindex": 2
+    },
+    {
+      "url": "modules/types/science/spectra/spectra_displayer/",
+      "configuration": {
+        "sections": {
+          "graph": [
+            {
+              "sections": {},
+              "groups": {
+                "graph": [
+                  {
+                    "url": [
+                      ""
+                    ],
+                    "zoom": [
+                      "x"
+                    ],
+                    "wheelAction": [
+                      "zoomY"
+                    ],
+                    "wheelbaseline": [
+                      0
+                    ],
+                    "fullOut": [
+                      "none"
+                    ],
+                    "legend": [
+                      null
+                    ],
+                    "legendOptions": [
+                      [
+                        "isSerieHideable",
+                        "isSerieSelectable"
+                      ]
+                    ],
+                    "mouseTracking": [
+                      []
+                    ],
+                    "selectScatter": [
+                      []
+                    ],
+                    "independantYZoom": [
+                      []
+                    ]
+                  }
+                ]
+              }
+            }
+          ],
+          "axis": [
+            {
+              "sections": {},
+              "groups": {
+                "xAxis": [
+                  {
+                    "checkboxes": [
+                      [
+                        "display",
+                        "flip"
                       ]
                     ],
                     "label": [
@@ -1266,34 +1900,13 @@
                 "variables": [
                   [
                     {
-                      "variable": "currentJcamp",
+                      "variable": "spectraToDisplay",
                       "axis": "0",
                       "adaptTo": "none",
                       "plotcolor": [
-                        1,
-                        1,
                         255,
-                        1
-                      ],
-                      "strokewidth": "1",
-                      "strokestyle": "1",
-                      "plotcontinuous": "continuous",
-                      "peakpicking": [],
-                      "markers": [],
-                      "markerShape": "1",
-                      "markerSize": 2,
-                      "normalize": "none",
-                      "optimizeSlots": [],
-                      "tracking": []
-                    },
-                    {
-                      "variable": "selectedJcamp",
-                      "axis": "0",
-                      "adaptTo": "none",
-                      "plotcolor": [
-                        232,
-                        62,
-                        69,
+                        4,
+                        1,
                         1
                       ],
                       "strokewidth": "1",
@@ -1336,7 +1949,7 @@
             "top": 43
           },
           "size": {
-            "width": 160,
+            "width": 145,
             "height": 51
           },
           "zIndex": 0,
@@ -1354,15 +1967,15 @@
         },
         "admin": {
           "position": {
-            "left": 0,
-            "top": 0
+            "left": 71,
+            "top": 91
           },
           "size": {
-            "width": 20,
-            "height": 20
+            "width": 64,
+            "height": 34
           },
           "zIndex": 0,
-          "display": false,
+          "display": true,
           "title": "",
           "bgColor": [
             255,
@@ -1375,19 +1988,22 @@
           "name": "admin"
         }
       },
-      "id": 6,
+      "id": 9,
       "vars_in": [
         {
-          "rel": "jcamp",
-          "name": "currentJcamp"
+          "rel": "chart",
+          "name": "spectraToDisplay"
         },
         {
-          "rel": "jcamp",
-          "name": "selectedJcamp"
+          "rel": "chart",
+          "name": "currentSpectraToDisplay"
         }
       ],
       "actions_in": [
-        {}
+        {
+          "rel": "fromToX",
+          "name": "fromToX"
+        }
       ],
       "vars_out": [
         {
@@ -1396,7 +2012,10 @@
       ],
       "actions_out": [
         {
-          "jpath": []
+          "event": "onZoomChange",
+          "rel": "fromToX",
+          "jpath": [],
+          "name": "fromToX"
         }
       ],
       "toolbar": {
@@ -1420,7 +2039,9 @@
           {
             "toolbar": [
               [
-                "Open Preferences"
+                "Open Preferences",
+                "Print",
+                "Show fullscreen"
               ]
             ]
           }
@@ -1436,7 +2057,8 @@
           ]
         }
       ],
-      "title": "Original data from URL (shift + cursor to move the spectra / double click to reset zoom)"
+      "title": "Original data from URL (shift + cursor to move the spectra / double click to reset zoom)",
+      "zindex": 1
     }
   ],
   "variables": [
