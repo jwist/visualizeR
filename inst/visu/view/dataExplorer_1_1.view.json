@@ -37,7 +37,7 @@
                 ]
               ],
               "script": [
-                "let fh = API.cache('helperFunctions');\nlet data = API.getData('data').resurrect();\n\n\nlet d = data.map(x => x.dataMatrix.filter((v, i) => i % 2 == 1));\nlet dataT = fh.transpose(d);\n\nlet ceiling = dataT.map(x => Math.max.apply(null, x));\nlet floor = dataT.map(x => Math.min.apply(null, x));\n\nvar col = [];\nceiling.forEach( i => col.push({'_rgb':[240,240,240,1]}) );\n\nvar x = data[0].dataMatrix.filter(function(value, index, Arr) {\n    return index % 2 == 0\n});\n\nlet ceilingSpectra = (\n        {'type': 'color',\n            'y': ceiling,\n            'x': x,\n            'color': col\n        }\n);\nAPI.createData('ceilingSpectra', {'data':ceilingSpectra});\n\nlet floorSpectra = (\n        {'type': 'color',\n            'y': floor,\n            'x': x,\n            'color': col\n        }\n);\nAPI.createData('floorSpectra', {'data':floorSpectra});\n\nlet action = null;\nlet value = null;\n\nif(this.action) {\n    action = this.action.name;\n    value = this.action.value;\n} else {\n\nswitch(this.button) {\n  case 'createHeaders': \n    action = 'createHeaders';\n  break;\n  case 'selectColor':\n    action = 'selectColor';\n  break;\n  default:\n  action = this.variable;\n  break;\n  }\n}\n\nconsole.log('action:' + action);\n\nlet selectedData = [];\nlet currentID = [];\nvar colors = [];\nlet selectedColors = [];\n\n\nswitch(action) {\n  case 'selectColor':\n    let currentHeader = API.getData('currentHeader');\n    \n    if(!currentHeader) {\n        currentHeader = 'ID';\n    }\n    \n    console.log(currentHeader);\n    let m = API.getData('metadata');\n    \n    let factor = [];\n    m.map(x => x[currentHeader])\n    .forEach((i, j) => factor[i] = (factor[i] || 0) + 1);\n    console.log(factor);\n    let colorScale = chroma.scale(['#fafa6e','#2A4858']).domain([0, (Object.keys(factor).length)]).mode('lch');\n    let colorVect = []; \n    let count = 0;\n    for (let key in factor){\n        colorVect[key] = colorScale(count);\n        count++;\n    }\n    colors = m.map(x => x[currentHeader]).map((x) => colorVect[x]);\n    console.log(colorScale(1))\n    API.cache('colors', colors);\n    API.doAction('selectedHeaders', colors);\n    API.doAction('colorScores', colors);\n    //API.doAction('removeSerie',[0]);\n    \n  break;\n  \n  case 'colorScores':\n        let scores = API.getData(\"score12\");\n        \n        colors = API.cache('colors');\n        let rgbaColors = colors.map(x => \n            'rgba('+x['_rgb'].toString()+')');\n        \n        scores.data[0].styles.unselected.map((x,i) => x.fill = rgbaColors[i]);\n        scores.data[0].styles.selected.map((x,i) => x.fill = rgbaColors[i]);\n        \n        API.createData('scoresToDisplay', scores);\n  \n  case 'createHeaders':\n    \n    if (API.getData('headers') == null){\n      let metadata = data.map(x => x.metadata);\n      API.createData('metadata', metadata);\n\n      let headersList = Object.keys(data[0].metadata);\n      let headers = [];\n      headersList.forEach(i => headers.push({'header': i}));\n      API.createData('headers', headers);\n      \n    }\n    break;\n      \n  case 'selectedHeaders':\n    let selectedHeaders = API.getData('selectedHeaders');\n   \n    if(!value) {\n        var col = API.getData('colors');\n    } else {\n        var col = value;\n    }\n    \n    let metadata = API.getData('metadata');\n    \n    let newMetadata = [];\n    let t = metadata.map((x, j) => {\n        let newRow = {};\n        newRow['ID'] = data[j].ID;\n        newRow['_highlight'] = j;\n        newRow['colors'] = col[j].toString();\n        selectedHeaders.forEach(i => newRow[i.header] = x[i.header]);\n        return newRow;\n    })\n\n    API.createData('selectedMetadata', t);\n    API.createData('currentID', null);\n    API.createData('selectedID', null);\n    API.createData('selectedScores', null);\n    API.createData('currentSpectraToDisplay', null);\n    API.doAction('unsetActiveRow');\n  break;\n    \n  case 'selectedID':\n    let selectedID = API.getData('selectedID');\n    \n    if (selectedID != null) {\n      let selectedData = data.filter(val => \n      selectedID.includes(val.ID));\n  \n      let jcampUrl = selectedData[0].metadata.JcampUrl;\n      let jcamp = (await superagent.get(jcampUrl).withCredentials()).text;\n      API.createData('selectedJcamp', jcamp);\n\n      API.createData('selectedID', null);\n      console.log('selected jcamp loaded');\n    }\n  break;\n  \n  case 'currentID':\n    currentID = API.getData('currentID').resurrect();\n\n    selectedData = data.filter(val => \n    currentID.includes(val.ID));\n  \n    let jcampUrl = selectedData[0].metadata.JcampUrl;\n    let jcamp = (await superagent.get(jcampUrl).withCredentials()).text;\n    API.createData('currentJcamp', jcamp);\n    console.log('current jcamp loaded');\n    currentID = ([currentID]);\n    let currentData = data.filter(f =>\n        currentID.includes(f.ID));\n    \n\n    \n    let y = selectedData.map( x => \n        x.dataMatrix.filter((value, index, Arr) => \n            index % 2 == 1\n        )\n    );\n    col = [];\n    x.forEach( i => col.push({'_rgb':[0,0,255,1]}) );\n    \n    let currentSpectra = (\n            {'type': 'color',\n                'y': currentData[0].dataMatrix.filter((value, index, Arr) => index % 2 == 1),\n                'x': x,\n                'color': col\n            }\n    );\n    API.createData('currentSpectraToDisplay', {'data':currentSpectra});\n  break;\n  \n  case 'selectedIDs':\n        \n        let s = API.getData('selectedIDs');\n        console.log(s)\n        \n        if(s){\n            let selectedIDs = s.map(x => x.ID);\n        \n        selectedData = data.filter(f =>\n            selectedIDs.includes(f.ID));\n        \n        \n        let y = selectedData.map( x => \n            x.dataMatrix.filter((value, index, Arr) => \n                index % 2 == 1\n            )\n        );\n        \n        selectedColors = API.getData('selectedIDs')\n            .map(x => x.colors);\n        \n        let color = [];\n        let spectra = selectedData.map((e, i) => {\n            let groupColor = fh.hexToRgb(selectedColors[i]);\n            color =[];\n            x.forEach( () => color.push({'_rgb':groupColor}) )\n            let s = (\n                {'type': 'color',\n                    'y': y[i],\n                    'x': x,\n                    'color': color\n                });\n            return s\n            }\n        );\n\n        API.createData('spectraToDisplay', {'data':spectra});\n        \n        }\n  \n  default:\n    break;\n}\n\n\n"
+                "let fh = API.cache('helperFunctions');\nlet data = API.getData('data').resurrect();\n\n\nlet d = data.map(x => x.dataMatrix.filter((v, i) => i % 2 == 1));\nlet dataT = fh.transpose(d);\n\nlet ceiling = dataT.map(x => Math.max.apply(null, x));\nlet floor = dataT.map(x => Math.min.apply(null, x));\n\nvar col = [];\nceiling.forEach( i => col.push({'_rgb':[240,240,240,1]}) );\n\nvar x = data[0].dataMatrix.filter(function(value, index, Arr) {\n    return index % 2 == 0\n});\n\nlet ceilingSpectra = (\n        {'type': 'color',\n            'y': ceiling,\n            'x': x,\n            'color': col\n        }\n);\nAPI.createData('ceilingSpectra', {'data':ceilingSpectra});\n\nlet floorSpectra = (\n        {'type': 'color',\n            'y': floor,\n            'x': x,\n            'color': col\n        }\n);\nAPI.createData('floorSpectra', {'data':floorSpectra});\n\nlet action = null;\nlet value = null;\n\nif(this.action) {\n    action = this.action.name;\n    value = this.action.value;\n} else {\n\nswitch(this.button) {\n  case 'createHeaders': \n    action = 'createHeaders';\n  break;\n  case 'selectColor':\n    action = 'selectColor';\n  break;\n  default:\n  action = this.variable;\n  break;\n  }\n}\n\nconsole.log('action:' + action);\n\nlet selectedData = [];\nlet currentID = [];\nvar colors = [];\nlet selectedColors = [];\n\n\nswitch(action) {\n  case 'selectColor':\n    let currentHeader = API.getData('currentHeader');\n    \n    if(!currentHeader) {\n        currentHeader = 'ID';\n    }\n    \n    console.log(currentHeader);\n    let m = API.getData('metadata');\n    \n    let factor = [];\n    m.map(x => x[currentHeader])\n    .forEach((i, j) => factor[i] = (factor[i] || 0) + 1);\n    console.log(factor);\n    let colorScale = chroma.scale(['#0FFFFF','orange','red']).domain([0, (Object.keys(factor).length)]).mode('lch');\n    let colorVect = []; \n    let count = 0;\n    for (let key in factor){\n        colorVect[key] = colorScale(count);\n        count++;\n    }\n    colors = m.map(x => x[currentHeader]).map((x) => colorVect[x]);\n    console.log(colorScale(1))\n    API.cache('colors', colors);\n    API.doAction('selectedHeaders', colors);\n    API.doAction('colorScores', colors);\n    //API.doAction('removeSerie',[0]);\n    \n  break;\n  \n  case 'colorScores':\n        let scores = API.getData(\"score12\");\n        \n        colors = API.cache('colors');\n        let rgbaColors = colors.map(x => \n            'rgba('+x['_rgb'].toString()+')');\n        \n        scores.data[0].styles.unselected.map((x,i) => x.fill = rgbaColors[i]);\n        scores.data[0].styles.selected.map((x,i) => x.fill = rgbaColors[i]);\n        \n        API.createData('scoresToDisplay', scores);\n  \n  case 'createHeaders':\n    \n    if (API.getData('headers') == null){\n      let metadata = data.map(x => x.metadata);\n      API.createData('metadata', metadata);\n\n      let headersList = Object.keys(data[0].metadata);\n      let headers = [];\n      headersList.forEach(i => headers.push({'header': i}));\n      API.createData('headers', headers);\n      \n    }\n    break;\n      \n  case 'selectedHeaders':\n    let selectedHeaders = API.getData('selectedHeaders');\n   \n    if(!value) {\n        var col = API.getData('colors');\n    } else {\n        var col = value;\n    }\n    \n    let metadata = API.getData('metadata');\n    \n    let newMetadata = [];\n    let t = metadata.map((x, j) => {\n        let newRow = {};\n        newRow['ID'] = data[j].ID;\n        newRow['_highlight'] = j;\n        newRow['colors'] = col[j].toString();\n        selectedHeaders.forEach(i => newRow[i.header] = x[i.header]);\n        return newRow;\n    })\n\n    API.createData('selectedMetadata', t);\n    API.createData('currentID', null);\n    API.createData('selectedID', null);\n    API.createData('selectedScores', null);\n    API.createData('currentSpectraToDisplay', null);\n    API.doAction('unsetActiveRow');\n  break;\n    \n  case 'selectedID':\n    let selectedID = API.getData('selectedID');\n    \n    if (selectedID != null) {\n      let selectedData = data.filter(val => \n      selectedID.includes(val.ID));\n  \n      let jcampUrl = selectedData[0].metadata.JcampUrl;\n      let jcamp = (await superagent.get(jcampUrl).withCredentials()).text;\n      API.createData('selectedJcamp', jcamp);\n\n      API.createData('selectedID', null);\n      console.log('selected jcamp loaded');\n    }\n  break;\n  \n  case 'currentID':\n    currentID = API.getData('currentID').resurrect();\n\n    selectedData = data.filter(val => \n    currentID.includes(val.ID));\n  \n    let jcampUrl = selectedData[0].metadata.JcampUrl;\n    let jcamp = (await superagent.get(jcampUrl).withCredentials()).text;\n    API.createData('currentJcamp', jcamp);\n    console.log('current jcamp loaded');\n    currentID = ([currentID]);\n    let currentData = data.filter(f =>\n        currentID.includes(f.ID));\n    \n\n    \n    let y = selectedData.map( x => \n        x.dataMatrix.filter((value, index, Arr) => \n            index % 2 == 1\n        )\n    );\n    col = [];\n    x.forEach( i => col.push({'_rgb':[0,0,255,1]}) );\n    \n    let currentSpectra = (\n            {'type': 'color',\n                'y': currentData[0].dataMatrix.filter((value, index, Arr) => index % 2 == 1),\n                'x': x,\n                'color': col\n            }\n    );\n    API.createData('currentSpectraToDisplay', {'data':currentSpectra});\n  break;\n  \n  case 'selectedIDs':\n        \n        let s = API.getData('selectedIDs');\n        console.log(s)\n        \n        if(s){\n            let selectedIDs = s.map(x => x.ID);\n        \n        selectedData = data.filter(f =>\n            selectedIDs.includes(f.ID));\n        \n        \n        let y = selectedData.map( x => \n            x.dataMatrix.filter((value, index, Arr) => \n                index % 2 == 1\n            )\n        );\n        \n        selectedColors = API.getData('selectedIDs')\n            .map(x => x.colors);\n        \n        let color = [];\n        let spectra = selectedData.map((e, i) => {\n            let groupColor = fh.hexToRgb(selectedColors[i]);\n            color =[];\n            x.forEach( () => color.push({'_rgb':groupColor}) )\n            let s = (\n                {'type': 'color',\n                    'y': y[i],\n                    'x': x,\n                    'color': color\n                });\n            return s\n            }\n        );\n\n        API.createData('spectraToDisplay', {'data':spectra});\n        \n        }\n  \n  default:\n    break;\n}\n\n\n"
               ]
             }
           ],
@@ -1375,7 +1375,7 @@
             0,
             0,
             0,
-            0.62
+            0.12
           ],
           "wrapper": false,
           "created": true,
@@ -1969,10 +1969,10 @@
           "display": true,
           "title": "Original data from URL (shift + cursor to move the spectra / double click to reset zoom)",
           "bgColor": [
-            255,
-            255,
-            255,
-            0
+            0,
+            0,
+            0,
+            0.22
           ],
           "wrapper": true,
           "created": true,
@@ -2427,10 +2427,10 @@
           "display": true,
           "title": "Score plot (use Alt-draw to select points)",
           "bgColor": [
-            255,
-            255,
-            255,
-            0
+            0,
+            0,
+            0,
+            0.18
           ],
           "wrapper": true,
           "created": true,
@@ -2754,6 +2754,230 @@
       ],
       "title": "Selected Scores ",
       "zindex": 3
+    },
+    {
+      "url": "modules/types/array_search/configured_search/",
+      "configuration": {
+        "sections": {
+          "searchFields": [
+            {
+              "sections": {
+                "validation": [
+                  {
+                    "sections": {},
+                    "groups": {
+                      "general": [
+                        {
+                          "pattern": [
+                            null
+                          ],
+                          "neg": [
+                            null
+                          ],
+                          "pos": [
+                            null
+                          ],
+                          "authorize_empty": [
+                            null
+                          ]
+                        }
+                      ]
+                    }
+                  }
+                ]
+              },
+              "groups": {
+                "general": [
+                  {
+                    "name": [
+                      null
+                    ],
+                    "label": [
+                      null
+                    ],
+                    "allow_undefined": [
+                      null
+                    ],
+                    "type": [
+                      null
+                    ],
+                    "searchOnField": [
+                      null
+                    ],
+                    "operator": [
+                      null
+                    ]
+                  }
+                ],
+                "defaultVal": [
+                  {
+                    "defaultVal": [
+                      null
+                    ]
+                  }
+                ],
+                "text": [
+                  {
+                    "case_sensitive": [
+                      null
+                    ]
+                  }
+                ],
+                "slider": [
+                  {
+                    "start": [
+                      null
+                    ],
+                    "end": [
+                      null
+                    ],
+                    "step": [
+                      null
+                    ]
+                  }
+                ],
+                "range": [
+                  {
+                    "start": [
+                      null
+                    ],
+                    "end": [
+                      null
+                    ],
+                    "step": [
+                      null
+                    ],
+                    "val1": [
+                      null
+                    ],
+                    "val2": [
+                      null
+                    ]
+                  }
+                ],
+                "options": [
+                  [
+                    {}
+                  ]
+                ]
+              }
+            }
+          ]
+        },
+        "groups": {
+          "group": [
+            {
+              "max": [
+                "50"
+              ],
+              "disableMessage": [
+                "Click to enable search"
+              ]
+            }
+          ]
+        }
+      },
+      "layers": {
+        "Default layer": {
+          "position": {
+            "left": 0,
+            "top": 0
+          },
+          "size": {
+            "width": 20,
+            "height": 20
+          },
+          "zIndex": 0,
+          "display": false,
+          "title": "",
+          "bgColor": [
+            255,
+            255,
+            255,
+            0
+          ],
+          "wrapper": true,
+          "created": true,
+          "name": "Default layer"
+        },
+        "admin": {
+          "position": {
+            "left": 51,
+            "top": 48
+          },
+          "size": {
+            "width": 9,
+            "height": 7
+          },
+          "zIndex": 0,
+          "display": true,
+          "title": "",
+          "bgColor": [
+            255,
+            255,
+            255,
+            0
+          ],
+          "wrapper": true,
+          "created": true,
+          "name": "admin"
+        }
+      },
+      "id": 13,
+      "vars_in": [
+        {}
+      ],
+      "actions_in": [
+        {}
+      ],
+      "actions_out": [
+        {
+          "jpath": []
+        }
+      ],
+      "vars_out": [
+        {
+          "jpath": []
+        }
+      ],
+      "toolbar": {
+        "custom": [
+          [
+            {
+              "title": "",
+              "icon": "",
+              "action": "",
+              "position": "begin",
+              "color": [
+                100,
+                100,
+                100,
+                1
+              ]
+            }
+          ]
+        ],
+        "common": [
+          {
+            "toolbar": [
+              [
+                "Open Preferences"
+              ]
+            ]
+          }
+        ]
+      },
+      "css": [
+        {
+          "fontSize": [
+            ""
+          ],
+          "fontFamily": [
+            ""
+          ]
+        }
+      ],
+      "title": ""
     }
   ],
   "variables": [
@@ -2803,7 +3027,7 @@
     }
   ],
   "configuration": {
-    "title": "visualizeR dataExplorer"
+    "title": "visualizeR dataExplorer 1.1"
   },
   "actionscripts": [
     {
