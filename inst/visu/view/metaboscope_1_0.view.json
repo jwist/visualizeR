@@ -454,7 +454,7 @@
                       0
                     ],
                     "fullOut": [
-                      "none"
+                      "both"
                     ],
                     "legend": [
                       "none"
@@ -632,10 +632,10 @@
           "display": true,
           "title": "Scatter plot (use Alt + draw to select points)",
           "bgColor": [
-            255,
-            255,
-            255,
-            0
+            0,
+            0,
+            0,
+            0.12
           ],
           "wrapper": true,
           "created": true,
@@ -723,7 +723,9 @@
           {
             "toolbar": [
               [
-                "Open Preferences"
+                "Open Preferences",
+                "Print",
+                "Show fullscreen"
               ]
             ]
           }
@@ -1085,10 +1087,10 @@
           "display": true,
           "title": "Selected Spectra (current is blue line, hoovering on the table row)",
           "bgColor": [
-            255,
-            255,
-            255,
-            0
+            0,
+            0,
+            0,
+            0.12
           ],
           "wrapper": true,
           "created": true,
@@ -1125,10 +1127,7 @@
         }
       ],
       "actions_in": [
-        {
-          "rel": "fromToX",
-          "name": "zoomSync"
-        }
+        {}
       ],
       "vars_out": [
         {
@@ -1856,8 +1855,8 @@
                 "visibility": "both",
                 "rendererOptions": "",
                 "editorOptions": "",
-                "hideColumn": [],
-                "width": 105
+                "width": 105,
+                "hideColumn": []
               },
               {
                 "name": "description",
@@ -1871,8 +1870,8 @@
                 "visibility": "both",
                 "rendererOptions": "",
                 "editorOptions": "",
-                "hideColumn": [],
-                "width": 139
+                "width": 139,
+                "hideColumn": []
               },
               {
                 "name": "structure",
@@ -1886,8 +1885,8 @@
                 "visibility": "both",
                 "rendererOptions": "",
                 "editorOptions": "",
-                "hideColumn": [],
-                "width": 121
+                "width": 121,
+                "hideColumn": []
               }
             ]
           ],
@@ -1950,7 +1949,7 @@
           },
           "zIndex": 0,
           "display": true,
-          "title": "",
+          "title": "Reference compounds",
           "bgColor": [
             255,
             255,
@@ -2046,7 +2045,7 @@
           ]
         }
       ],
-      "title": ""
+      "title": "Reference compounds"
     },
     {
       "url": "modules/types/array_search/smart_array_filter/",
@@ -2365,7 +2364,7 @@
         "Default layer": {
           "position": {
             "left": 0,
-            "top": 55
+            "top": 51
           },
           "size": {
             "width": 133,
@@ -2375,10 +2374,10 @@
           "display": true,
           "title": "",
           "bgColor": [
-            255,
-            255,
-            255,
-            0
+            0,
+            0,
+            0,
+            0.12
           ],
           "wrapper": false,
           "created": true,
@@ -2655,7 +2654,7 @@
         "Default layer": {
           "position": {
             "left": 0,
-            "top": 50
+            "top": 51
           },
           "size": {
             "width": 133,
@@ -2665,10 +2664,10 @@
           "display": true,
           "title": "",
           "bgColor": [
-            255,
-            255,
-            255,
-            0
+            0,
+            0,
+            0,
+            0.12
           ],
           "wrapper": false,
           "created": true,
@@ -3320,6 +3319,157 @@
         }
       ],
       "title": "Loadings"
+    },
+    {
+      "url": "modules/types/edition/rich_text/",
+      "configuration": {
+        "sections": {},
+        "groups": {
+          "group": [
+            {
+              "editable": [
+                [
+                  "isEditable"
+                ]
+              ],
+              "debouncing": [
+                0
+              ],
+              "modifyInVariable": [
+                []
+              ],
+              "storeInView": [
+                [
+                  "yes"
+                ]
+              ],
+              "autoHeight": [
+                []
+              ],
+              "bgColor": [
+                [
+                  255,
+                  242,
+                  204,
+                  1
+                ]
+              ],
+              "postit": [
+                [
+                  "yes"
+                ]
+              ],
+              "html": [
+                [
+                  "yes"
+                ]
+              ]
+            }
+          ]
+        }
+      },
+      "layers": {
+        "Default layer": {
+          "position": {
+            "left": 174,
+            "top": 1
+          },
+          "size": {
+            "width": 24,
+            "height": 77
+          },
+          "zIndex": 0,
+          "display": true,
+          "title": "",
+          "bgColor": [
+            255,
+            255,
+            255,
+            0
+          ],
+          "wrapper": true,
+          "created": true,
+          "name": "Default layer"
+        },
+        "admin": {
+          "position": {
+            "left": 0,
+            "top": 0
+          },
+          "size": {
+            "width": 20,
+            "height": 20
+          },
+          "zIndex": 0,
+          "display": false,
+          "title": "",
+          "bgColor": [
+            255,
+            255,
+            255,
+            0
+          ],
+          "wrapper": true,
+          "created": true,
+          "name": "admin"
+        }
+      },
+      "id": 17,
+      "vars_in": [
+        {}
+      ],
+      "actions_in": [
+        {}
+      ],
+      "vars_out": [
+        {
+          "jpath": []
+        }
+      ],
+      "actions_out": [
+        {
+          "jpath": []
+        }
+      ],
+      "toolbar": {
+        "custom": [
+          [
+            {
+              "title": "",
+              "icon": "",
+              "action": "",
+              "position": "begin",
+              "color": [
+                100,
+                100,
+                100,
+                1
+              ]
+            }
+          ]
+        ],
+        "common": [
+          {
+            "toolbar": [
+              [
+                "Open Preferences"
+              ]
+            ]
+          }
+        ]
+      },
+      "css": [
+        {
+          "fontSize": [
+            ""
+          ],
+          "fontFamily": [
+            ""
+          ]
+        }
+      ],
+      "richtext": "<p><span style=\"font-size:14px\">First select scores using the lasso tool (using Alt+draw). The selected sample will appear in the table on the left and spectra will appear in the module at the bottom.</span></p>\n\n<p>&nbsp;</p>\n\n<p><span style=\"font-size:14px\">Hovering over the table allows to highlight that sample in blue.</span></p>\n\n<p>&nbsp;</p>\n\n<p><span style=\"font-size:14px\">Selecting (clicking) on a loading in the loadings table will display colored loadings.</span></p>\n\n<p>&nbsp;</p>\n\n<p><span style=\"font-size:14px\">Selecting a molecule in the table of reference compounds will load the 1D spectra from our database (internet connection is thus required). The search box on the top of the table can be used to narrow down the list of reference compound.</span></p>\n\n<p>&nbsp;</p>\n\n<p><span style=\"font-size:14px\">On the bottom, 3 modules are overlayed and synchronized so that zooming in the spectra will also zoom in the reference compound and loading traces. <strong>Double click on the spectra will reset the zoom.</strong></span></p>\n\n<p>&nbsp;</p>\n\n<p><span style=\"font-size:14px\">The gray area shows the area to work with each module. It is possible to zoom or move the reference trace using the gray area in the middle of the display, while the upper darker area allow to manipulate the loadings.</span></p>\n\n<p>&nbsp;</p>\n\n<p><span style=\"font-size:14px\">Using shift and the mouse, it is possible to move the spectra or the traces.</span></p>\n\n<p>&nbsp;</p>\n\n<p><span style=\"font-size:14px\">To export the spectra or traces to svg use right click in the corresponding gray area and select the option &quot;print&quot;.</span></p>\n",
+      "title": ""
     }
   ],
   "variables": [
