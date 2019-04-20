@@ -7,6 +7,9 @@
       },
       "admin": {
         "name": "admin"
+      },
+      "stocsy": {
+        "name": "stocsy"
       }
     },
     "xWidth": 10,
@@ -115,6 +118,28 @@
           "wrapper": true,
           "created": true,
           "name": "Default layer"
+        },
+        "stocsy": {
+          "position": {
+            "left": 15,
+            "top": 43
+          },
+          "size": {
+            "width": 59,
+            "height": 48
+          },
+          "zIndex": 0,
+          "display": false,
+          "title": "",
+          "bgColor": [
+            255,
+            255,
+            255,
+            0
+          ],
+          "wrapper": true,
+          "created": true,
+          "name": "Default layer"
         }
       },
       "id": 1,
@@ -194,7 +219,7 @@
         }
       ],
       "title": "",
-      "zindex": 2
+      "zindex": 3
     },
     {
       "url": "modules/types/edition/slick_grid/",
@@ -351,11 +376,33 @@
             "top": 10
           },
           "size": {
-            "width": 168,
-            "height": 32
+            "width": 131,
+            "height": 33
           },
           "zIndex": 0,
           "display": true,
+          "title": "",
+          "bgColor": [
+            255,
+            255,
+            255,
+            0
+          ],
+          "wrapper": true,
+          "created": true,
+          "name": "Default layer"
+        },
+        "stocsy": {
+          "position": {
+            "left": 15,
+            "top": 10
+          },
+          "size": {
+            "width": 131,
+            "height": 33
+          },
+          "zIndex": 0,
+          "display": false,
           "title": "",
           "bgColor": [
             255,
@@ -446,8 +493,8 @@
           ]
         }
       ],
-      "title": "",
-      "zindex": 2
+      "title": "Metadata Table (click to load original data / double click to superimpose)",
+      "zindex": 3
     },
     {
       "url": "modules/types/edition/slick_grid/",
@@ -618,6 +665,28 @@
           "wrapper": true,
           "created": true,
           "name": "Default layer"
+        },
+        "stocsy": {
+          "position": {
+            "left": 75,
+            "top": 43
+          },
+          "size": {
+            "width": 39,
+            "height": 29
+          },
+          "zIndex": 0,
+          "display": false,
+          "title": "",
+          "bgColor": [
+            255,
+            255,
+            255,
+            0
+          ],
+          "wrapper": true,
+          "created": true,
+          "name": "Default layer"
         }
       },
       "id": 3,
@@ -688,8 +757,8 @@
           ]
         }
       ],
-      "title": "",
-      "zindex": 2
+      "title": "Metadata headers (select to fill the table)",
+      "zindex": 3
     },
     {
       "url": "modules/types/client_interaction/code_executor/",
@@ -791,6 +860,28 @@
           "wrapper": true,
           "created": true,
           "name": "admin"
+        },
+        "stocsy": {
+          "position": {
+            "left": 75,
+            "top": 73
+          },
+          "size": {
+            "width": 60,
+            "height": 18
+          },
+          "zIndex": 0,
+          "display": false,
+          "title": "function helper",
+          "bgColor": [
+            255,
+            255,
+            255,
+            0
+          ],
+          "wrapper": true,
+          "created": true,
+          "name": "admin"
         }
       },
       "id": 4,
@@ -848,7 +939,7 @@
         }
       ],
       "title": "function helper",
-      "zindex": 2
+      "zindex": 3
     },
     {
       "url": "modules/types/science/spectra/spectra_displayer/",
@@ -1075,6 +1166,28 @@
           "wrapper": true,
           "created": true,
           "name": "admin"
+        },
+        "stocsy": {
+          "position": {
+            "left": 115,
+            "top": 43
+          },
+          "size": {
+            "width": 20,
+            "height": 29
+          },
+          "zIndex": 0,
+          "display": false,
+          "title": "",
+          "bgColor": [
+            255,
+            255,
+            255,
+            0
+          ],
+          "wrapper": true,
+          "created": true,
+          "name": "admin"
         }
       },
       "id": 5,
@@ -1139,7 +1252,7 @@
         }
       ],
       "title": "",
-      "zindex": 2
+      "zindex": 3
     },
     {
       "url": "modules/types/science/spectra/spectra_displayer/",
@@ -1386,6 +1499,28 @@
           "wrapper": true,
           "created": true,
           "name": "admin"
+        },
+        "stocsy": {
+          "position": {
+            "left": 0,
+            "top": 0
+          },
+          "size": {
+            "width": 20,
+            "height": 20
+          },
+          "zIndex": 0,
+          "display": false,
+          "title": "",
+          "bgColor": [
+            255,
+            255,
+            255,
+            0
+          ],
+          "wrapper": true,
+          "created": true,
+          "name": "admin"
         }
       },
       "id": 6,
@@ -1454,7 +1589,7 @@
         }
       ],
       "title": "Original data from URL (shift + cursor to move the spectra / double click to reset zoom)",
-      "zindex": 2
+      "zindex": 3
     },
     {
       "url": "modules/types/edition/rich_text/",
@@ -1548,6 +1683,28 @@
           "wrapper": true,
           "created": true,
           "name": "admin"
+        },
+        "stocsy": {
+          "position": {
+            "left": 0,
+            "top": 0
+          },
+          "size": {
+            "width": 20,
+            "height": 20
+          },
+          "zIndex": 0,
+          "display": false,
+          "title": "",
+          "bgColor": [
+            255,
+            255,
+            255,
+            0
+          ],
+          "wrapper": true,
+          "created": true,
+          "name": "admin"
         }
       },
       "id": 7,
@@ -1606,7 +1763,7 @@
       ],
       "richtext": "<p>&nbsp;</p>\n\n<p><span style=\"font-size:14px\">First, click on &quot;create headers&quot; button to read&nbsp;headers from metadata.</span></p>\n\n<p><span style=\"font-size:14px\">Then select a header from the table and use the &quot;set color&quot; button to color the data according to it.</span></p>\n\n<p><span style=\"font-size:14px\">Finally,&nbsp;select the data in the table for which you want to display the spectra.</span></p>\n\n<p>&nbsp;</p>\n\n<p><span style=\"font-size:14px\">You can select as many headers as you wish to see in the table. The first selected one will be used to color. (use shift or ctrl for multiple selection)</span></p>\n\n<p>&nbsp;</p>\n\n<p><strong><span style=\"font-size:14px\">A double click on the spectra area will reset the zoom (sometimes it is necessary to reset it before seeing the spectra if cache is enabled in the browser)</span></strong></p>\n\n<p>&nbsp;</p>\n\n<p><span style=\"font-size:14px\">The top line show in blue the selected spectra from the dataMatrix object in R, while the red curve shows the original data (url of the jcamp)</span></p>\n\n<p>&nbsp;</p>\n\n<p><span style=\"font-size:14px\">The bottom lines shows the selected spectra. The first selected spectra appears in blue, while the next will take the color of their group.</span></p>\n\n<p>&nbsp;</p>\n\n<p><span style=\"font-size:14px\">Beware that depending on the size of the spectra and the number that are selected coloring may take a few seconds.</span></p>\n",
       "title": "",
-      "zindex": 2
+      "zindex": 3
     },
     {
       "url": "modules/types/client_interaction/code_executor/",
@@ -1676,15 +1833,37 @@
         },
         "admin": {
           "position": {
-            "left": 136,
-            "top": 43
+            "left": 15,
+            "top": 108
           },
           "size": {
-            "width": 44,
-            "height": 83
+            "width": 59,
+            "height": 18
           },
           "zIndex": 0,
           "display": true,
+          "title": "",
+          "bgColor": [
+            255,
+            255,
+            255,
+            0
+          ],
+          "wrapper": true,
+          "created": true,
+          "name": "admin"
+        },
+        "stocsy": {
+          "position": {
+            "left": 15,
+            "top": 108
+          },
+          "size": {
+            "width": 59,
+            "height": 18
+          },
+          "zIndex": 0,
+          "display": false,
           "title": "",
           "bgColor": [
             255,
@@ -1755,7 +1934,7 @@
         }
       ],
       "title": "",
-      "zindex": 2
+      "zindex": 3
     },
     {
       "url": "modules/types/science/spectra/spectra_displayer/",
@@ -1985,6 +2164,28 @@
           "wrapper": true,
           "created": true,
           "name": "admin"
+        },
+        "stocsy": {
+          "position": {
+            "left": 75,
+            "top": 92
+          },
+          "size": {
+            "width": 60,
+            "height": 34
+          },
+          "zIndex": 0,
+          "display": false,
+          "title": "",
+          "bgColor": [
+            255,
+            255,
+            255,
+            0
+          ],
+          "wrapper": true,
+          "created": true,
+          "name": "admin"
         }
       },
       "id": 9,
@@ -2067,7 +2268,7 @@
           ]
         }
       ],
-      "title": "",
+      "title": "Original data from URL (shift + cursor to move the spectra / double click to reset zoom)",
       "zindex": 1
     },
     {
@@ -2107,6 +2308,28 @@
           },
           "zIndex": 0,
           "display": true,
+          "title": "",
+          "bgColor": [
+            255,
+            255,
+            255,
+            0
+          ],
+          "wrapper": true,
+          "created": true,
+          "name": "admin"
+        },
+        "stocsy": {
+          "position": {
+            "left": 45,
+            "top": 63
+          },
+          "size": {
+            "width": 15,
+            "height": 0
+          },
+          "zIndex": 0,
+          "display": false,
           "title": "",
           "bgColor": [
             255,
@@ -2173,7 +2396,8 @@
           ]
         }
       ],
-      "title": ""
+      "title": "",
+      "zindex": 3
     },
     {
       "url": "modules/types/client_interaction/code_executor/",
@@ -2248,10 +2472,32 @@
           },
           "size": {
             "width": 59,
-            "height": 49
+            "height": 15
           },
           "zIndex": 0,
           "display": true,
+          "title": "",
+          "bgColor": [
+            255,
+            255,
+            255,
+            0
+          ],
+          "wrapper": true,
+          "created": true,
+          "name": "admin"
+        },
+        "stocsy": {
+          "position": {
+            "left": 15,
+            "top": 92
+          },
+          "size": {
+            "width": 59,
+            "height": 15
+          },
+          "zIndex": 0,
+          "display": false,
           "title": "",
           "bgColor": [
             255,
@@ -2321,7 +2567,8 @@
           ]
         }
       ],
-      "title": ""
+      "title": "",
+      "zindex": 3
     },
     {
       "url": "modules/types/edition/slick_grid/",
@@ -2506,6 +2753,28 @@
           "wrapper": true,
           "created": true,
           "name": "admin"
+        },
+        "stocsy": {
+          "position": {
+            "left": 182,
+            "top": 63
+          },
+          "size": {
+            "width": 16,
+            "height": 62
+          },
+          "zIndex": 0,
+          "display": false,
+          "title": "",
+          "bgColor": [
+            255,
+            255,
+            255,
+            0
+          ],
+          "wrapper": true,
+          "created": true,
+          "name": "admin"
         }
       },
       "id": 12,
@@ -2568,7 +2837,815 @@
           ]
         }
       ],
-      "title": ""
+      "title": "Sorted IDs",
+      "zindex": 3
+    },
+    {
+      "url": "modules/types/client_interaction/code_executor/",
+      "configuration": {
+        "sections": {},
+        "groups": {
+          "group": [
+            {
+              "display": [
+                [
+                  "editor",
+                  "buttons"
+                ]
+              ],
+              "execOnLoad": [
+                []
+              ],
+              "asyncAwait": [
+                [
+                  "top"
+                ]
+              ],
+              "script": [
+                "let cm = API.getData('covarianceMatrix').resurrect();\n\nconsole.log(cm[0][0]);\n\nlet xLabel = [];\nfor (let i = 0; i < cm.length; i++){\n    xLabel.push(i);\n}\nlet covarianceMatrix = {\n    type: 'matrix', \n    value: {\n        data: cm,\n        xLabel: xLabel,\n        yLabel: xLabel\n    }\n};\n\nAPI.createData('covariance', covarianceMatrix);\nconsole.log(covarianceMatrix)\n"
+              ]
+            }
+          ],
+          "libs": [
+            [
+              {}
+            ]
+          ],
+          "buttons": [
+            [
+              {
+                "name": "button1",
+                "label": "Execute",
+                "hide": [],
+                "disable": []
+              }
+            ]
+          ]
+        }
+      },
+      "layers": {
+        "Default layer": {
+          "position": {
+            "left": 0,
+            "top": 0
+          },
+          "size": {
+            "width": 20,
+            "height": 20
+          },
+          "zIndex": 0,
+          "display": false,
+          "title": "",
+          "bgColor": [
+            255,
+            255,
+            255,
+            0
+          ],
+          "wrapper": true,
+          "created": true,
+          "name": "Default layer"
+        },
+        "admin": {
+          "position": {
+            "left": 138,
+            "top": 58
+          },
+          "size": {
+            "width": 38,
+            "height": 30
+          },
+          "zIndex": 0,
+          "display": true,
+          "title": "",
+          "bgColor": [
+            255,
+            255,
+            255,
+            0
+          ],
+          "wrapper": true,
+          "created": true,
+          "name": "admin"
+        },
+        "stocsy": {
+          "position": {
+            "left": 192,
+            "top": 88
+          },
+          "size": {
+            "width": 38,
+            "height": 30
+          },
+          "zIndex": 0,
+          "display": true,
+          "title": "",
+          "bgColor": [
+            255,
+            255,
+            255,
+            0
+          ],
+          "wrapper": true,
+          "created": true,
+          "name": "admin"
+        }
+      },
+      "id": 13,
+      "vars_in": [
+        {}
+      ],
+      "actions_in": [
+        {}
+      ],
+      "vars_out": [
+        {
+          "jpath": []
+        }
+      ],
+      "actions_out": [
+        {
+          "jpath": []
+        }
+      ],
+      "toolbar": {
+        "custom": [
+          [
+            {
+              "title": "",
+              "icon": "",
+              "action": "",
+              "position": "begin",
+              "color": [
+                100,
+                100,
+                100,
+                1
+              ]
+            }
+          ]
+        ],
+        "common": [
+          {
+            "toolbar": [
+              [
+                "Open Preferences"
+              ]
+            ]
+          }
+        ]
+      },
+      "css": [
+        {
+          "fontSize": [
+            ""
+          ],
+          "fontFamily": [
+            ""
+          ]
+        }
+      ],
+      "title": "",
+      "zindex": 3
+    },
+    {
+      "url": "modules/types/chart/advanced/canvas_matrix/",
+      "configuration": {
+        "sections": {},
+        "groups": {
+          "group": [
+            {
+              "highcontrast": [
+                [
+                  "true"
+                ]
+              ],
+              "color": [
+                [
+                  0,
+                  0,
+                  0,
+                  1
+                ],
+                [
+                  255,
+                  255,
+                  255,
+                  1
+                ]
+              ]
+            }
+          ]
+        }
+      },
+      "layers": {
+        "Default layer": {
+          "position": {
+            "left": 0,
+            "top": 0
+          },
+          "size": {
+            "width": 20,
+            "height": 20
+          },
+          "zIndex": 0,
+          "display": false,
+          "title": "",
+          "bgColor": [
+            255,
+            255,
+            255,
+            0
+          ],
+          "wrapper": true,
+          "created": true,
+          "name": "Default layer"
+        },
+        "admin": {
+          "position": {
+            "left": 147,
+            "top": 7
+          },
+          "size": {
+            "width": 46,
+            "height": 47
+          },
+          "zIndex": 0,
+          "display": true,
+          "title": "",
+          "bgColor": [
+            255,
+            255,
+            255,
+            0
+          ],
+          "wrapper": true,
+          "created": true,
+          "name": "admin"
+        },
+        "stocsy": {
+          "position": {
+            "left": 0,
+            "top": 0
+          },
+          "size": {
+            "width": 239,
+            "height": 125
+          },
+          "zIndex": 0,
+          "display": true,
+          "title": "",
+          "bgColor": [
+            255,
+            255,
+            255,
+            0
+          ],
+          "wrapper": true,
+          "created": true,
+          "name": "admin"
+        }
+      },
+      "id": 14,
+      "vars_in": [
+        {
+          "rel": "matrix",
+          "name": "covariance"
+        }
+      ],
+      "actions_in": [
+        {}
+      ],
+      "vars_out": [
+        {
+          "event": "onPixelHover",
+          "rel": "fullRow",
+          "jpath": [],
+          "name": "currentRow"
+        }
+      ],
+      "actions_out": [
+        {
+          "jpath": []
+        }
+      ],
+      "toolbar": {
+        "custom": [
+          [
+            {
+              "title": "",
+              "icon": "",
+              "action": "",
+              "position": "begin",
+              "color": [
+                100,
+                100,
+                100,
+                1
+              ]
+            }
+          ]
+        ],
+        "common": [
+          {
+            "toolbar": [
+              [
+                "Open Preferences"
+              ]
+            ]
+          }
+        ]
+      },
+      "css": [
+        {
+          "fontSize": [
+            ""
+          ],
+          "fontFamily": [
+            ""
+          ]
+        }
+      ],
+      "title": "",
+      "zindex": 2
+    },
+    {
+      "url": "modules/types/client_interaction/code_executor/",
+      "configuration": {
+        "sections": {},
+        "groups": {
+          "group": [
+            {
+              "display": [
+                [
+                  "editor",
+                  "buttons"
+                ]
+              ],
+              "execOnLoad": [
+                []
+              ],
+              "asyncAwait": [
+                [
+                  "top"
+                ]
+              ],
+              "script": [
+                "let row = API.getData('currentRow');\n\n\nconsole.log(row);"
+              ]
+            }
+          ],
+          "libs": [
+            [
+              {}
+            ]
+          ],
+          "buttons": [
+            [
+              {
+                "name": "button1",
+                "label": "Execute",
+                "hide": [],
+                "disable": []
+              }
+            ]
+          ]
+        }
+      },
+      "layers": {
+        "Default layer": {
+          "position": {
+            "left": 0,
+            "top": 0
+          },
+          "size": {
+            "width": 20,
+            "height": 20
+          },
+          "zIndex": 0,
+          "display": false,
+          "title": "",
+          "bgColor": [
+            255,
+            255,
+            255,
+            0
+          ],
+          "wrapper": true,
+          "created": true,
+          "name": "Default layer"
+        },
+        "admin": {
+          "position": {
+            "left": 139,
+            "top": 93
+          },
+          "size": {
+            "width": 37,
+            "height": 21
+          },
+          "zIndex": 0,
+          "display": true,
+          "title": "",
+          "bgColor": [
+            255,
+            255,
+            255,
+            0
+          ],
+          "wrapper": true,
+          "created": true,
+          "name": "admin"
+        },
+        "stocsy": {
+          "position": {
+            "left": 139,
+            "top": 93
+          },
+          "size": {
+            "width": 37,
+            "height": 21
+          },
+          "zIndex": 0,
+          "display": false,
+          "title": "",
+          "bgColor": [
+            255,
+            255,
+            255,
+            0
+          ],
+          "wrapper": true,
+          "created": true,
+          "name": "admin"
+        }
+      },
+      "id": 15,
+      "vars_in": [
+        {
+          "rel": "inputValue",
+          "name": "currentRow"
+        }
+      ],
+      "actions_in": [
+        {}
+      ],
+      "vars_out": [
+        {
+          "jpath": []
+        }
+      ],
+      "actions_out": [
+        {
+          "jpath": []
+        }
+      ],
+      "toolbar": {
+        "custom": [
+          [
+            {
+              "title": "",
+              "icon": "",
+              "action": "",
+              "position": "begin",
+              "color": [
+                100,
+                100,
+                100,
+                1
+              ]
+            }
+          ]
+        ],
+        "common": [
+          {
+            "toolbar": [
+              [
+                "Open Preferences"
+              ]
+            ]
+          }
+        ]
+      },
+      "css": [
+        {
+          "fontSize": [
+            ""
+          ],
+          "fontFamily": [
+            ""
+          ]
+        }
+      ],
+      "title": "",
+      "zindex": 3
+    },
+    {
+      "url": "modules/types/science/spectra/spectra_displayer/",
+      "configuration": {
+        "sections": {
+          "graph": [
+            {
+              "sections": {},
+              "groups": {
+                "graph": [
+                  {
+                    "url": [
+                      ""
+                    ],
+                    "zoom": [
+                      "none"
+                    ],
+                    "wheelAction": [
+                      "none"
+                    ],
+                    "wheelbaseline": [
+                      0
+                    ],
+                    "fullOut": [
+                      "both"
+                    ],
+                    "legend": [
+                      null
+                    ],
+                    "legendOptions": [
+                      [
+                        "isSerieHideable",
+                        "isSerieSelectable"
+                      ]
+                    ],
+                    "mouseTracking": [
+                      []
+                    ],
+                    "selectScatter": [
+                      []
+                    ],
+                    "independantYZoom": [
+                      []
+                    ]
+                  }
+                ]
+              }
+            }
+          ],
+          "axis": [
+            {
+              "sections": {},
+              "groups": {
+                "xAxis": [
+                  {
+                    "checkboxes": [
+                      [
+                        "display"
+                      ]
+                    ],
+                    "label": [
+                      ""
+                    ],
+                    "beforeSpacing": [
+                      "0"
+                    ],
+                    "afterSpacing": [
+                      0
+                    ],
+                    "min": [
+                      ""
+                    ],
+                    "max": [
+                      ""
+                    ],
+                    "nbTicksPrimary": [
+                      5
+                    ],
+                    "axismodification": [
+                      "none"
+                    ]
+                  }
+                ],
+                "yAxis": [
+                  {
+                    "checkboxes": [
+                      []
+                    ],
+                    "label": [
+                      ""
+                    ],
+                    "beforeSpacing": [
+                      "0"
+                    ],
+                    "afterSpacing": [
+                      0
+                    ],
+                    "min": [
+                      ""
+                    ],
+                    "max": [
+                      ""
+                    ],
+                    "nbTicksPrimary": [
+                      5
+                    ],
+                    "fitToAxisOnFromTo": [
+                      []
+                    ]
+                  }
+                ]
+              }
+            }
+          ],
+          "series": [
+            {
+              "sections": {},
+              "groups": {
+                "series": [
+                  {
+                    "overflow": [
+                      []
+                    ],
+                    "stackVerticalSpacing": [
+                      0
+                    ]
+                  }
+                ]
+              }
+            }
+          ],
+          "variables": [
+            {
+              "sections": {},
+              "groups": {
+                "variables": [
+                  [
+                    {
+                      "variable": "",
+                      "axis": "0",
+                      "adaptTo": "none",
+                      "plotcolor": [
+                        1,
+                        1,
+                        255,
+                        1
+                      ],
+                      "strokewidth": "1",
+                      "strokestyle": "1",
+                      "plotcontinuous": "continuous",
+                      "peakpicking": [],
+                      "markers": [],
+                      "markerShape": "1",
+                      "markerSize": 2,
+                      "normalize": "none",
+                      "optimizeSlots": [],
+                      "tracking": []
+                    }
+                  ]
+                ]
+              }
+            }
+          ],
+          "misc": [
+            {
+              "sections": {},
+              "groups": {
+                "misc": [
+                  {
+                    "highlightOptions": [
+                      "{}"
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "groups": {}
+      },
+      "layers": {
+        "Default layer": {
+          "position": {
+            "left": 0,
+            "top": 0
+          },
+          "size": {
+            "width": 20,
+            "height": 20
+          },
+          "zIndex": 0,
+          "display": false,
+          "title": "",
+          "bgColor": [
+            255,
+            255,
+            255,
+            0
+          ],
+          "wrapper": true,
+          "created": true,
+          "name": "Default layer"
+        },
+        "admin": {
+          "position": {
+            "left": 135,
+            "top": 116
+          },
+          "size": {
+            "width": 45,
+            "height": 15
+          },
+          "zIndex": 0,
+          "display": true,
+          "title": "",
+          "bgColor": [
+            255,
+            255,
+            255,
+            0
+          ],
+          "wrapper": true,
+          "created": true,
+          "name": "admin"
+        },
+        "stocsy": {
+          "position": {
+            "left": 0,
+            "top": 37
+          },
+          "size": {
+            "width": 233,
+            "height": 33
+          },
+          "zIndex": 0,
+          "display": true,
+          "title": "",
+          "bgColor": [
+            255,
+            255,
+            255,
+            0
+          ],
+          "wrapper": false,
+          "created": true,
+          "name": "admin"
+        }
+      },
+      "id": 16,
+      "vars_in": [
+        {
+          "rel": "xArray",
+          "name": "currentRow"
+        }
+      ],
+      "actions_in": [
+        {}
+      ],
+      "vars_out": [
+        {
+          "jpath": []
+        }
+      ],
+      "actions_out": [
+        {
+          "jpath": []
+        }
+      ],
+      "toolbar": {
+        "custom": [
+          [
+            {
+              "title": "",
+              "icon": "",
+              "action": "",
+              "position": "begin",
+              "color": [
+                100,
+                100,
+                100,
+                1
+              ]
+            }
+          ]
+        ],
+        "common": [
+          {
+            "toolbar": [
+              [
+                "Open Preferences"
+              ]
+            ]
+          }
+        ]
+      },
+      "css": [
+        {
+          "fontSize": [
+            ""
+          ],
+          "fontFamily": [
+            ""
+          ]
+        }
+      ],
+      "title": "",
+      "zindex": 3
     }
   ],
   "variables": [
@@ -2582,6 +3659,12 @@
       "varname": "xAxis",
       "jpath": [
         "xAxis"
+      ]
+    },
+    {
+      "varname": "covarianceMatrix",
+      "jpath": [
+        "covarianceMatrix"
       ]
     }
   ],

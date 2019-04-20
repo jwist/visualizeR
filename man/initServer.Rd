@@ -19,7 +19,7 @@ This functions starts the http server that is necessary to the \code{github.com/
 If a server is already running (daemon_list is empty), then nothing happens.
 }
 \examples{
-
+#start new server object
 s <- new("server")
 #initServer(s)
 
