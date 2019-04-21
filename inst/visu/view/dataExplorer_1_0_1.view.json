@@ -432,26 +432,18 @@
       ],
       "vars_out": [
         {
+          "event": "onRowsSelect",
+          "rel": "rows",
+          "jpath": [],
+          "name": "selectedIDs"
+        },
+        {
           "event": "onHover",
           "rel": "row",
           "jpath": [
             "ID"
           ],
           "name": "currentID"
-        },
-        {
-          "event": "onDoubleClick",
-          "rel": "row",
-          "jpath": [
-            "ID"
-          ],
-          "name": "selectedID"
-        },
-        {
-          "event": "onRowsSelect",
-          "rel": "rows",
-          "jpath": [],
-          "name": "selectedIDs"
         }
       ],
       "toolbar": {
@@ -1787,7 +1779,7 @@
                 ]
               ],
               "script": [
-                "let selectedIDs = API.getData('selectedIDs')\n    .map(x => x.ID);\n\nlet data = API.getData('data').resurrect();\n\nlet selectedData = data.filter(f =>\n    selectedIDs.includes(f.ID));\n\nlet currentID = API.getData('currentID').resurrect();\ncurrentID = ([currentID]);\nlet currentData = data.filter(f =>\n    currentID.includes(f.ID));\n\nconsole.log(selectedData);\nconsole.log(currentData);\n\n\nlet x = data[0].dataMatrix.filter(function(value, index, Arr) {\n    return index % 2 == 0\n});\n\nlet y = selectedData.map( x => \n    x.dataMatrix.filter((value, index, Arr) => \n        index % 2 == 1\n    )\n);\n\nfunction hexToRgb(hex) {\n    var result = /^#?([a-f\\d]{2})([a-f\\d]{2})([a-f\\d]{2})$/i.exec(hex);\n    return result ? [\n        parseInt(result[1], 16),\n        parseInt(result[2], 16),\n        parseInt(result[3], 16),\n        1\n    ] : null;\n}\n\nlet selectedColors = API.getData('selectedIDs')\n    .map(x => x.colors);\n\nlet color = [];\nlet spectra = selectedData.map((e, i) => {\n    let groupColor = hexToRgb(selectedColors[i]);\n    color =[];\n    x.forEach( () => color.push({'_rgb':groupColor}) )\n    let s = (\n        {'type': 'color',\n            'y': y[i],\n            'x': x,\n            'color': color\n        });\n    return s\n    }\n);\n\nconsole.log(spectra[0]);\n\nlet col = [];\nx.forEach( i => col.push({'_rgb':[0,0,255,1]}) );\n\nlet currentSpectra = (\n        {'type': 'color',\n            'y': currentData[0].dataMatrix.filter((value, index, Arr) => index % 2 == 1),\n            'x': x,\n            'color': col\n        }\n);\n\nconsole.log(currentSpectra);\n\nAPI.createData('spectraToDisplay', {'data':spectra});\nAPI.createData('currentSpectraToDisplay', {'data':currentSpectra});\n"
+                "let selectedIDs = API.getData('selectedIDs').resurrect()\n    .map(x => x.ID);\nconsole.log('selectedIDs:' + selectedIDs);\n\nlet sortedIDs = selectedIDs.slice().sort();\nconsole.log(sortedIDs);\n\nlet data = API.getData('data').resurrect();\n\nlet selectedData = data.filter(f =>\n    selectedIDs.includes(f.ID));\nconsole.log(selectedData);\n\nlet sortedSelectedData = selectedData.slice().sort((a, b) =>  \n  sortedIDs.indexOf(a.ID) - sortedIDs.indexOf(b.ID));\n\nconsole.log(sortedSelectedData);\n\nlet x = API.cache('x');\n\nlet y = sortedSelectedData.map( x => \n    x.dataMatrix.filter((value, index, Arr) => \n        index % 2 == 1\n    )\n);\n\nfunction hexToRgb(hex) {\n    var result = /^#?([a-f\\d]{2})([a-f\\d]{2})([a-f\\d]{2})$/i.exec(hex);\n    return result ? [\n        parseInt(result[1], 16),\n        parseInt(result[2], 16),\n        parseInt(result[3], 16),\n        1\n    ] : null;\n}\n\nlet selectedColors = API.getData('selectedIDs');\n    //.map(x => x.colors);\nconsole.log(selectedColors);\n\nlet sortedselectedColors = selectedColors.slice().sort((a, b) =>  \n  sortedIDs.indexOf(a.ID) - sortedIDs.indexOf(b.ID)).map(x => x.colors);\nconsole.log(sortedselectedColors)\n\nlet color = [];\nlet spectra = sortedSelectedData.map((e, i) => {\n    let groupColor = hexToRgb(sortedselectedColors[i]);\n    color =[];\n    x.forEach( () => color.push({'_rgb':groupColor}) )\n    let s = (\n        {'type': 'color',\n            'y': y[i],\n            'x': x,\n            'color': color\n        });\n    return s\n    }\n);\n\nconsole.log(spectra[0]);\nAPI.createData('spectraToDisplay', {'data':spectra});\nconsole.log('draw selected IDs executed')\nAPI.createData('selectedIDs', null);\n\nlet currentID = API.getData('currentID').resurrect();\ncurrentID = ([currentID]);\nlet currentData = data.filter(f =>\n    currentID.includes(f.ID));\nlet col = [];\nx.forEach( i => col.push({'_rgb':[0,0,255,1]}) );\n\nlet currentSpectra = (\n        {'type': 'color',\n            'y': currentData[0].dataMatrix.filter((value, index, Arr) => index % 2 == 1),\n            'x': x,\n            'color': col\n        }\n);\nconsole.log(currentSpectra);\nAPI.createData('currentSpectraToDisplay', {'data':currentSpectra});\n\n\n"
               ]
             }
           ],
@@ -1834,15 +1826,15 @@
         "admin": {
           "position": {
             "left": 15,
-            "top": 108
+            "top": 113
           },
           "size": {
             "width": 59,
-            "height": 18
+            "height": 32
           },
           "zIndex": 0,
           "display": true,
-          "title": "",
+          "title": "draw selected IDs",
           "bgColor": [
             255,
             255,
@@ -1933,7 +1925,7 @@
           ]
         }
       ],
-      "title": "",
+      "title": "draw selected IDs",
       "zindex": 3
     },
     {
@@ -2272,134 +2264,6 @@
       "zindex": 1
     },
     {
-      "url": "modules/types/bio/feature_viewer/",
-      "configuration": {},
-      "layers": {
-        "Default layer": {
-          "position": {
-            "left": 0,
-            "top": 0
-          },
-          "size": {
-            "width": 20,
-            "height": 20
-          },
-          "zIndex": 0,
-          "display": false,
-          "title": "",
-          "bgColor": [
-            255,
-            255,
-            255,
-            0
-          ],
-          "wrapper": true,
-          "created": true,
-          "name": "Default layer"
-        },
-        "admin": {
-          "position": {
-            "left": 45,
-            "top": 63
-          },
-          "size": {
-            "width": 15,
-            "height": 0
-          },
-          "zIndex": 0,
-          "display": true,
-          "title": "",
-          "bgColor": [
-            255,
-            255,
-            255,
-            0
-          ],
-          "wrapper": true,
-          "created": true,
-          "name": "admin"
-        },
-        "stocsy": {
-          "position": {
-            "left": 45,
-            "top": 63
-          },
-          "size": {
-            "width": 15,
-            "height": 0
-          },
-          "zIndex": 0,
-          "display": false,
-          "title": "",
-          "bgColor": [
-            255,
-            255,
-            255,
-            0
-          ],
-          "wrapper": true,
-          "created": true,
-          "name": "admin"
-        }
-      },
-      "id": 10,
-      "vars_in": [
-        {}
-      ],
-      "actions_in": [
-        {}
-      ],
-      "vars_out": [
-        {
-          "jpath": []
-        }
-      ],
-      "actions_out": [
-        {
-          "jpath": []
-        }
-      ],
-      "toolbar": {
-        "custom": [
-          [
-            {
-              "title": "",
-              "icon": "",
-              "action": "",
-              "position": "begin",
-              "color": [
-                100,
-                100,
-                100,
-                1
-              ]
-            }
-          ]
-        ],
-        "common": [
-          {
-            "toolbar": [
-              [
-                "Open Preferences"
-              ]
-            ]
-          }
-        ]
-      },
-      "css": [
-        {
-          "fontSize": [
-            ""
-          ],
-          "fontFamily": [
-            ""
-          ]
-        }
-      ],
-      "title": "",
-      "zindex": 3
-    },
-    {
       "url": "modules/types/client_interaction/code_executor/",
       "configuration": {
         "sections": {},
@@ -2421,7 +2285,7 @@
                 ]
               ],
               "script": [
-                "let xVariable = API.getData('xVariable').resurrect();\nconsole.log(xVariable);\n\nlet dataT = API.cache('dataT');\nlet x = API.cache('x');\n\nlet index = x.indexOf(xVariable);\nlet v = dataT[index];\n\nlet vSorted = v.slice().sort(function(a, b){return a-b});\n\nlet s = API.getData('selectedMetadata');\n\nlet sort = s.slice().sort(function(a, b){  \n  return v[s.indexOf(b)]-v[s.indexOf(a)];\n});\n\nconsole.log(sort.map((e, i) => ({e, 'intensity': vSorted[i]})))\n\nAPI.createData('sortedID', sort);"
+                "let xVariable = API.getData('xVariable').resurrect();\nconsole.log('selected: ' + xVariable);\n\nlet dataT = API.cache('dataT');\nlet x = API.cache('x');\n\nlet index = x.indexOf(xVariable);\nlet v = dataT[index];\n\nlet vSorted = v.slice().sort(function(a, b){return a-b});\n\nlet s = API.getData('selectedMetadata').resurrect();\n//console.log(s);\n\nlet sort = s.slice().sort(function(a, b){  \n  return v[s.indexOf(b)]-v[s.indexOf(a)];\n});\n\nsort.map((x, i) => x.intensity = vSorted[i]);\n\nAPI.createData('sortedID', sort);\n\nconsole.log('sort variables executed');\nAPI.createData('selectedIDs', null);"
               ]
             }
           ],
@@ -2472,11 +2336,11 @@
           },
           "size": {
             "width": 59,
-            "height": 15
+            "height": 20
           },
           "zIndex": 0,
           "display": true,
-          "title": "",
+          "title": "sort variables",
           "bgColor": [
             255,
             255,
@@ -2510,7 +2374,7 @@
           "name": "admin"
         }
       },
-      "id": 11,
+      "id": 10,
       "vars_in": [
         {
           "rel": "inputValue",
@@ -2567,7 +2431,7 @@
           ]
         }
       ],
-      "title": "",
+      "title": "sort variables",
       "zindex": 3
     },
     {
@@ -2583,8 +2447,9 @@
                   "rowNumbering",
                   "forceFitColumns",
                   "highlightScroll",
+                  "editable",
                   "forgetLastActive",
-                  "editable"
+                  "forgetLastSelected"
                 ]
               ],
               "copyPaste": [
@@ -2777,7 +2642,7 @@
           "name": "admin"
         }
       },
-      "id": 12,
+      "id": 11,
       "vars_in": [
         {
           "rel": "list",
@@ -2951,7 +2816,7 @@
           "name": "admin"
         }
       },
-      "id": 13,
+      "id": 12,
       "vars_in": [
         {}
       ],
@@ -3106,7 +2971,7 @@
           "name": "admin"
         }
       },
-      "id": 14,
+      "id": 13,
       "vars_in": [
         {
           "rel": "matrix",
@@ -3191,7 +3056,7 @@
                 ]
               ],
               "script": [
-                "let row = API.getData('currentRow');\n\n\nconsole.log(row);"
+                "\nlet test = [{a:1},{a:2}];\nconsole.log(test);\n\ntest.map(x=>x.int=1)\nconsole.log(test)\n\nlet test2 = {a : 2}\nconsole.log(test2)\ntest2.ddd = 1;\nconsole.log(test2)"
               ]
             }
           ],
@@ -3280,7 +3145,7 @@
           "name": "admin"
         }
       },
-      "id": 15,
+      "id": 14,
       "vars_in": [
         {
           "rel": "inputValue",
@@ -3587,7 +3452,7 @@
           "name": "admin"
         }
       },
-      "id": 16,
+      "id": 15,
       "vars_in": [
         {
           "rel": "xArray",

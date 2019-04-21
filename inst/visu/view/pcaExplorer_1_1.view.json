@@ -1664,7 +1664,7 @@
                 ]
               ],
               "script": [
-                "let index = API.getData('currentVariableIndex').resurrect();\nlet cov = API.getData('correlationMatrix');\nlet xAxis = API.getData('xAxis');\n\nindex = Math.round(index);\nconsole.log(\"index: \" + index);\n\nlet loadingsColors = cov[index];\n\nvar max = loadingsColors.reduce(function(a, b) {\n    return Math.max(a, b);\n});\n\nvar min = loadingsColors.reduce(function(a, b) {\n    return Math.min(a, b);\n});\n\nlet unselectedScale = chroma.scale(['blue', 'cyan',  'yellow', 'red']).domain([0, max]).mode('lch');\n\nlet colorScale = loadingsColors.map((x, j) => unselectedScale(x));\n\nlet currentData = API.getData('currentData').resurrect();\nconsole.log(currentData.ID);\nlet currentSpectra = currentData.dataMatrix.filter((e, i) => i % 2 == 1);\n\nlet spectra = [];\nspectra = {'type': 'color', x: xAxis, y: currentSpectra, 'color': colorScale};\n\nAPI.createData('coloredSpectra', spectra);\nconsole.log(spectra);\n\n// let currentID = API.getData('selectedID')\n// console.log(currentID)\n// if (currentID != null) { \n// let sspectra = JSON.parse(JSON.stringify(API.getData('selectedSpectra')))\n\n// sspectra.data.map(e => {\n//     return e.label == currentID ? e.color = colorScale : []\n// })\n\n// API.createData('modifiedSelectedSpectra', sspectra)\n// API.createData('currentID', null)\n// console.log('color')\n// }"
+                "let index = API.getData('currentVariableIndex').resurrect();\nlet cov = API.getData('correlationMatrix');\nlet xAxis = API.getData('xAxis');\n\nindex = Math.round(index);\nconsole.log(\"index: \" + index);\n\nlet loadingsColors = cov[index];\n\nvar max = loadingsColors.reduce(function(a, b) {\n    return Math.max(a, b);\n});\n\nvar min = loadingsColors.reduce(function(a, b) {\n    return Math.min(a, b);\n});\n\nlet unselectedScale = chroma.scale(['blue', 'cyan',  'yellow', 'red']).domain([0, max]).mode('lch');\n\nlet colorScale = loadingsColors.map((x, j) => unselectedScale(x));\n\nlet currentData = [];\nif (API.getData('currentData')) {\n    currentData = API.getData('currentData').resurrect();\n} else {\n    currentData = API.getData('selectedData')[0].resurrect();\n}\n\nconsole.log(currentData.ID);\nlet currentSpectra = currentData.dataMatrix.filter((e, i) => i % 2 == 1);\n\nlet spectra = [];\nspectra = {'type': 'color', x: xAxis, y: currentSpectra, 'color': colorScale};\n\nAPI.createData('coloredSpectra', spectra);\nconsole.log(spectra);\n\n"
               ]
             }
           ],
@@ -2169,7 +2169,7 @@
           "name": "admin"
         }
       },
-      "id": 13,
+      "id": 11,
       "vars_in": [
         {
           "rel": "value",
@@ -2323,7 +2323,7 @@
           "name": "admin"
         }
       },
-      "id": 14,
+      "id": 12,
       "vars_in": [
         {}
       ],

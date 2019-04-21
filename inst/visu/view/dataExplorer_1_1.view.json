@@ -37,7 +37,7 @@
                 ]
               ],
               "script": [
-                "let fh = API.cache('helperFunctions');\nlet data = API.getData('data').resurrect();\n\n\nlet d = data.map(x => x.dataMatrix.filter((v, i) => i % 2 == 1));\nlet dataT = fh.transpose(d);\n\nlet ceiling = dataT.map(x => Math.max.apply(null, x));\nlet floor = dataT.map(x => Math.min.apply(null, x));\n\nvar col = [];\nceiling.forEach( i => col.push({'_rgb':[240,240,240,1]}) );\n\nvar x = data[0].dataMatrix.filter(function(value, index, Arr) {\n    return index % 2 == 0\n});\n\nlet ceilingSpectra = (\n        {'type': 'color',\n            'y': ceiling,\n            'x': x,\n            'color': col\n        }\n);\nAPI.createData('ceilingSpectra', {'data':ceilingSpectra});\n\nlet floorSpectra = (\n        {'type': 'color',\n            'y': floor,\n            'x': x,\n            'color': col\n        }\n);\nAPI.createData('floorSpectra', {'data':floorSpectra});\n\nlet action = null;\nlet value = null;\n\nif(this.action) {\n    action = this.action.name;\n    value = this.action.value;\n} else {\n\nswitch(this.button) {\n  case 'createHeaders': \n    action = 'createHeaders';\n  break;\n  case 'selectColor':\n    action = 'selectColor';\n  break;\n  default:\n  action = this.variable;\n  break;\n  }\n}\n\nconsole.log('action:' + action);\n\nlet selectedData = [];\nlet currentID = [];\nvar colors = [];\nlet selectedColors = [];\n\n\nswitch(action) {\n  case 'selectColor':\n    let currentHeader = API.getData('currentHeader');\n    \n    if(!currentHeader) {\n        currentHeader = 'ID';\n    }\n    \n    console.log(currentHeader);\n    let m = API.getData('metadata');\n    \n    let factor = [];\n    m.map(x => x[currentHeader])\n    .forEach((i, j) => factor[i] = (factor[i] || 0) + 1);\n    console.log(factor);\n    let colorScale = chroma.scale(['#0FFFFF','#FF7F0F','#FF000F']).domain([0, (Object.keys(factor).length)]).mode('lch');\n    let colorVect = []; \n    let count = 0;\n    for (let key in factor){\n        colorVect[key] = colorScale(count);\n        count++;\n    }\n    colors = m.map(x => x[currentHeader]).map((x) => colorVect[x]);\n    console.log(colorScale(1))\n    API.cache('colors', colors);\n    API.doAction('selectedHeaders', colors);\n    API.doAction('colorScores', colors);\n    //API.doAction('removeSerie',[0]);\n    \n  break;\n  \n  case 'colorScores':\n        let scores = API.getData(\"score12\");\n        \n        colors = API.cache('colors');\n        let rgbaColors = colors.map(x => \n            'rgba('+x['_rgb'].toString()+')');\n        \n        scores.data[0].styles.unselected.map((x,i) => x.fill = rgbaColors[i]);\n        scores.data[0].styles.selected.map((x,i) => x.fill = rgbaColors[i]);\n        \n        API.createData('scoresToDisplay', scores);\n  \n  case 'createHeaders':\n    \n    if (API.getData('headers') == null){\n      let metadata = data.map(x => x.metadata);\n      API.createData('metadata', metadata);\n\n      let headersList = Object.keys(data[0].metadata);\n      let headers = [];\n      headersList.forEach(i => headers.push({'header': i}));\n      API.createData('headers', headers);\n      \n    }\n    break;\n      \n  case 'selectedHeaders':\n    let selectedHeaders = API.getData('selectedHeaders');\n   \n    if(!value) {\n        var col = API.getData('colors');\n    } else {\n        var col = value;\n    }\n    \n    let metadata = API.getData('metadata');\n    \n    let newMetadata = [];\n    let t = metadata.map((x, j) => {\n        let newRow = {};\n        newRow['ID'] = data[j].ID;\n        newRow['_highlight'] = j;\n        newRow['colors'] = col[j].toString();\n        selectedHeaders.forEach(i => newRow[i.header] = x[i.header]);\n        return newRow;\n    })\n\n    API.createData('selectedMetadata', t);\n    API.createData('currentID', null);\n    API.createData('selectedID', null);\n    API.createData('selectedScores', null);\n    API.createData('currentSpectraToDisplay', null);\n    API.doAction('unsetActiveRow');\n  break;\n    \n  case 'selectedID':\n    let selectedID = API.getData('selectedID');\n    \n    if (selectedID != null) {\n      let selectedData = data.filter(val => \n      selectedID.includes(val.ID));\n  \n      let jcampUrl = selectedData[0].metadata.JcampUrl;\n      let jcamp = (await superagent.get(jcampUrl).withCredentials()).text;\n      API.createData('selectedJcamp', jcamp);\n\n      API.createData('selectedID', null);\n      console.log('selected jcamp loaded');\n    }\n  break;\n  \n  case 'currentID':\n    currentID = API.getData('currentID').resurrect();\n\n    selectedData = data.filter(val => \n    currentID.includes(val.ID));\n  \n    let jcampUrl = selectedData[0].metadata.JcampUrl;\n    let jcamp = (await superagent.get(jcampUrl).withCredentials()).text;\n    API.createData('currentJcamp', jcamp);\n    console.log('current jcamp loaded');\n    currentID = ([currentID]);\n    let currentData = data.filter(f =>\n        currentID.includes(f.ID));\n    \n\n    \n    let y = selectedData.map( x => \n        x.dataMatrix.filter((value, index, Arr) => \n            index % 2 == 1\n        )\n    );\n    col = [];\n    x.forEach( i => col.push({'_rgb':[0,0,255,1]}) );\n    \n    let currentSpectra = (\n            {'type': 'color',\n                'y': currentData[0].dataMatrix.filter((value, index, Arr) => index % 2 == 1),\n                'x': x,\n                'color': col\n            }\n    );\n    API.createData('currentSpectraToDisplay', {'data':currentSpectra});\n  break;\n  \n  case 'selectedIDs':\n        \n        let s = API.getData('selectedIDs');\n        console.log(s)\n        \n        if(s){\n            let selectedIDs = s.map(x => x.ID);\n        \n        selectedData = data.filter(f =>\n            selectedIDs.includes(f.ID));\n        \n        \n        let y = selectedData.map( x => \n            x.dataMatrix.filter((value, index, Arr) => \n                index % 2 == 1\n            )\n        );\n        \n        selectedColors = API.getData('selectedIDs')\n            .map(x => x.colors);\n        \n        let color = [];\n        let spectra = selectedData.map((e, i) => {\n            let groupColor = fh.hexToRgb(selectedColors[i]);\n            color =[];\n            x.forEach( () => color.push({'_rgb':groupColor}) )\n            let s = (\n                {'type': 'color',\n                    'y': y[i],\n                    'x': x,\n                    'color': color\n                });\n            return s\n            }\n        );\n\n        API.createData('spectraToDisplay', {'data':spectra});\n        \n        }\n  \n  default:\n    break;\n}\n\n\n"
+                "let fh = API.cache('helperFunctions');\nlet data = API.getData('data').resurrect();\n\n\nlet d = data.map(x => x.dataMatrix.filter((v, i) => i % 2 == 1));\nlet dataT = fh.transpose(d);\n\nlet ceiling = dataT.map(x => Math.max.apply(null, x));\nlet floor = dataT.map(x => Math.min.apply(null, x));\n\nvar col = [];\nceiling.forEach( i => col.push({'_rgb':[240,240,240,1]}) );\n\nvar x = data[0].dataMatrix.filter(function(value, index, Arr) {\n    return index % 2 == 0\n});\n\nlet ceilingSpectra = (\n        {'type': 'color',\n            'y': ceiling,\n            'x': x,\n            'color': col\n        }\n);\nAPI.createData('ceilingSpectra', {'data':ceilingSpectra});\n\nlet floorSpectra = (\n        {'type': 'color',\n            'y': floor,\n            'x': x,\n            'color': col\n        }\n);\nAPI.createData('floorSpectra', {'data':floorSpectra});\n\nlet action = null;\nlet value = null;\n\nif(this.action) {\n    action = this.action.name;\n    value = this.action.value;\n} else {\n\nswitch(this.button) {\n  case 'createHeaders': \n    action = 'createHeaders';\n  break;\n  case 'selectColor':\n    action = 'selectColor';\n  break;\n  default:\n  action = this.variable;\n  break;\n  }\n}\n\nconsole.log('action:' + action);\n\nlet selectedData = [];\nlet currentID = [];\nvar colors = [];\nlet selectedColors = [];\n\n\nswitch(action) {\n  case 'selectColor':\n    let currentHeader = API.getData('currentHeader');\n    \n    if(!currentHeader) {\n        currentHeader = 'ID';\n    }\n    \n    console.log(currentHeader);\n    let m = API.getData('metadata');\n    \n    let factor = [];\n    m.map(x => x[currentHeader])\n    .forEach((i, j) => factor[i] = (factor[i] || 0) + 1);\n    console.log(factor);\n    let colorScale = chroma.scale(['#0FFFFF','#FF7F0F','#FF000F']).domain([0, (Object.keys(factor).length)]).mode('lch');\n    let colorVect = []; \n    let count = 0;\n    for (let key in factor){\n        colorVect[key] = colorScale(count);\n        count++;\n    }\n    colors = m.map(x => x[currentHeader]).map((x) => colorVect[x]);\n    console.log(colorScale(1))\n    API.cache('colors', colors);\n    API.doAction('selectedHeaders', colors);\n    API.doAction('colorScores', colors);\n    //API.doAction('removeSerie',[0]);\n    \n  break;\n  \n  case 'colorScores':\n        let scores = API.getData(\"score12\");\n        \n        colors = API.cache('colors');\n        let rgbaColors = colors.map(x => \n            'rgba('+x['_rgb'].toString()+')');\n        \n        scores.data[0].styles.unselected.map((x,i) => x.fill = rgbaColors[i]);\n        scores.data[0].styles.selected.map((x,i) => x.fill = rgbaColors[i]);\n        \n        API.createData('scoresToDisplay', scores);\n  \n  case 'createHeaders':\n    \n    if (API.getData('headers') == null){\n      let metadata = data.map(x => x.metadata);\n      API.createData('metadata', metadata);\n\n      let headersList = Object.keys(data[0].metadata);\n      let headers = [];\n      headersList.forEach(i => headers.push({'header': i}));\n      API.createData('headers', headers);\n      \n    }\n    break;\n      \n  case 'selectedHeaders':\n    let selectedHeaders = API.getData('selectedHeaders');\n   \n    if(!value) {\n        var col = API.getData('colors');\n    } else {\n        var col = value;\n    }\n    \n    let metadata = API.getData('metadata');\n    \n    let newMetadata = [];\n    let t = metadata.map((x, j) => {\n        let newRow = {};\n        newRow['ID'] = data[j].ID;\n        newRow['_highlight'] = j;\n        newRow['colors'] = col[j].toString();\n        selectedHeaders.forEach(i => newRow[i.header] = x[i.header]);\n        return newRow;\n    })\n\n    API.createData('selectedMetadata', t);\n    API.createData('currentID', null);\n    API.createData('selectedID', null);\n    API.createData('selectedScores', null);\n    API.createData('currentSpectraToDisplay', null);\n    API.doAction('unsetActiveRow');\n  break;\n    \n  case 'selectedID':\n    let selectedID = API.getData('selectedID');\n    \n    if (selectedID != null) {\n      let selectedData = data.filter(val => \n      selectedID.includes(val.ID));\n  \n      let jcampUrl = selectedData[0].metadata.JcampUrl;\n      let jcamp = (await superagent.get(jcampUrl).withCredentials()).text;\n      API.createData('selectedJcamp', jcamp);\n\n      API.createData('selectedID', null);\n      console.log('selected jcamp loaded');\n    }\n  break;\n  \n  case 'currentID':\n    currentID = API.getData('currentID').resurrect();\n\n    selectedData = data.filter(val => \n    currentID.includes(val.ID));\n    console.log(selectedData)\n    let jcampUrl = selectedData[0].metadata.JcampUrl;\n    let jcamp = (await superagent.get(jcampUrl).withCredentials()).text;\n    API.createData('currentJcamp', jcamp);\n    console.log('current jcamp loaded');\n    \n    let y = selectedData.map( x => \n        x.dataMatrix.filter((value, index, Arr) => \n            index % 2 == 1\n        )\n    );\n    col = [];\n    x.forEach( i => col.push({'_rgb':[0,0,255,1]}) );\n    \n    let currentSpectra = (\n            {'type': 'color',\n                'y': selectedData[0].dataMatrix.filter((value, index, Arr) => index % 2 == 1),\n                'x': x,\n                'color': col\n            }\n    );\n    API.createData('currentSpectraToDisplay', {'data':currentSpectra});\n  break;\n  \n  case 'selectedIDs':\n        \n        let s = API.getData('selectedIDs');\n        //console.log(s)\n        \n        if(s){\n            let selectedIDs = s.map(x => x.ID);\n            console.log(selectedIDs);\n            \n            let sortedIDs = selectedIDs.slice().sort();\n            console.log(sortedIDs);\n        \n            selectedData = data.filter(f =>\n            selectedIDs.includes(f.ID));\n            \n            let sortedSelectedData = selectedData.slice().sort((a, b) =>  \n              sortedIDs.indexOf(a.ID) - sortedIDs.indexOf(b.ID));\n            console.log(sortedSelectedData);\n        \n            let y = sortedSelectedData.map( x => \n                x.dataMatrix.filter((value, index, Arr) => \n                    index % 2 == 1\n                )\n            );\n        \n            selectedColors = API.getData('selectedIDs')\n                \n            let sortedselectedColors = selectedColors.slice().sort((a, b) =>  \n              sortedIDs.indexOf(a.ID) - sortedIDs.indexOf(b.ID)).map(x => x.colors);\n            console.log(sortedselectedColors)\n        \n            let color = [];\n            let spectra = sortedSelectedData.map((e, i) => {\n                let groupColor = fh.hexToRgb(sortedselectedColors[i]);\n                color =[];\n                x.forEach( () => color.push({'_rgb':groupColor}) )\n                let S = (\n                    {'type': 'color',\n                        'y': y[i],\n                        'x': x,\n                        'color': color\n                    });\n                return S;\n                }\n            );\n            console.log(spectra);\n            API.createData('spectraToDisplay', {'data':spectra});\n            API.createData('selectedIDs', null)\n        }\n  \n  default:\n    break;\n}\n\n\n"
               ]
             }
           ],
@@ -218,7 +218,9 @@
                   "forceFitColumns",
                   "highlightScroll",
                   "filterColumns",
-                  "editable"
+                  "editable",
+                  "forgetLastActive",
+                  "forgetLastSelected"
                 ]
               ],
               "copyPaste": [
@@ -383,10 +385,6 @@
       ],
       "actions_in": [
         {
-          "rel": "unsetActiveRow",
-          "name": "unsetActiveRow"
-        },
-        {
           "rel": "selectRows",
           "name": "setSelectedRows"
         }
@@ -398,26 +396,18 @@
       ],
       "vars_out": [
         {
+          "event": "onRowsSelect",
+          "rel": "rows",
+          "jpath": [],
+          "name": "selectedIDs"
+        },
+        {
           "event": "onHover",
           "rel": "row",
           "jpath": [
             "ID"
           ],
           "name": "currentID"
-        },
-        {
-          "event": "onDoubleClick",
-          "rel": "row",
-          "jpath": [
-            "ID"
-          ],
-          "name": "selectedID"
-        },
-        {
-          "event": "onRowsSelect",
-          "rel": "rows",
-          "jpath": [],
-          "name": "selectedIDs"
         }
       ],
       "toolbar": {
@@ -459,7 +449,7 @@
           ]
         }
       ],
-      "title": "",
+      "title": "Metadata Table (click to load original data / double click to superimpose)",
       "zindex": 3
     },
     {
@@ -704,7 +694,7 @@
           ]
         }
       ],
-      "title": "",
+      "title": "Metadata headers (select to fill the table)",
       "zindex": 3
     },
     {
@@ -789,7 +779,7 @@
         "admin": {
           "position": {
             "left": 0,
-            "top": 107
+            "top": 108
           },
           "size": {
             "width": 59,
@@ -1646,7 +1636,7 @@
                 ]
               ],
               "script": [
-                "let currentID = API.getData('currentID')\n\nif (currentID != null) { \nlet score = JSON.parse(JSON.stringify(API.getData('score12')))\n//let score = API.getData('score').resurrect();\n\nlet index = score.data[0].info.filter( val => val.id == currentID.s_ )[0]._highlight[0]\n//console.log(index)\n\n//score.data[0].styles.unselected[index].fill = \"transparent\"\nscore.data[0].styles.unselected[index].r = 6\nscore.data[0].styles.unselected[index].stroke = \"red\"\n\nlet currentChart = ({\"title\": \"score plot\",\n    \"data\": [{\n        \"type\": \"scatter\",\n        \"info\":[],\n        \"x\":[score.data[0].x[1]],\n        \"y\":[score.data[0].y[1]],\n        \"styles\": {\n            \"unselected\": [\n                {\"fill\": \"transparent\",\n                \"shape\": \"circle\",\n                \"cx\": 0,\n                \"cy\": 0,\n                \"r\": 8,\n                \"height\": \"5px\",\n                \"width\": \"5px\",\n                \"stroke\": \"red\"}]\n            }\n        }]\n})\n\n//API.createData('currentChart', currentChart)\nAPI.createData('scoresToDisplay', score)\nAPI.createData('currentID', null)\nconsole.log('executed')\n}\n"
+                "let currentID = API.getData('currentID')\n\nif (currentID != null) { \nlet score = JSON.parse(JSON.stringify(API.getData('score12')))\n//let score = API.getData('score').resurrect();\n\nlet index = score.data[0].info.filter( val => val.id == currentID.s_ )[0]._highlight[0]\n//console.log(index)\n\n//score.data[0].styles.unselected[index].fill = \"transparent\"\nscore.data[0].styles.unselected[index].r = 6\nscore.data[0].styles.unselected[index].stroke = \"red\"\n\nlet currentChart = ({\"title\": \"score plot\",\n    \"data\": [{\n        \"type\": \"scatter\",\n        \"info\":[],\n        \"x\":[score.data[0].x[1]],\n        \"y\":[score.data[0].y[1]],\n        \"styles\": {\n            \"unselected\": [\n                {\"fill\": \"transparent\",\n                \"shape\": \"circle\",\n                \"cx\": 0,\n                \"cy\": 0,\n                \"r\": 8,\n                \"height\": \"5px\",\n                \"width\": \"5px\",\n                \"stroke\": \"red\"}]\n            }\n        }]\n})\n\n//API.createData('currentChart', currentChart)\nAPI.createData('scoresToDisplay', score)\n//API.createData('currentID', null)\nconsole.log('hightlight scores executed')\n}\n"
               ]
             }
           ],
@@ -1913,13 +1903,13 @@
                 "variables": [
                   [
                     {
-                      "variable": "spectraToDisplay",
+                      "variable": "",
                       "axis": "0",
                       "adaptTo": "none",
                       "plotcolor": [
-                        32,
-                        32,
-                        229,
+                        1,
+                        1,
+                        255,
                         1
                       ],
                       "strokewidth": "1",
@@ -2014,10 +2004,6 @@
         {
           "rel": "chart",
           "name": "floorSpectra"
-        },
-        {
-          "rel": "chart",
-          "name": "currentSpectraToDisplay"
         }
       ],
       "actions_in": [
@@ -2078,7 +2064,7 @@
           ]
         }
       ],
-      "title": "",
+      "title": "Original data from URL (shift + cursor to move the spectra / double click to reset zoom)",
       "zindex": 1
     },
     {
@@ -2443,7 +2429,7 @@
           },
           "size": {
             "width": 60,
-            "height": 22
+            "height": 23
           },
           "zIndex": 0,
           "display": true,
@@ -2525,7 +2511,7 @@
           ]
         }
       ],
-      "title": "",
+      "title": "Score plot (use Alt-draw to select points)",
       "zindex": 3
     },
     {
@@ -2712,7 +2698,12 @@
       ],
       "vars_out": [
         {
-          "jpath": []
+          "event": "onSelect",
+          "rel": "row",
+          "jpath": [
+            "id"
+          ],
+          "name": "currentID"
         }
       ],
       "toolbar": {
@@ -2752,7 +2743,7 @@
           ]
         }
       ],
-      "title": "",
+      "title": "Selected Scores ",
       "zindex": 3
     },
     {
