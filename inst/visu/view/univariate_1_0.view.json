@@ -88,12 +88,12 @@
           "created": true,
           "name": "Default layer",
           "position": {
-            "left": 1,
-            "top": 1
+            "left": 0,
+            "top": 0
           },
           "size": {
             "width": 30,
-            "height": 10
+            "height": 6
           },
           "bgColor": [
             255,
@@ -267,7 +267,8 @@
                     "checkboxes": [
                       [
                         "display",
-                        "flip"
+                        "flip",
+                        "main"
                       ]
                     ],
                     "label": [
@@ -297,7 +298,8 @@
                   {
                     "checkboxes": [
                       [
-                        "display"
+                        "display",
+                        "main"
                       ]
                     ],
                     "label": [
@@ -397,6 +399,48 @@
                       "normalize": "none",
                       "optimizeSlots": [],
                       "tracking": []
+                    },
+                    {
+                      "variable": "minSpectra",
+                      "axis": "0",
+                      "adaptTo": "none",
+                      "plotcolor": [
+                        1,
+                        1,
+                        255,
+                        0.28
+                      ],
+                      "strokewidth": "1",
+                      "strokestyle": "1",
+                      "plotcontinuous": "continuous",
+                      "peakpicking": [],
+                      "markers": [],
+                      "markerShape": "1",
+                      "markerSize": 2,
+                      "normalize": "none",
+                      "optimizeSlots": [],
+                      "tracking": []
+                    },
+                    {
+                      "variable": "maxSpectra",
+                      "axis": "0",
+                      "adaptTo": "none",
+                      "plotcolor": [
+                        1,
+                        1,
+                        255,
+                        0.28
+                      ],
+                      "strokewidth": "1",
+                      "strokestyle": "1",
+                      "plotcontinuous": "continuous",
+                      "peakpicking": [],
+                      "markers": [],
+                      "markerShape": "1",
+                      "markerSize": 2,
+                      "normalize": "none",
+                      "optimizeSlots": [],
+                      "tracking": []
                     }
                   ]
                 ]
@@ -429,18 +473,18 @@
           "created": true,
           "name": "Default layer",
           "position": {
-            "left": 32,
-            "top": 12
+            "left": 31,
+            "top": 7
           },
           "size": {
             "width": 88,
             "height": 38
           },
           "bgColor": [
-            255,
-            255,
-            255,
-            0
+            0,
+            0,
+            0,
+            0.22
           ]
         },
         "admin": {
@@ -999,8 +1043,8 @@
           "created": true,
           "name": "Default layer",
           "position": {
-            "left": 65,
-            "top": 5
+            "left": 62,
+            "top": -1
           },
           "size": {
             "width": 51,
@@ -1357,7 +1401,7 @@
           "created": true,
           "name": "Default layer",
           "position": {
-            "left": 121,
+            "left": 120,
             "top": 1
           },
           "size": {
@@ -1519,12 +1563,12 @@
           "created": true,
           "name": "Default layer",
           "position": {
-            "left": 1,
-            "top": 86
+            "left": 0,
+            "top": 81
           },
           "size": {
             "width": 119,
-            "height": 21
+            "height": 13
           },
           "bgColor": [
             255,
@@ -1935,12 +1979,12 @@
       "layers": {
         "Default layer": {
           "position": {
-            "left": 121,
+            "left": 120,
             "top": 53
           },
           "size": {
             "width": 51,
-            "height": 54
+            "height": 41
           },
           "zIndex": 0,
           "display": true,
@@ -2134,12 +2178,12 @@
           "created": true,
           "name": "Default layer",
           "position": {
-            "left": 32,
-            "top": 1
+            "left": 31,
+            "top": 0
           },
           "size": {
             "width": 30,
-            "height": 10
+            "height": 6
           },
           "bgColor": [
             255,
@@ -3298,8 +3342,8 @@
       "layers": {
         "Default layer": {
           "position": {
-            "left": 32,
-            "top": 51
+            "left": 31,
+            "top": 46
           },
           "size": {
             "width": 88,
@@ -3309,10 +3353,10 @@
           "display": true,
           "title": "Select multiple spectra in the table to display them here",
           "bgColor": [
-            255,
-            255,
-            255,
-            0
+            0,
+            0,
+            0,
+            0.22
           ],
           "wrapper": true,
           "created": true,
@@ -3923,8 +3967,8 @@
       "layers": {
         "Default layer": {
           "position": {
-            "left": 1,
-            "top": 12
+            "left": 0,
+            "top": 7
           },
           "size": {
             "width": 30,
