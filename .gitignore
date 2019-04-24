@@ -5,3 +5,5 @@
 .httr-oauth
 .Rbuildignore
 inst/doc
+doc
+Meta
