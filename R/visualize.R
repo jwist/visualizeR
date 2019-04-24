@@ -16,7 +16,3 @@
 setGeneric("visualize", function(v) {
   standardGeneric("visualize")
 })
-
-
-
-

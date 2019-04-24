@@ -19,5 +19,3 @@ readView <- function( pathToFile ) {
                 )
 
 }
-
-

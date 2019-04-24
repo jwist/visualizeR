@@ -15,5 +15,3 @@ repCol <- function(c, n){
   matrix( rep(c, each = n), ncol = n, byrow = TRUE )
 
 }
-
-

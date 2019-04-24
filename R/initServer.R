@@ -30,7 +30,7 @@ initServer <- function (server, force = FALSE) {
 
       if (!is.numeric(server@port)) {
         warning("initServer: port is not of type numeric and will be ignored")
-        port = 0
+        port <- 0
       }
 
     #}
@@ -39,24 +39,3 @@ initServer <- function (server, force = FALSE) {
   }
 
 }
-
-
-# initServer <- function (directory =  file.path( system.file(package = "visualizeR"), "visu" ),
-#                         port = 4574) {
-#
-#   if (is.null(servr::daemon_list())) {
-#     servr::httw(dir = directory,
-#                 watch = directory,
-#                 port = port)
-#
-#     if (!is.numeric(port)) {
-#       warning("initServer: port is not of type numeric and will be ignored")
-#       port = 0
-#     }
-#
-#
-#   }
-#
-# }
-
-

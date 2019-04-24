@@ -22,7 +22,7 @@ saveJSON <- function( object, path, filename ) {
   version <- gsub(":", "-", gsub(" ", "_", base::Sys.time()))
 
   if (regexpr("/$", path)[1] == -1) {
-    path <- paste0(path,"/")
+    path <- paste0(path, "/")
     warning("saveJSON: the path argument should have a trailing slash, one was added")
   }
 
@@ -33,7 +33,7 @@ saveJSON <- function( object, path, filename ) {
   writeLines(jsonlite::toJSON(object,
                     pretty = TRUE,
                     auto_unbox = TRUE,
-                    null = 'null'
+                    null = "null"
                     ),
              fileConn
              )
@@ -43,5 +43,3 @@ saveJSON <- function( object, path, filename ) {
   close( fileConn )
 
 }
-
-

@@ -21,10 +21,3 @@ print.server <- function(x, ...){
   }
 
 }
-
-
-# setMethod("print",
-#           signature(x = "serverURL"),
-#           function(x, ...){
-#             paste0(x@protocole, x@baseURL, ":", x@port, x@path)
-#           })
