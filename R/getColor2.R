@@ -12,13 +12,13 @@ getColor2 <- function(text, colorFormat="rgb") {
 
   t <- sapply(unlist(strsplit(text, NULL)), utf8ToInt)
   c <- sum(t) %% 165
-  if(colorFormat == 'rgb'){
-    c <- paste0("rgba(", crayola$R[c], ",", crayola$G[c], ",", crayola$B[c],",1)")
+  if (colorFormat == "rgb"){
+    c <- paste0("rgba(", crayola$R[c], ",", crayola$G[c], ",", crayola$B[c], ",1)")
   } else {
-    c <- sprintf('#%s',paste(as.hexmode(c(crayola$R[c],
+    c <- sprintf("#%s", paste(as.hexmode(c(crayola$R[c],
                                           crayola$G[c],
                                           crayola$B[c])),
-                             collapse = ''))
+                             collapse = ""))
   }
   return(c)
 
