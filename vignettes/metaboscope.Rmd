@@ -33,6 +33,9 @@ Data are readily loaded from the dataset provided with this package. A complete 
 
 ```{r}
 data("bariatricRat")
+X <- bariatricRat$X
+ppm <- bariatricRat$ppm
+metadata <- bariatricRat$metadata
 ```
 
 A very useful package **kimsche/MetaboMate** available on github.com contains a lot of functions for metabolic profiling. We use it for this example to normalize the data.

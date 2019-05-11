@@ -28,10 +28,13 @@ Since the data have been prepared for another analysis, the data have to be resh
 * a matrix `x` that contains the data. Each row represents a sample, each columns a variable
 * a vector `x_axis` that contains the names or values of each variable
 
-Data are readily loaded from the dataset provided with this package
+Data are readily loaded from the dataset provided with this package. A complete description of the dataset can be found here: https://www.frontiersin.org/articles/10.3389/fmicb.2011.00183
 
 ```{r}
 data("bariatricRat")
+X <- bariatricRat$X
+ppm <- bariatricRat$ppm
+metadata <- bariatricRat$metadata
 ```
 
 It can be verified that the dataset contains 59 spectra of length 22913

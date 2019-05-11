@@ -33,6 +33,9 @@ Data are readily loaded from the dataset provided with this package. The descrip
 
 ```{r}
 data("bariatricRat")
+X <- bariatricRat$X
+ppm <- bariatricRat$ppm
+metadata <- bariatricRat$metadata
 ```
 
 A very useful package **kimsche/MetaboMate** available on github.com contains a lot of functions for metabolic profiling. We use it for this example to normalize the data.
@@ -47,7 +50,7 @@ The we prepare the dataset for visualization using **jwist/visualizeR**
 ```{r}
 ID <- metadata$Sample.Label
 group <- metadata$Class
-metadata <- data.frame(metadata)
+#metadata <- data.frame(metadata)
 x <- matrix(Xn, dim(X)[1], dim(X)[2])
 x_axis <- as.numeric( ppm )
 color = sapply(group, function(x) getColor2(as.character(x)))
