@@ -19,9 +19,7 @@ Imports:
   jsonlite (>= 1.5),
   servr (>= 0.10),
   base64enc,
-  methods,
-  MetaboMate,
-  car
+  methods
 Suggests:
     testthat,
     covr,
