@@ -26,3 +26,5 @@ Suggests:
     knitr,
     rmarkdown
 VignetteBuilder: knitr
+StagedInstall: no
+
