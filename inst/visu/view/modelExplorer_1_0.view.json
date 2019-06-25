@@ -2233,15 +2233,19 @@
                 ]
               ],
               "script": [
-                "'use strict';\n// let fh = API.cache('helperFunctions');\n// (!fh) ? API.doAction('loadFunction') : [];\n\nfunction transpose(matrix) {\n  return matrix[0].map((col, i) => matrix.map((row) => row[i]));\n}\n\nfunction seq_along(x) {\n  return x.map((x, i) => i + 1);\n}\n\nlet data = API.getData('data');\n\nlet sm = API.getData('selectedModel').resurrect();\n\nlet ellipses = sm.ellipses;\nconsole.log(ellipses)\n//API.createData('ellipse1', ellipses);\nlet ellipseX = sm.ellipses.map(x => x.x);\nlet ellipseY = sm.ellipses.map(x => x.y);\nconsole.log(ellipseX);\n    \nlet loadings = sm.loadings;\nlet loadingsXaxis = sm.loadingsXaxis;\nlet loadingsColor = sm.loadingsColor;\n\nlet scoresX, scoresY;\n\nlet pcSelector = API.getData('pcSelector').resurrect();\nconsole.log(pcSelector.pc)\nswitch (pcSelector.pc) {\n  case 12:\n    scoresX = transpose(sm.scores)[0];\n    scoresY = transpose(sm.scores)[1];\n    break;\n  case 23:\n    scoresX = transpose(sm.scores)[1];\n    scoresY = transpose(sm.scores)[2];\n    break;\n  case 13:\n    scoresX = transpose(sm.scores)[0];\n    scoresY = transpose(sm.scores)[2];\n    break;\n\n  default:\n    break;\n}\n\n\nswitch (this.variable) {\n  case 'selectedModel':\n\n    let options = {};\n    options.title = sm.name;\n    options.color = data.map((e) => e.color);\n\n    let type;\n    let scoresChart = test.createChart(\n      scoresX,\n      scoresY,\n      type = 'scatter',\n      options\n    );\n    \n    options.title = 'ellipse'\n    options.color = {};\n    options.unselected =  {cx: 0,\n    cy: 0,\n    r: 1,\n    shape: 'circle',\n    stroke: 'black',\n    width: '5px',\n    height: '5px'};\n    \n    let ellipseChart = test.createChart(\n      ellipseX,\n      ellipseY,\n      type = 'scatter',\n      options\n    );\n\n    API.createData('ellipse1', ellipseChart);\n    console.log(ellipseChart)\n    API.createData('modifiedScores', scoresChart);\n    console.log(scoresChart)\n\n    let list = seq_along(loadings);\n    API.createData('loadingList', list.map((x) => [x]));\n    API.createData('selectedLoading', null);\n    \n    console.log(this.variable, 'executed');\n    break;\n  case 'selectedLoading':\n    let selectedLoading = API.getData('selectedLoading');\n\n    let varLength = loadings[0].length;\n    let obsLength = loadings.length;\n\n    let eigenVectors = new Array(obsLength);\n\n    var max = loadingsColor[selectedLoading - 1].reduce(function (a, b) {\n      return Math.max(a, b);\n    });\n\n    var min = loadingsColor[selectedLoading - 1].reduce(function (a, b) {\n      return Math.min(a, b);\n    });\n\n    let unselectedScale = chroma\n      .scale(['blue', 'cyan', 'yellow', 'red'])\n      .domain([0, max])\n      .mode('lch');\n\n    let colorScale = loadingsColor[selectedLoading - 1].map((x, j) =>\n      unselectedScale(x)\n    );\n\n    eigenVectors[selectedLoading - 1] = {\n      id: [selectedLoading],\n      data: {\n        type: 'color',\n        x: xAxis,\n        y: loadings[selectedLoading - 1],\n        color: colorScale\n      }\n    };\n\n    API.createData('coloredLoadings', eigenVectors[selectedLoading - 1].data);\n    API.createData('loadingTable', eigenVectors);\n    console.log(this.variable, 'executed');\n    break;\n  default:\n    break;\n}\n"
+                "'use strict';\nlet fh = API.cache('helperFunctions');\n(!fh) ? API.doAction('loadFunction') : [];\n\n// function transpose(matrix) {\n//   return matrix[0].map((col, i) => matrix.map((row) => row[i]));\n// }\n\n// function seq_along(x) {\n//   return x.map((x, i) => i + 1);\n// }\n\nlet data = API.getData('data');\n\nlet sm = API.getData('selectedModel').resurrect();\n\nlet ellipses = sm.ellipses;\nconsole.log(ellipses)\n//API.createData('ellipse1', ellipses);\nlet ellipseX = sm.ellipses.map(x => x.x);\nlet ellipseY = sm.ellipses.map(x => x.y);\nconsole.log(ellipseX);\n    \nlet loadings = sm.loadings;\nlet loadingsXaxis = sm.loadingsXaxis;\nlet loadingsColor = sm.loadingsColor;\n\nlet scoresX, scoresY;\n\nlet pcSelector = API.getData('pcSelector').resurrect();\nconsole.log(pcSelector.pc)\nswitch (pcSelector.pc) {\n  case 12:\n    scoresX = fh.transpose(sm.scores)[0];\n    scoresY = fh.transpose(sm.scores)[1];\n    break;\n  case 23:\n    scoresX = fh.transpose(sm.scores)[1];\n    scoresY = fh.transpose(sm.scores)[2];\n    break;\n  case 13:\n    scoresX = fh.transpose(sm.scores)[0];\n    scoresY = fh.transpose(sm.scores)[2];\n    break;\n\n  default:\n    break;\n}\n\n\nswitch (this.variable) {\n  case 'selectedModel':\n\n    let options = {};\n    options.title = sm.name;\n    options.color = data.map((e) => e.color);\n\n    let type;\n    let scoresChart = hlvh.createChart(\n      scoresX,\n      scoresY,\n      type = 'scatter',\n      options\n    );\n    \n    options.title = 'ellipse'\n    options.color = {};\n    options.unselected =  {cx: 0,\n    cy: 0,\n    r: 1,\n    shape: 'circle',\n    stroke: 'black',\n    width: '5px',\n    height: '5px'};\n    \n    let ellipseChart = hlvh.createChart(\n      ellipseX,\n      ellipseY,\n      type = 'scatter',\n      options\n    );\n\n    API.createData('ellipse1', ellipseChart);\n    console.log(ellipseChart)\n    API.createData('modifiedScores', scoresChart);\n    console.log(scoresChart)\n\n    let list = fh.seq_along(loadings);\n    API.createData('loadingList', list.map((x) => [x]));\n    API.createData('selectedLoading', null);\n    \n    console.log(this.variable, 'executed');\n    break;\n  case 'selectedLoading':\n    let selectedLoading = API.getData('selectedLoading');\n\n    let varLength = loadings[0].length;\n    let obsLength = loadings.length;\n\n    let eigenVectors = new Array(obsLength);\n\n    var max = loadingsColor[selectedLoading - 1].reduce(function (a, b) {\n      return Math.max(a, b);\n    });\n\n    var min = loadingsColor[selectedLoading - 1].reduce(function (a, b) {\n      return Math.min(a, b);\n    });\n\n    let unselectedScale = chroma\n      .scale(['blue', 'cyan', 'yellow', 'red'])\n      .domain([0, max])\n      .mode('lch');\n\n    let colorScale = loadingsColor[selectedLoading - 1].map((x, j) =>\n      unselectedScale(x)\n    );\n\n    eigenVectors[selectedLoading - 1] = {\n      id: [selectedLoading],\n      data: {\n        type: 'color',\n        x: xAxis,\n        y: loadings[selectedLoading - 1],\n        color: colorScale\n      }\n    };\n\n    API.createData('coloredLoadings', eigenVectors[selectedLoading - 1].data);\n    API.createData('loadingTable', eigenVectors);\n    console.log(this.variable, 'executed');\n    break;\n  default:\n    break;\n}\n"
               ]
             }
           ],
           "libs": [
             [
               {
-                "lib": "test",
-                "alias": "test"
+                "lib": "hlvhx",
+                "alias": "hlvhx"
+              },
+              {
+                "lib": "hlvh",
+                "alias": "hlvh"
               }
             ]
           ],
@@ -2958,8 +2962,12 @@
       "alias": "cdb"
     },
     {
-      "path": "http://localhost:9898/mljs/test/dist/ml-test",
-      "alias": "test"
+      "path": "http://localhost:9898/cheminfo-js/hlv-helper/dist/hlv-helper",
+      "alias": "hlvhx"
+    },
+    {
+      "path": "https://www.lactame.com/github/cheminfo-js/hlv-helper/c94ab2a48bdf3a2692f470188d773a088f41bc8c/dist/hlv-helper",
+      "alias": "hlvh"
     }
   ],
   "configuration": {
