@@ -38,7 +38,7 @@ saveJSON <- function( object, path, filename ) {
              fileConn
              )
 
-  base::file.copy(pathToFile, paste0(path, version, "_", filename))
+  #base::file.copy(pathToFile, paste0(path, version, "_", filename))
 
   close( fileConn )
 
