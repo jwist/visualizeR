@@ -169,8 +169,8 @@
           ]
         }
       ],
-      "title": "filter data with selected markers in score plot ",
-      "zindex": 12
+      "title": "",
+      "zindex": 10
     },
     {
       "url": "modules/types/edition/slick_grid/",
@@ -340,8 +340,8 @@
         },
         "admin": {
           "position": {
-            "left": 0,
-            "top": 0
+            "left": 156,
+            "top": 7
           },
           "size": {
             "width": 44,
@@ -424,8 +424,8 @@
           ]
         }
       ],
-      "title": "",
-      "zindex": 2
+      "title": "Selected Data (select on score plot)",
+      "zindex": 0
     },
     {
       "url": "modules/types/science/spectra/spectra_displayer/",
@@ -491,7 +491,7 @@
                       ]
                     ],
                     "label": [
-                      "PC 1"
+                      "PC 1 (17.080000000000002%)"
                     ],
                     "beforeSpacing": [
                       "0"
@@ -523,7 +523,7 @@
                       ]
                     ],
                     "label": [
-                      "PC 2"
+                      "PC 2 (11.940000000000001%)"
                     ],
                     "beforeSpacing": [
                       "0"
@@ -678,7 +678,10 @@
         }
       ],
       "actions_in": [
-        {}
+        {
+          "rel": "_editPreferences",
+          "name": "changeLabel"
+        }
       ],
       "vars_out": [
         {
@@ -740,7 +743,7 @@
         }
       ],
       "title": "Scatter plot (use Alt + draw to select points)",
-      "zindex": 1
+      "zindex": 0
     },
     {
       "url": "modules/types/client_interaction/code_executor/",
@@ -889,7 +892,7 @@
         }
       ],
       "title": "exec highlight score hoovered in the table",
-      "zindex": 2
+      "zindex": 0
     },
     {
       "url": "modules/types/science/spectra/spectra_displayer/",
@@ -1155,7 +1158,13 @@
       ],
       "vars_out": [
         {
-          "jpath": []
+          "event": "onTrackClick",
+          "rel": "trackData",
+          "jpath": [
+            "modifiedSelectedSpectra",
+            "indexClosest"
+          ],
+          "name": "currentVariableIndex"
         }
       ],
       "actions_out": [
@@ -1204,7 +1213,7 @@
         }
       ],
       "title": "Selected Spectra (current is blue line, hoovering on the table row)",
-      "zindex": 2
+      "zindex": 0
     },
     {
       "url": "modules/types/client_interaction/code_executor/",
@@ -1228,7 +1237,7 @@
                 ]
               ],
               "script": [
-                "let selectedRows = API.getData('selectedIDs');\nlet selectedIDs = selectedRows.map(x => x.ID);\n\nlet data = API.getData('selectedData').resurrect();\n\nif (selectedIDs != null) {\n  let selectedData = data.filter(val => \n    selectedIDs.includes(val.ID));\n\n   let jcampUrl = selectedData.map(x => x.metadata.JcampUrl);\n   console.log(jcampUrl);\n   \n//    let result = Promise.all(\n//      jcampUrl.map((link) => fetch(link).then((response) => response.toJSON))\n//    );\n    \n//  console.log(result);\n\n  let jcamp = (await fetch(jcampUrl));\n  console.log(jcamp);\n  let yresult = (await jcamp.json());\n  let y = yresult.y;\n\n    let x = API.getData('xAxis');\n    let color = [];\n    let spectra = selectedData.map((el, i) => {\n        let groupColor = el.color.split(\"(\")[1].split(\")\")[0].split(\",\").map(Number)\n        color = []\n        x.forEach( () => color.push({'_rgb': groupColor}) )\n\n        let type;\n        let options = {};\n        options.title = 'spect';\n        options.color = color;\n        let s = hlvh.createChart(\n          x,\n          y,\n          type = 'color',\n          options\n        );\n        return s;\n    })\n\n   API.createData('modifiedSelectedSpectra', spectra[0]);\n  console.log(spectra)\n  console.log('executed+');\n}\n\n\n\n"
+                "let selectedRows = API.getData('selectedIDs');\n\nlet selectedIDs = selectedRows.map(x => x.ID);\n\nlet data = API.getData('selectedData').resurrect();\n\nif (selectedIDs != null) {\n  let selectedData = data.filter(val => \n    selectedIDs.includes(val.ID));\n\n   let jcampUrl = selectedData.map(x => x.metadata.JcampUrl);\n   // console.log(jcampUrl);\n   \n//    let result = Promise.all(\n//      jcampUrl.map((link) => fetch(link).then((response) => response.toJSON))\n//    );\n    \n//  console.log(result);\n//let urls=[];\nlet promises=[];\n\nfor (let url of jcampUrl) {\n    promises.push(fetch(url).then( (res) => res.json()));\n}\n\nlet allJcamps = (await Promise.all(promises));\n// console.log(allResults);\n\n  // let jcamp = (await fetch(jcampUrl));\n  // console.log(jcamp);\n  // let yresult = (await jcamp.json());\n  //let y = yresult.y;\n\n    let x = API.getData('xAxis');\n    let color = [];\n    let spectra = selectedData.map((el, i) => {\n        let groupColor = el.color.split(\"(\")[1].split(\")\")[0].split(\",\").map(Number)\n        color = []\n        x.forEach( () => color.push({'_rgb': groupColor}) )\n        \n        let type;\n        let options = {};\n        options.title = 'spect';\n        options.color = color;\n        // let s = hlvh.createChart(\n        //   x,\n        //   y,\n        //   type = 'color',\n        //   options\n        // );\n        // return s;\n        let s = ({'type': 'color',\n            'y': allJcamps[i].y,\n            'x': x,\n            'color': color\n        });\n        return s;\n    })\n\n   //API.createData('modifiedSelectedSpectra', spectra[0]);\n  API.createData('modifiedSelectedSpectra', {'data': spectra});\n  console.log(spectra)\n  console.log('executed+');\n}\n\n\n\n"
               ]
             }
           ],
@@ -1356,7 +1365,7 @@
         }
       ],
       "title": "exec highlight spectra hooverd in the table",
-      "zindex": 2
+      "zindex": 0
     },
     {
       "url": "modules/types/client_interaction/code_executor/",
@@ -1515,7 +1524,7 @@
         }
       ],
       "title": "function helper",
-      "zindex": 2
+      "zindex": 0
     },
     {
       "url": "modules/types/edition/slick_grid/",
@@ -1746,7 +1755,7 @@
         }
       ],
       "title": "Loadings",
-      "zindex": 2
+      "zindex": 0
     },
     {
       "url": "modules/types/science/spectra/spectra_displayer/",
@@ -1771,7 +1780,7 @@
                       0
                     ],
                     "fullOut": [
-                      "none"
+                      "yAxis"
                     ],
                     "legend": [
                       null
@@ -1935,7 +1944,7 @@
           },
           "size": {
             "width": 144,
-            "height": 27
+            "height": 19
           },
           "zIndex": 0,
           "display": true,
@@ -1993,10 +2002,7 @@
       ],
       "actions_out": [
         {
-          "event": "onZoomChange",
-          "rel": "fromToX",
-          "jpath": [],
-          "name": "zoomSync"
+          "jpath": []
         }
       ],
       "toolbar": {
@@ -2037,7 +2043,7 @@
         }
       ],
       "title": "",
-      "zindex": 2
+      "zindex": 15
     },
     {
       "url": "modules/types/client_interaction/code_executor/",
@@ -2061,7 +2067,7 @@
                 ]
               ],
               "script": [
-                "'use strict';\nlet fh = API.cache('helperFunctions');\n(!fh) ? API.doAction('loadFunction') : [];\n\n// function transpose(matrix) {\n//   return matrix[0].map((col, i) => matrix.map((row) => row[i]));\n// }\n\n// function seq_along(x) {\n//   return x.map((x, i) => i + 1);\n// }\n\nlet data = API.getData('data');\n\nlet sm = API.getData('selectedModel').resurrect();\n\nlet ellipses = sm.ellipses;\nconsole.log(ellipses)\n//API.createData('ellipse1', ellipses);\nlet ellipseX = sm.ellipses.map(x => x.x);\nlet ellipseY = sm.ellipses.map(x => x.y);\nconsole.log(ellipseX);\n    \nlet loadings = sm.loadings;\nlet loadingsXaxis = sm.loadingsXaxis;\nlet loadingsColor = sm.loadingsColor;\n\nlet scoresX, scoresY;\n\nlet pcSelector = API.getData('pcSelector').resurrect();\nconsole.log(pcSelector.pc)\nswitch (pcSelector.pc) {\n  case 12:\n    scoresX = fh.transpose(sm.scores)[0];\n    scoresY = fh.transpose(sm.scores)[1];\n    break;\n  case 23:\n    scoresX = fh.transpose(sm.scores)[1];\n    scoresY = fh.transpose(sm.scores)[2];\n    break;\n  case 13:\n    scoresX = fh.transpose(sm.scores)[0];\n    scoresY = fh.transpose(sm.scores)[2];\n    break;\n\n  default:\n    break;\n}\n\n\nswitch (this.variable) {\n  case 'selectedModel':\n\n    let options = {};\n    options.title = sm.name;\n    options.color = data.map((e) => e.color);\n\n    let type;\n    let scoresChart = hlvh.createChart(\n      scoresX,\n      scoresY,\n      type = 'scatter',\n      options\n    );\n    \n    options.title = 'ellipse'\n    options.color = {};\n    options.unselected =  {cx: 0,\n    cy: 0,\n    r: 1,\n    shape: 'circle',\n    stroke: 'black',\n    width: '5px',\n    height: '5px'};\n    \n    let ellipseChart = hlvh.createChart(\n      ellipseX,\n      ellipseY,\n      type = 'scatter',\n      options\n    );\n\n    API.createData('ellipse1', ellipseChart);\n    console.log(ellipseChart)\n    API.createData('modifiedScores', scoresChart);\n    console.log(scoresChart)\n\n    let list = fh.seq_along(loadings);\n    API.createData('loadingList', list.map((x) => [x]));\n    API.createData('selectedLoading', null);\n    \n    console.log(this.variable, 'executed');\n    break;\n  case 'selectedLoading':\n    let selectedLoading = API.getData('selectedLoading');\n\n    let varLength = loadings[0].length;\n    let obsLength = loadings.length;\n\n    let eigenVectors = new Array(obsLength);\n\n    var max = loadingsColor[selectedLoading - 1].reduce(function (a, b) {\n      return Math.max(a, b);\n    });\n\n    var min = loadingsColor[selectedLoading - 1].reduce(function (a, b) {\n      return Math.min(a, b);\n    });\n\n    let unselectedScale = chroma\n      .scale(['blue', 'cyan', 'yellow', 'red'])\n      .domain([0, max])\n      .mode('lch');\n\n    let colorScale = loadingsColor[selectedLoading - 1].map((x, j) =>\n      unselectedScale(x)\n    );\n\n    eigenVectors[selectedLoading - 1] = {\n      id: [selectedLoading],\n      data: {\n        type: 'color',\n        x: loadingsXaxis,\n        y: loadings[selectedLoading - 1],\n        color: colorScale\n      }\n    };\n\n    API.createData('coloredLoadings', eigenVectors[selectedLoading - 1].data);\n    API.createData('loadingTable', eigenVectors);\n    console.log(this.variable, 'executed');\n    break;\n  default:\n    break;\n}\n"
+                "'use strict';\nlet fh = API.cache('helperFunctions');\n(!fh) ? API.doAction('loadFunction') : [];\n\n// function transpose(matrix) {\n//   return matrix[0].map((col, i) => matrix.map((row) => row[i]));\n// }\n\n// function seq_along(x) {\n//   return x.map((x, i) => i + 1);\n// }\n\nlet data = API.getData('data');\n\nlet sm = API.getData('selectedModel').resurrect();\n\nlet ellipses = sm.ellipses;\nconsole.log(ellipses)\n//API.createData('ellipse1', ellipses);\nlet ellipseX = sm.ellipses.map(x => x.x);\nlet ellipseY = sm.ellipses.map(x => x.y);\nconsole.log(ellipseX);\n    \nlet loadings = sm.loadings;\nlet loadingsXaxis = sm.loadingsXaxis;\nlet loadingsColor = sm.loadingsColor;\n\nlet scoresX, scoresY;\n\nlet pcSelector = API.getData('pcSelector').resurrect();\nconsole.log(pcSelector.pc)\nlet options;\nlet expVar;\nswitch (pcSelector.pc) {\n  case 12:\n    scoresX = fh.transpose(sm.scores)[0];\n    scoresY = fh.transpose(sm.scores)[1];\n    expVar = sm.expVar;\n    options={\n        \"xLabel\": \"PC 1 (\" + expVar[0] * 100 + \"%)\",\n        \"yLabel\": \"PC 2 (\" + expVar[1] * 100 + \"%)\",\n    }\n    API.doAction('changeLabel', options);\n    break;\n  case 23:\n    scoresX = fh.transpose(sm.scores)[1];\n    scoresY = fh.transpose(sm.scores)[2];\n    options={\n        \"xLabel\": \"PC 2 (\" + expVar[1] * 100 + \"%)\",\n        \"yLabel\": \"PC 3 (\" + expVar[2] * 100 + \"%)\",\n    }\n    API.doAction('changeLabel', options);\n    break;\n  case 13:\n    scoresX = fh.transpose(sm.scores)[0];\n    scoresY = fh.transpose(sm.scores)[2];\n    options={\n        \"xLabel\": \"PC 1 (\" + expVar[0] * 100 + \"%)\",\n        \"yLabel\": \"PC 3 (\" + expVar[2] * 100 + \"%)\",\n    }\n    API.doAction('changeLabel', options);\n    break;\n\n  default:\n    break;\n}\n\n\nswitch (this.variable) {\n  case 'selectedModel':\n\n    let options = {};\n    options.title = sm.name;\n    options.color = data.map((e) => e.color);\n\n    let type;\n    let scoresChart = hlvh.createChart(\n      scoresX,\n      scoresY,\n      type = 'scatter',\n      options\n    );\n    \n    options.title = 'ellipse'\n    options.color = {};\n    options.unselected =  {cx: 0,\n    cy: 0,\n    r: 1,\n    shape: 'circle',\n    stroke: 'black',\n    width: '5px',\n    height: '5px'};\n    \n    let ellipseChart = hlvh.createChart(\n      ellipseX,\n      ellipseY,\n      type = 'scatter',\n      options\n    );\n\n    API.createData('ellipse1', ellipseChart);\n    console.log(ellipseChart)\n    API.createData('modifiedScores', scoresChart);\n    console.log(scoresChart)\n\n    let list = fh.seq_along(loadings);\n    API.createData('loadingList', list.map((x) => [x]));\n    API.createData('selectedLoading', 1);\n    \n    console.log(this.variable, 'executed');\n    break;\n  case 'selectedLoading':\n    let selectedLoading = API.getData('selectedLoading');\n\n    let varLength = loadings[0].length;\n    let obsLength = loadings.length;\n\n    let eigenVectors = new Array(obsLength);\n\n    var max = loadingsColor[selectedLoading - 1].reduce(function (a, b) {\n      return Math.max(a, b);\n    });\n\n    var min = loadingsColor[selectedLoading - 1].reduce(function (a, b) {\n      return Math.min(a, b);\n    });\n\n    let unselectedScale = chroma\n      .scale(['blue', 'cyan', 'yellow', 'red'])\n      .domain([0, max])\n      .mode('lch');\n\n    let colorScale = loadingsColor[selectedLoading - 1].map((x, j) =>\n      unselectedScale(x)\n    );\n\n    eigenVectors[selectedLoading - 1] = {\n      id: [selectedLoading],\n      data: {\n        type: 'color',\n        x: loadingsXaxis,\n        y: loadings[selectedLoading - 1],\n        color: colorScale\n      }\n    };\n\n    API.createData('coloredLoadings', eigenVectors[selectedLoading - 1].data);\n    API.createData('loadingTable', eigenVectors);\n    console.log(this.variable, 'executed');\n    break;\n  default:\n    break;\n}\n"
               ]
             }
           ],
@@ -2200,7 +2206,7 @@
         }
       ],
       "title": "",
-      "zindex": 2
+      "zindex": 0
     },
     {
       "url": "modules/types/edition/slick_grid/",
@@ -2434,7 +2440,7 @@
         }
       ],
       "title": "model selector",
-      "zindex": 2
+      "zindex": 0
     },
     {
       "url": "modules/types/client_interaction/code_executor/",
@@ -2458,7 +2464,7 @@
                 ]
               ],
               "script": [
-                "let a = API.getData('selectedAnnotation');\n\nconsole.log(a);\n\nlet b = API.getData('pcSelector');\n\nconsole.log(b.pc);"
+                "let a = API.getData('selectedAnnotation');\n\nconsole.log(a);\n\nlet b = API.getData('pcSelector');\n\nconsole.log(b.pc);\n\nlet c = {\n      \"title\": \"PCA PC 1 vs 1 (157.30%)\",\n      \"axis\": [\n        {\n          \"type\": \"bottom\",\n          \"label\": \"PC 1 (78.65%)\",\n          \"_jsGraphIndex\": 0\n        },\n        {\n          \"type\": \"left\",\n          \"label\": \"PC 1 (78.65%)\",\n          \"_jsGraphIndex\": 0\n        }\n      ],\n      \"data\": [\n        {\n          \"type\": \"scatter\",\n          \"x\": [\n            33.796273991679165,\n            31.34854767733769,\n            -32.56332637881742,\n            -27.669681997487885,\n            3.198587507919215,\n            -8.11040080063078\n          ],\n          \"y\": [\n            33.796273991679165,\n            31.34854767733769,\n            -32.56332637881742,\n            -27.669681997487885,\n            3.198587507919215,\n            -8.11040080063078\n          ],\n          \"styles\": {\n            \"selected\": [\n              {\n                \"shape\": \"circle\",\n                \"stroke\": \"rgb(230,0,0)\",\n                \"r\": 5\n              },\n              {\n                \"shape\": \"circle\",\n                \"stroke\": \"rgb(230,0,0)\",\n                \"r\": 5\n              },\n              {\n                \"shape\": \"circle\",\n                \"stroke\": \"rgb(230,0,0)\",\n                \"r\": 5\n              },\n              {\n                \"shape\": \"circle\",\n                \"stroke\": \"rgb(230,0,0)\",\n                \"r\": 5\n              },\n              {\n                \"shape\": \"circle\",\n                \"stroke\": \"rgb(230,0,0)\",\n                \"r\": 5\n              },\n              {\n                \"shape\": \"circle\",\n                \"stroke\": \"rgb(230,0,0)\",\n                \"r\": 5\n              }\n            ],\n            \"unselected\": [\n              {\n                \"shape\": \"circle\",\n                \"fill\": \"rgb(230,0,0)\",\n                \"r\": 3\n              },\n              {\n                \"shape\": \"circle\",\n                \"fill\": \"rgb(230,0,0)\",\n                \"r\": 3\n              },\n              {\n                \"shape\": \"circle\",\n                \"fill\": \"rgb(230,0,0)\",\n                \"r\": 3\n              },\n              {\n                \"shape\": \"circle\",\n                \"fill\": \"rgb(230,0,0)\",\n                \"r\": 3\n              },\n              {\n                \"shape\": \"circle\",\n                \"fill\": \"rgb(230,0,0)\",\n                \"r\": 3\n              },\n              {\n                \"shape\": \"circle\",\n                \"fill\": \"rgb(230,0,0)\",\n                \"r\": 3\n              }\n            ]\n          }\n        }\n      ]\n    }\n\nconsole.log(c);\nAPI.createData('c', c);\n\n\nlet model = API.getData('model');\nconsole.log(model[0].expVar);\n\nconsole.log(\"d\"+\"b\")"
               ]
             }
           ],
@@ -2508,8 +2514,8 @@
             "top": 35
           },
           "size": {
-            "width": 22,
-            "height": 24
+            "width": 25,
+            "height": 27
           },
           "zIndex": 0,
           "display": true,
@@ -2583,7 +2589,7 @@
         }
       ],
       "title": "",
-      "zindex": 2
+      "zindex": 0
     },
     {
       "url": "modules/types/client_interaction/code_executor/",
@@ -2609,7 +2615,7 @@
                 ]
               ],
               "script": [
-                "let pcSelector;\nswitch (this.button) {\n  case 'pc12':\n    API.createData('pcSelector', {pc: 12});\n    break;\n  case 'pc23':\n    API.createData('pcSelector', {pc: 23});\n    break;\n  case 'pc13':\n    API.createData('pcSelector', {pc: 13});\n    break;\n\n  default:\n  API.createData('pcSelector', {pc: 12});\n    break;\n}\n\nlet sm = API.getData('selectedModel');\nAPI.createData('selectedModel', sm);\n\n\n"
+                "let pcSelector;\nlet options;\nswitch (this.button) {\n  case 'pc12':\n    API.createData('pcSelector', {pc: 12});\n    break;\n  case 'pc23':\n    API.createData('pcSelector', {pc: 23});\n    break;\n  case 'pc13':\n    API.createData('pcSelector', {pc: 13});\n    break;\n\n  default:\n  API.createData('pcSelector', {pc: 12});\n    break;\n}\n\nlet sm = API.getData('selectedModel');\nAPI.createData('selectedModel', sm);\n\n\n"
               ]
             }
           ],
@@ -2677,8 +2683,8 @@
             "top": 0
           },
           "size": {
-            "width": 21,
-            "height": 18
+            "width": 26,
+            "height": 32
           },
           "zIndex": 0,
           "display": true,
@@ -2749,7 +2755,447 @@
         }
       ],
       "title": "",
-      "zindex": 2
+      "zindex": 0
+    },
+    {
+      "url": "modules/types/client_interaction/code_executor/",
+      "configuration": {
+        "sections": {},
+        "groups": {
+          "group": [
+            {
+              "display": [
+                [
+                  "editor",
+                  "buttons"
+                ]
+              ],
+              "execOnLoad": [
+                []
+              ],
+              "asyncAwait": [
+                [
+                  "top"
+                ]
+              ],
+              "script": [
+                "let index = API.getData('currentVariableIndex').resurrect();\nlet cov = API.getData('correlationMatrix');\nlet xAxis = API.getData('xAxis');\n\nindex = Math.round(index);\nconsole.log(\"index: \" + index);\n\nlet loadingsColors = cov[index];\n\nvar max = loadingsColors.reduce(function(a, b) {\n    return Math.max(a, b);\n});\n\nvar min = loadingsColors.reduce(function(a, b) {\n    return Math.min(a, b);\n});\n\nlet unselectedScale = chroma.scale(['blue', 'cyan',  'yellow', 'red']).domain([0, max]).mode('lch');\n\nlet colorScale = loadingsColors.map((x, j) => unselectedScale(x));\n\nlet currentData = [];\n// if (API.getData('currentData')) {\n//     currentData = API.getData('currentData').resurrect();\n// } else {\n//     currentData = API.getData('selectedData')[0].resurrect();\n// }\ncurrentData = API.getData('selectedData')[0].resurrect();\nlet jcampUrl = currentData.metadata.JcampUrl;\nlet jcamp = (await fetch(jcampUrl).then( (res) => res.json()));\n\nlet spectra = [];\nspectra = {'type': 'color', x: xAxis, y: jcamp.y, 'color': colorScale};\n\nAPI.createData('coloredSpectra', spectra);\nconsole.log(spectra);"
+              ]
+            }
+          ],
+          "libs": [
+            [
+              {
+                "lib": "chroma",
+                "alias": "chroma"
+              }
+            ]
+          ],
+          "buttons": [
+            [
+              {
+                "name": "button1",
+                "label": "Execute",
+                "hide": [],
+                "disable": []
+              }
+            ]
+          ]
+        }
+      },
+      "layers": {
+        "Default layer": {
+          "position": {
+            "left": 0,
+            "top": 0
+          },
+          "size": {
+            "width": 20,
+            "height": 20
+          },
+          "zIndex": 0,
+          "display": false,
+          "title": "",
+          "bgColor": [
+            255,
+            255,
+            255,
+            0
+          ],
+          "wrapper": true,
+          "created": true,
+          "name": "Default layer"
+        },
+        "admin": {
+          "position": {
+            "left": 0,
+            "top": 84
+          },
+          "size": {
+            "width": 61,
+            "height": 46
+          },
+          "zIndex": 0,
+          "display": true,
+          "title": "",
+          "bgColor": [
+            255,
+            255,
+            255,
+            0
+          ],
+          "wrapper": true,
+          "created": true,
+          "name": "admin"
+        }
+      },
+      "id": 14,
+      "vars_in": [
+        {
+          "rel": "inputValue",
+          "name": "currentVariableIndex"
+        }
+      ],
+      "actions_in": [
+        {}
+      ],
+      "vars_out": [
+        {
+          "jpath": []
+        }
+      ],
+      "actions_out": [
+        {
+          "jpath": []
+        }
+      ],
+      "toolbar": {
+        "custom": [
+          [
+            {
+              "title": "",
+              "icon": "",
+              "action": "",
+              "position": "begin",
+              "color": [
+                100,
+                100,
+                100,
+                1
+              ]
+            }
+          ]
+        ],
+        "common": [
+          {
+            "toolbar": [
+              [
+                "Open Preferences"
+              ]
+            ]
+          }
+        ]
+      },
+      "css": [
+        {
+          "fontSize": [
+            ""
+          ],
+          "fontFamily": [
+            ""
+          ]
+        }
+      ],
+      "title": "",
+      "zindex": 0
+    },
+    {
+      "url": "modules/types/science/spectra/spectra_displayer/",
+      "configuration": {
+        "sections": {
+          "graph": [
+            {
+              "sections": {},
+              "groups": {
+                "graph": [
+                  {
+                    "url": [
+                      ""
+                    ],
+                    "zoom": [
+                      "x"
+                    ],
+                    "wheelAction": [
+                      "zoomY"
+                    ],
+                    "wheelbaseline": [
+                      0
+                    ],
+                    "fullOut": [
+                      "none"
+                    ],
+                    "legend": [
+                      null
+                    ],
+                    "legendOptions": [
+                      [
+                        "isSerieHideable",
+                        "isSerieSelectable"
+                      ]
+                    ],
+                    "mouseTracking": [
+                      []
+                    ],
+                    "selectScatter": [
+                      []
+                    ],
+                    "independantYZoom": [
+                      []
+                    ]
+                  }
+                ]
+              }
+            }
+          ],
+          "axis": [
+            {
+              "sections": {},
+              "groups": {
+                "xAxis": [
+                  {
+                    "checkboxes": [
+                      [
+                        "flip"
+                      ]
+                    ],
+                    "label": [
+                      ""
+                    ],
+                    "beforeSpacing": [
+                      "0"
+                    ],
+                    "afterSpacing": [
+                      0
+                    ],
+                    "min": [
+                      ""
+                    ],
+                    "max": [
+                      ""
+                    ],
+                    "nbTicksPrimary": [
+                      5
+                    ],
+                    "axismodification": [
+                      "none"
+                    ]
+                  }
+                ],
+                "yAxis": [
+                  {
+                    "checkboxes": [
+                      []
+                    ],
+                    "label": [
+                      ""
+                    ],
+                    "beforeSpacing": [
+                      "0"
+                    ],
+                    "afterSpacing": [
+                      0
+                    ],
+                    "min": [
+                      ""
+                    ],
+                    "max": [
+                      ""
+                    ],
+                    "nbTicksPrimary": [
+                      5
+                    ],
+                    "fitToAxisOnFromTo": [
+                      []
+                    ]
+                  }
+                ]
+              }
+            }
+          ],
+          "series": [
+            {
+              "sections": {},
+              "groups": {
+                "series": [
+                  {
+                    "overflow": [
+                      []
+                    ],
+                    "stackVerticalSpacing": [
+                      0
+                    ]
+                  }
+                ]
+              }
+            }
+          ],
+          "variables": [
+            {
+              "sections": {},
+              "groups": {
+                "variables": [
+                  [
+                    {
+                      "variable": "",
+                      "axis": "0",
+                      "adaptTo": "none",
+                      "plotcolor": [
+                        1,
+                        1,
+                        255,
+                        1
+                      ],
+                      "strokewidth": "1",
+                      "strokestyle": "1",
+                      "plotcontinuous": "continuous",
+                      "peakpicking": [],
+                      "markers": [],
+                      "markerShape": "1",
+                      "markerSize": 2,
+                      "normalize": "none",
+                      "optimizeSlots": [],
+                      "tracking": []
+                    }
+                  ]
+                ]
+              }
+            }
+          ],
+          "misc": [
+            {
+              "sections": {},
+              "groups": {
+                "misc": [
+                  {
+                    "highlightOptions": [
+                      "{}"
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "groups": {}
+      },
+      "layers": {
+        "Default layer": {
+          "position": {
+            "left": 0,
+            "top": 48
+          },
+          "size": {
+            "width": 144,
+            "height": 30
+          },
+          "zIndex": 0,
+          "display": true,
+          "title": "",
+          "bgColor": [
+            0,
+            0,
+            0,
+            0.15
+          ],
+          "wrapper": false,
+          "created": true,
+          "name": "Default layer"
+        },
+        "admin": {
+          "position": {
+            "left": 0,
+            "top": 0
+          },
+          "size": {
+            "width": 20,
+            "height": 20
+          },
+          "zIndex": 0,
+          "display": false,
+          "title": "",
+          "bgColor": [
+            255,
+            255,
+            255,
+            0
+          ],
+          "wrapper": true,
+          "created": true,
+          "name": "admin"
+        }
+      },
+      "id": 15,
+      "vars_in": [
+        {
+          "rel": "chart",
+          "name": "coloredSpectra"
+        }
+      ],
+      "actions_in": [
+        {
+          "rel": "fromToX",
+          "name": "zoomSync"
+        }
+      ],
+      "vars_out": [
+        {
+          "jpath": []
+        }
+      ],
+      "actions_out": [
+        {
+          "jpath": []
+        }
+      ],
+      "toolbar": {
+        "custom": [
+          [
+            {
+              "title": "",
+              "icon": "",
+              "action": "",
+              "position": "begin",
+              "color": [
+                100,
+                100,
+                100,
+                1
+              ]
+            }
+          ]
+        ],
+        "common": [
+          {
+            "toolbar": [
+              [
+                "Open Preferences"
+              ]
+            ]
+          }
+        ]
+      },
+      "css": [
+        {
+          "fontSize": [
+            ""
+          ],
+          "fontFamily": [
+            ""
+          ]
+        }
+      ],
+      "title": "",
+      "zindex": 14
     }
   ],
   "variables": [
@@ -2769,6 +3215,12 @@
       "varname": "model",
       "jpath": [
         "model"
+      ]
+    },
+    {
+      "varname": "correlationMatrix",
+      "jpath": [
+        "correlationMatrix"
       ]
     }
   ],
@@ -2894,3 +3346,4 @@
     }
   ]
 }
+
