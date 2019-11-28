@@ -23,7 +23,7 @@ $sol-base1:    #93a1a1;  // 65 -05 -02
 $sol-base2:    #eee8d5;  // 92 -00  10
 $sol-base3:    #fdf6e3;  // 97  00  10
 $sol-yellow:   #b58900;  // 60  10  65
-$sol-orange:   #cb4b16;  // 50  50  55
+$sol-orange:   #d34525;  // 50  50  55
 $sol-red:      #dc322f;  // 50  65  45
 $sol-magenta:  #d33682;  // 50  65 -05
 $sol-violet:   #6c71c4;  // 50  15 -45
@@ -57,7 +57,7 @@ $text-color:            $sol-mono01 !default;
 $background-color:      $sol-mono3 !default;
 $code-background-color: $sol-mono2 !default;
 
-$link-base-color:       $sol-blue !default;
+$link-base-color:       $sol-orange !default;
 $link-visited-color:    mix($sol-blue, $sol-mono00) !default;
 
 $table-text-color:      $sol-mono00 !default;
