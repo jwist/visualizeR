@@ -152,7 +152,7 @@ code {
   @include relative-font-size(0.9375);
   border: 1px solid $brand-color-light;
   border-radius: 3px;
-  background-color: $code-background-color;
+  background-color: lighten(#d34525, 35%);
 }
 
 code {
@@ -171,7 +171,7 @@ pre {
 }
 
 .highlight {
-  background: $code-background-color;
+  background: lighten(#d34525, 35%);
   @extend %vertical-rhythm;
 
   .highlighter-rouge & {
